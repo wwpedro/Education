@@ -1,59 +1,128 @@
+/* Fundo geral */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #274c77; /* Azul escuro */
+  color: white;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Evita barra de rolagem causada pelo movimento */
+}
+
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Waves */
+.wave {
+  position: absolute;
+  width: 200%; /* Largura extra para animação */
+  height: 200px;
+  bottom: 0;
+  animation: moveWave 10s linear infinite;
+}
+
+.wave-back {
+  background: rgba(255, 255, 255, 0.2);
+  clip-path: ellipse(120% 40% at 50% 60%);
+  z-index: 1;
+  animation-duration: 12s; /* Velocidade mais lenta */
+}
+
+.wave-front {
+  background: rgba(255, 255, 255, 0.4);
+  clip-path: ellipse(120% 30% at 50% 70%);
+  z-index: 2;
+  animation-duration: 8s; /* Velocidade padrão */
+}
+
+/* Animação para mover as waves */
+@keyframes moveWave {
+  0% {
+    transform: translateX(0);
   }
-  
-  .login-form {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    box-sizing: border-box;
+  100% {
+    transform: translateX(-50%);
   }
-  
-  .login-form h1 {
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-    text-align: center;
-  }
-  
-  .form-group {
-    margin-bottom: 1rem;
-  }
-  
-  .form-group label {
-    display: block;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  
-  button {
-    width: 100%;
-    padding: 0.75rem;
-    border: none;
-    background-color: #2563eb;
-    color: white;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #1d4ed8;
-  }
-  
+}
+
+/* Formulário */
+.login-form {
+  background: rgba(255, 255, 255, 0.1); /* Fundo translúcido */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-form h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #fff;
+  color: #333;
+}
+
+button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #fcbf49; /* Amarelo */
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #000;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #d89f36;
+}
+
+.redirect {
+  margin-top: 1rem;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.redirect .link {
+  color: #fcbf49;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.redirect .link:hover {
+  text-decoration: underline;
+}

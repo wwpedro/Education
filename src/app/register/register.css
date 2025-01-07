@@ -1,59 +1,139 @@
+/* Fundo geral */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #274c77; /* Azul escuro */
+  color: white;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Evita barra de rolagem causada pelo movimento */
+}
+
 .register-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Waves */
+.wave {
+  position: absolute;
+  width: 200%; /* Largura extra para movimento */
+  height: 200px;
+  bottom: 0;
+  animation: waveAnimation 8s linear infinite; /* Animação contínua */
+  z-index: 1;
+  opacity: 0.6;
+}
+
+.wave-back {
+  background: rgba(255, 255, 255, 0.2);
+  clip-path: ellipse(120% 40% at 50% 60%);
+  animation-duration: 10s; /* Velocidade mais lenta */
+  animation-delay: -2s; /* Animação desfasada */
+}
+
+.wave-front {
+  background: rgba(255, 255, 255, 0.4);
+  clip-path: ellipse(120% 30% at 50% 70%);
+  animation-duration: 6s; /* Velocidade mais rápida */
+}
+
+/* Animação */
+@keyframes waveAnimation {
+  0% {
+    transform: translateX(0) translateY(0);
   }
-  
-  .register-form {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 450px;
+  25% {
+    transform: translateX(-25%) translateY(10px); /* Movimento para baixo */
   }
-  
-  .register-form h1 {
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-    text-align: center;
+  50% {
+    transform: translateX(-50%) translateY(0); /* Movimento para cima */
   }
-  
-  .form-group {
-    margin-bottom: 1rem;
+  75% {
+    transform: translateX(-75%) translateY(-10px); /* Movimento para baixo */
   }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
+  100% {
+    transform: translateX(-100%) translateY(0); /* Reinicia a posição */
   }
-  
-  .form-group input,
-  .form-group select {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  
-  button {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #4ade80;
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #22c55e;
-  }
-  
+}
+
+/* Formulário */
+.register-form {
+  background: rgba(255, 255, 255, 0.1); /* Fundo translúcido */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.register-form h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #fff;
+  color: #333;
+}
+
+button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #fcbf49; /* Amarelo */
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #000;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #d89f36;
+}
+
+.redirect {
+  margin-top: 1rem;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.redirect .link {
+  color: #fcbf49;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.redirect .link:hover {
+  text-decoration: underline;
+}

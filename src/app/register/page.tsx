@@ -7,8 +7,6 @@ const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("student");
-  const [subjectSpecialty, setSubjectSpecialty] = useState("");
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,8 +15,6 @@ const RegisterPage = () => {
       name,
       email,
       password,
-      role,
-      subjectSpecialty: role === "teacher" ? subjectSpecialty : undefined,
     };
 
     try {
@@ -46,6 +42,11 @@ const RegisterPage = () => {
 
   return (
     <div className="register-container">
+      {/* Waves no fundo */}
+      <div className="wave wave-back"></div>
+      <div className="wave wave-front"></div>
+  
+      {/* Formulário */}
       <form className="register-form" onSubmit={handleRegister}>
         <h1>Cadastro de Usuário</h1>
         <div className="form-group">
@@ -78,29 +79,6 @@ const RegisterPage = () => {
             required
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="role">Tipo de Usuário</label>
-          <select
-            id="role"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-          >
-            <option value="student">Estudante</option>
-            <option value="teacher">Professor</option>
-          </select>
-        </div>
-        {role === "teacher" && (
-          <div className="form-group">
-            <label htmlFor="subjectSpecialty">Especialidade</label>
-            <input
-              type="text"
-              id="subjectSpecialty"
-              value={subjectSpecialty}
-              onChange={(e) => setSubjectSpecialty(e.target.value)}
-              required
-            />
-          </div>
-        )}
         <button type="submit">Cadastrar</button>
         <p className="redirect">
           Já tem uma conta?{" "}
@@ -110,7 +88,7 @@ const RegisterPage = () => {
         </p>
       </form>
     </div>
-  );
+  );  
 };
 
 export default RegisterPage;

@@ -9,7 +9,7 @@ const LoginPage = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await fetch("/api/auth/login", {
+    const response = await fetch("http://localhost:8081/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,10 +29,15 @@ const LoginPage = () => {
 
   return (
     <div className="login-container">
+      {/* Waves no fundo */}
+      <div className="wave wave-back"></div>
+      <div className="wave wave-front"></div>
+  
+      {/* Formulário */}
       <form className="login-form" onSubmit={handleLogin}>
-        <h1>Login</h1>
+        <h1>Boas Vindas</h1>
         <div className="form-group">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Usuário</label>
           <input
             type="email"
             id="email"
@@ -51,7 +56,7 @@ const LoginPage = () => {
             required
           />
         </div>
-        <button type="submit">Entrar</button>
+        <button type="submit">Logar</button>
         <p className="redirect">
           Não tem uma conta?{" "}
           <Link href="/register" className="link">
