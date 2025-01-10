@@ -1,0 +1,103 @@
+.approval-page-container {
+  display: flex;
+  font-family: Arial, sans-serif;
+  background-color: #102f54; /* Azul escuro */
+  color: white;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.approval-page-title h1{
+  font-family: Arial, sans-serif;
+  text-align: center;
+  font-weight: bold;
+  font-size: 4rem;
+  margin-bottom: 2.5rem;
+  color: white;
+  font-weight: 700;
+}
+
+.approval-page-button {
+  width: 15%;
+  padding: 0.8rem;
+  background: linear-gradient(to right, #d29e01 50%, #E3AA00 50%);
+  background-size: 200% 100%; /* Duplica o tamanho horizontal para a animação */
+  background-position: right bottom;
+  border: none;    
+  align-items: center;  
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #ffffff;
+  margin-top: 1rem;
+  transition: background-position 0.3s ease; /* Anima a posição do gradiente */
+}
+
+button:hover {
+  background-position: left bottom; /* Move o gradiente para preencher */
+}
+
+/* Contêiner dos pontinhos */
+.dots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1; /* Fica atrás de todo o conteúdo */
+}
+
+/* Estilo dos pontinhos */
+.dot {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%; /* Pontos redondos */
+  animation: blink 3s infinite ease-in-out; /* Animação contínua */
+  opacity: 0; /* Inicialmente invisível */
+}
+
+/* Animação de piscar */
+@keyframes blink {
+  0% {
+    opacity: 0; /* Totalmente invisível */
+  }
+  50% {
+    opacity: 1; /* Totalmente visível */
+  }
+  100% {
+    opacity: 0; /* Invisível novamente */
+  }
+}
+
+.image-container  {
+  position: relative;  
+  width: 100%;
+  z-index: 0.5;
+}
+
+.img-planet {
+  position: absolute;
+  bottom: 110;
+  left: 80%;
+  transform: translateX(-300%);
+  height: 300px;
+  width: auto;
+  opacity: 0.5;
+}
+
+.img-astro {
+  position: absolute;
+  bottom: -200;
+  left: 120%;
+  opacity: 0.8;
+  transform: translateX(-300%);
+  width: auto; /* Define largura */
+  height: 200px; /* Mantém proporção */
+  border-radius: 30%; /* Exemplo: transforma a imagem em um círculo */
+}
+

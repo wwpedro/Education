@@ -1,0 +1,195 @@
+/* Configuração geral */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #102f54; /* Azul escuro */
+    color: white;
+  }
+  
+  .profile-container {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Altura total da tela */
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+  }
+  
+  /* Contêiner das waves */
+  .wave-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+  }
+  
+  .wave {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    animation: alternateWave 12s ease-in-out infinite;
+  }
+  
+  .wave-back {
+    background: rgba(255, 255, 255, 0.2);
+    clip-path: path(
+      "M0,650 C500,670 1000,630 1500,670 C2000,710 2500,670 3000,700 L3000,0 L0,0 Z"
+    );
+    z-index: -1;
+    animation-delay: 0s;
+  }
+  
+  .wave-front {
+    background: rgba(255, 255, 255, 0.4);
+    clip-path: path(
+      "M0,660 C500,690 1000,640 1500,690 C2000,730 2500,690 3000,710 L3000,0 L0,0 Z"
+    );
+    z-index: 1;
+    animation-delay: 1.5s;
+  }
+  
+  /* Header com imagem, informações e botões */
+  .profile-header {
+    display: flex;
+    justify-content: space-between; /* Informações no lado esquerdo, botões no lado direito */
+    align-items: flex-start;
+    z-index: 2;
+    width: 100%;
+  }
+  
+  /* Informações do usuário no lado esquerdo */
+  .profile-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Espaço entre imagem e texto */
+    margin-top: 4.5rem;
+    margin-left: 1rem;
+  }
+  
+  .profile-picture {
+    width: 224px;
+    height: 224px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .profile-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .profile-name {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .edit-link {
+    font-size: 0.9rem;
+    color: #007bff;
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+  
+  .edit-link:hover {
+    text-decoration: underline;
+  }
+  
+  .profile-description,
+  .profile-role {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #ddd;
+  }
+  
+  /* Botões no lado direito */
+.profile-buttons {
+    display: flex;
+    flex-direction: row; /* Alinha os botões em uma linha */
+    justify-content: flex-start; /* Alinha os botões à esquerda */
+    gap: 1rem; /* Espaçamento horizontal entre os botões */
+    margin-right:4rem; /* Move os botões para a esquerda */
+    margin-top: 35%;
+    }
+  
+  .profile-buttons button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #e3aa00;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .profile-buttons button:hover {
+    background-color: #d29e01;
+  }
+  
+  .accept-button {
+    background-color: #4caf50;
+  }
+  
+  .accept-button:hover {
+    background-color: #3e8e41;
+  }
+  
+  .create-class-button {
+    background-color: #007bff;
+  }
+  
+  .create-class-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .view-classes-button {
+    background-color: #ff5722;
+  }
+  
+  .view-classes-button:hover {
+    background-color: #e64a19;
+  }
+  
+
+  /* Contêiner dos pontinhos */
+.dots {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0; /* Fica atrás de todo o conteúdo */
+  }
+  
+  /* Estilo dos pontinhos */
+  .dot {
+    position: absolute;
+    background-color: white;
+    border-radius: 50%; /* Pontos redondos */
+    animation: blink 3s infinite ease-in-out; /* Animação contínua */
+    opacity: 0; /* Inicialmente invisível */
+  }
+  
+  /* Animação de piscar */
+  @keyframes blink {
+    0% {
+      opacity: 0; /* Totalmente invisível */
+    }
+    50% {
+      opacity: 1; /* Totalmente visível */
+    }
+    100% {
+      opacity: 0; /* Invisível novamente */
+    }
+  }
+  

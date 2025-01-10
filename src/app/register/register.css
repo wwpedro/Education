@@ -1,76 +1,127 @@
-/* Fundo geral */
+/* Fundo geral com pontinhos brancos */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #274c77; /* Azul escuro */
+  background-color: #102f54; /* Azul escuro */
   color: white;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* Evita barra de rolagem causada pelo movimento */
 }
 
-.register-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+/* Contêiner dos pontinhos */
+.dots {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  z-index: -1; /* Fica atrás de todo o conteúdo */
+}
+
+/* Estilo dos pontinhos */
+.dot {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%; /* Pontos redondos */
+  animation: blink 3s infinite ease-in-out; /* Animação contínua */
+  opacity: 0; /* Inicialmente invisível */
+}
+
+/* Animação de piscar */
+@keyframes blink {
+  0% {
+    opacity: 0; /* Totalmente invisível */
+  }
+  50% {
+    opacity: 1; /* Totalmente visível */
+  }
+  100% {
+    opacity: 0; /* Invisível novamente */
+  }
+}
+
+
+.login-container {
   position: relative;
+  overflow: hidden; /* Garante que as ondas não escapem da área visível */
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Contêiner das waves */
+.wave-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 1000%; /* Garante que as ondas cubram toda a largura */
+  height: 400px; /* Altura do contêiner */
+  overflow: hidden; /* Impede que as waves escapem */
+  z-index: 0;
 }
 
 /* Waves */
 .wave {
   position: absolute;
-  width: 200%; /* Largura extra para movimento */
-  height: 200px;
+  width: 100%; /* Ocupa 100% da largura da tela */
+  height: 400px; /* Ajuste conforme necessário */
   bottom: 0;
-  animation: waveAnimation 8s linear infinite; /* Animação contínua */
-  z-index: 1;
-  opacity: 0.6;
+  left: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  animation: alternateWave 5s ease-in-out infinite;
 }
 
+/* Wave de fundo */
 .wave-back {
   background: rgba(255, 255, 255, 0.2);
-  clip-path: ellipse(120% 40% at 50% 60%);
-  animation-duration: 10s; /* Velocidade mais lenta */
-  animation-delay: -2s; /* Animação desfasada */
+  clip-path: path(
+    "M0,300 C200,250 400,350 600,300 C800,250 1000,350 1200,300 C1400,250 1600,350 1800,300 L1800,400 L0,400 Z"
+  );
+  z-index: -1;
+  animation-delay: 0s; /* Movimenta imediatamente */
 }
 
+/* Wave da frente */
 .wave-front {
   background: rgba(255, 255, 255, 0.4);
-  clip-path: ellipse(120% 30% at 50% 70%);
-  animation-duration: 6s; /* Velocidade mais rápida */
+  clip-path: path(
+    "M0,420 C200,280 400,360 600,320 C800,280 1000,360 1200,320 C1400,280 1600,360 1800,320 L1800,400 L0,400 Z"
+  );
+  z-index: 1;
+  animation-delay: 1.5s; /* Movimenta após a wave-back */
 }
 
-/* Animação */
-@keyframes waveAnimation {
-  0% {
-    transform: translateX(0) translateY(0);
-  }
-  25% {
-    transform: translateX(-25%) translateY(10px); /* Movimento para baixo */
+/* Animação para alternar as formas das ondas */
+@keyframes alternateWave {
+  0%, 100% {
+    clip-path: path(
+      "M0,300 C200,250 400,350 600,300 C800,250 1000,350 1200,300 C1400,250 1600,350 1800,300 L1800,400 L0,400 Z"
+    );
   }
   50% {
-    transform: translateX(-50%) translateY(0); /* Movimento para cima */
-  }
-  75% {
-    transform: translateX(-75%) translateY(-10px); /* Movimento para baixo */
-  }
-  100% {
-    transform: translateX(-100%) translateY(0); /* Reinicia a posição */
+    clip-path: path(
+      "M0,320 C200,280 400,360 600,320 C800,280 1000,360 1200,320 C1400,280 1600,360 1800,320 L1800,400 L0,400 Z"
+    );
   }
 }
 
+
 /* Formulário */
-.register-form {
-  background: rgba(255, 255, 255, 0.1); /* Fundo translúcido */
+.login-form {
+  background: rgba(255, 255, 255, 0); /* Fundo translúcido */
   padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  /*border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);*/
   z-index: 3;
+  align-items: center;
   width: 100%;
   max-width: 400px;
   text-align: center;
@@ -78,49 +129,56 @@ body {
 
 .register-form h1 {
   font-size: 2rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
   color: white;
+  font-weight: 700;
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   text-align: left;
 }
 
 .form-group label {
   display: block;
-  font-weight: bold;
+  font-weight: 400;
   margin-bottom: 0.5rem;
+  text-align: center;
 }
 
-.form-group input,
-.form-group select {
+.form-group input {
   width: 100%;
+  height: 2.5em;
   padding: 0.8rem;
   border: none;
   border-radius: 6px;
   font-size: 1rem;
   background: #fff;
   color: #333;
+  text-align: center;
 }
 
 button {
-  width: 100%;
+  width: 50%;
   padding: 0.8rem;
-  background-color: #fcbf49; /* Amarelo */
+  background: linear-gradient(to right, #d29e01 50%, #E3AA00 50%);
+  background-size: 200% 100%; /* Duplica o tamanho horizontal para a animação */
+  background-position: right bottom;
+  align-items: center;
   border: none;
   border-radius: 6px;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  color: #000;
+  color: #ffffff;
   margin-top: 1rem;
-  transition: background-color 0.3s ease;
+  transition: background-position 0.3s ease; /* Anima a posição do gradiente */
 }
 
 button:hover {
-  background-color: #d89f36;
+  background-position: left bottom; /* Move o gradiente para preencher */
 }
+
 
 .redirect {
   margin-top: 1rem;
@@ -136,4 +194,37 @@ button:hover {
 
 .redirect .link:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .login-form {
+    padding: 1.5rem;
+    width: 90%;
+  }
+}
+
+.image-container  {
+  position: relative;  
+  width: 100%;
+}
+
+.img-planet {
+  position: absolute;
+  bottom: -150;
+  left: 120%;
+  transform: translateX(-300%);
+  height: 300px;
+  width: auto;
+  opacity: 0.5;
+}
+
+.img-astro {
+  position: absolute;
+  bottom: -440;
+  left: 400%;
+  transform: translateX(-300%);
+  width: auto; /* Define largura */
+  height: 250px; /* Mantém proporção */
+  opacity: 0.8;
+  border-radius: 30%; /* Exemplo: transforma a imagem em um círculo */
 }
