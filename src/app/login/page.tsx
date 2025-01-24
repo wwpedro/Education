@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // Corrigido o import
 import Link from "next/link";
 import "./login.css";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter(); // Certifique-se de que o roteador vem de 'next/navigation'
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +22,7 @@ const LoginPage = () => {
     if (response.ok) {
       const data = await response.json();
       console.log("Login bem-sucedido!", data);
-      alert("Login realizado com sucesso!");
+      router.push("/profile"); // Redireciona para a página de perfil
     } else {
       console.error("Erro ao realizar login");
       alert("Credenciais inválidas");

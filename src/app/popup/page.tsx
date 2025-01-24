@@ -1,8 +1,11 @@
 "use client";
-import React, { useEffect } from 'react';
-import './popup.css';
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation"; // Importa o hook de navegação do Next.js
+import "./popup.css";
 
 const ApprovalPage: React.FC = () => {
+  const router = useRouter(); // Inicializa o roteador
+
   useEffect(() => {
     const dotsContainer = document.querySelector(".dots");
     if (!dotsContainer) return;
@@ -29,28 +32,28 @@ const ApprovalPage: React.FC = () => {
     }
   }, []);
 
+  const handleButtonClick = () => {
+    router.push("/profile"); // Redireciona para a página /profile
+  };
+
   return (
     <div className="approval-page-container">
       <div className="dots"></div>
       <h1 className="approval-page-title">
-        Aguarde a aprovação do professor. <br />
-        (Vai chegar no seu E-mail!)
+        Seu cadastro foi realizado com sucesso <br />
+        <br />
+        Seu perfil está em análise<br />
+        assim que for aprovado você receberá um email
       </h1>
 
       {/* Contêiner para os pontinhos */}
       <div className="dots"></div>
 
-      {/* Imagem do planeta */}
-      <div className="image-container">
-      <img src="/assets/img-planet.png" alt="Planeta" className="img-planet" />
-      </div>
-
-      {/* Imagem do astronauta */}
-      <div className="image-container">
-      <img src="/assets/img-astro.png" alt="Astronauta" className="img-astro" />
-    </div>
-      <button className="approval-page-button" onClick={() => alert('Botão clicado!')}>
-        Voltar ao Menu
+      <button
+        className="approval-page-button"
+        onClick={handleButtonClick} // Adiciona o redirecionamento no clique
+      >
+        Perfil
       </button>
     </div>
   );

@@ -2,7 +2,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #1e3a8a; /* Fundo azul */
+    background-color: #102f54; /* Fundo azul */
     color: white;
     position: relative; /* Necessário para posicionar imagens absolutas */
     overflow: hidden; /* Impede que imagens se estendam para fora */

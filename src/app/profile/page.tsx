@@ -35,9 +35,9 @@ const ProfilePage = () => {
   return (
     <div className="profile-container">
       {/* Contêiner para as waves */}
-      <div className="wave-container">
-        <div className="wave wave-back"></div>
-        <div className="wave wave-front"></div>
+      <div className="wave-container1">
+        <div className="wave1 wave-back1"></div>
+        <div className="wave1 wave-front1"></div>
       </div>
 
       {/* Contêiner para os pontinhos */}

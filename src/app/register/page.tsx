@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // Importa o hook useRouter
 import Link from "next/link";
 import "./register.css";
 
@@ -7,6 +8,8 @@ const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState(""); // Estado para telefone
+  const router = useRouter(); // Inicializa o hook para redirecionamento
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,6 +18,8 @@ const RegisterPage = () => {
       name,
       email,
       password,
+      phone,
+      role: "student", // Papel padrão definido automaticamente
     };
 
     try {
@@ -29,7 +34,7 @@ const RegisterPage = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Usuário cadastrado com sucesso!", data);
-        alert("Cadastro realizado com sucesso!");
+        router.push("/popup"); // Redireciona para a rota /popup
       } else {
         console.error("Erro ao cadastrar usuário");
         alert("Erro no cadastro. Verifique os dados.");
@@ -40,52 +45,35 @@ const RegisterPage = () => {
     }
   };
 
-useEffect(() => {
+  useEffect(() => {
     const dotsContainer = document.querySelector(".dots");
     if (!dotsContainer) return;
 
-    const totalDots = 100; // Quantidade de pontinhos
+    const totalDots = 100;
     for (let i = 0; i < totalDots; i++) {
       const dot = document.createElement("div");
       dot.classList.add("dot");
-
-      // Posições aleatórias
       dot.style.top = `${Math.random() * 100}%`;
       dot.style.left = `${Math.random() * 100}%`;
-
-      // Tamanhos aleatórios
-      const size = Math.random() * 1 + 2; // Entre 2px e 6px
+      const size = Math.random() * 1 + 2;
       dot.style.width = `${size}px`;
       dot.style.height = `${size}px`;
-
-      // Atraso de animação aleatório
       dot.style.animationDelay = `${Math.random() * 5}s`;
-
-      // Adiciona o ponto ao contêiner
       dotsContainer.appendChild(dot);
     }
   }, []);
 
   return (
     <div className="register-container">
-      {/* Waves no fundo */}
       <div className="wave wave-back"></div>
       <div className="wave wave-front"></div>
-
-      {/* Contêiner para os pontinhos */}
       <div className="dots"></div>
-
-      {/* Imagem do planeta */}
-    <div className="image-container">
-    <img src="/assets/img-planet.png" alt="Planeta" className="img-planet" />
-    </div>
-
-    {/* Imagem do astronauta */}
-    <div className="image-container">
-    <img src="/assets/img-astro.png" alt="Astronauta" className="img-astro" />
-    </div>
-
-      {/* Formulário */}
+      <div className="image-container">
+        <img src="/assets/img-planet.png" alt="Planeta" className="img-planet" />
+      </div>
+      <div className="image-container">
+        <img src="/assets/img-astro.png" alt="Astronauta" className="img-astro" />
+      </div>
       <form className="register-form" onSubmit={handleRegister}>
         <h1>Cadastro de Usuário</h1>
         <div className="form-group">
@@ -118,16 +106,26 @@ useEffect(() => {
             required
           />
         </div>
+        <div className="form-group">
+          <label htmlFor="phone">Telefone</label>
+          <input
+            type="text"
+            id="phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+          />
+        </div>
         <button type="submit">Cadastrar</button>
         <p className="redirect">
-          Já tem uma conta?{" "}
+          Caso já tenha uma conta por favor: {" "}
           <Link href="/login" className="link">
             Faça login
           </Link>
         </p>
       </form>
     </div>
-  );  
+  );
 };
 
 export default RegisterPage;
