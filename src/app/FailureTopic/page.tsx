@@ -1,0 +1,59 @@
+"use client";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation"; // Hook de navegação
+import "./popup.css";
+
+const FailureTopic: React.FC = () => {
+  const router = useRouter(); // Inicializa o roteador
+
+  useEffect(() => {
+    const dotsContainer = document.querySelector(".dots");
+    if (!dotsContainer) return;
+
+    const totalDots = 100; // Quantidade de pontinhos
+    for (let i = 0; i < totalDots; i++) {
+      const dot = document.createElement("div");
+      dot.classList.add("dot");
+
+      // Posições aleatórias
+      dot.style.top = `${Math.random() * 100}%`;
+      dot.style.left = `${Math.random() * 100}%`;
+
+      // Tamanhos aleatórios
+      const size = Math.random() * 1 + 2; // Entre 2px e 6px
+      dot.style.width = `${size}px`;
+      dot.style.height = `${size}px`;
+
+      // Atraso de animação aleatório
+      dot.style.animationDelay = `${Math.random() * 5}s`;
+
+      // Adiciona o ponto ao contêiner
+      dotsContainer.appendChild(dot);
+    }
+  }, []);
+
+  const handleButtonClick = () => {
+    router.push("/"); // Redireciona para a página inicial
+  };
+
+  return (
+    <div className="approval-page-container">
+      <div className="dots"></div>
+      <h1 className="approval-page-title">
+        Que pena! Você não atingiu a pontuação necessária. 😞
+      </h1>
+      <div className="image-container">
+        <img src="/assets/failure_planet.png" alt="Planeta" className="img-planet" />
+        <img src="/assets/failure_astro.png" alt="Astronauta" className="img-astro" />
+      </div>
+      <button
+        className="approval-page-button"
+        onClick={handleButtonClick} // Redireciona para a página inicial
+      >
+        Tentar Novamente
+      </button>
+    </div>
+  );
+};
+
+export default FailureTopic;

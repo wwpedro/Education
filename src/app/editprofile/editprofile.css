@@ -1,0 +1,207 @@
+/* Fundo geral com pontinhos brancos */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #102f54; /* Azul escuro */
+  color: white;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Contêiner dos pontinhos */
+.dots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1; /* Fica atrás de todo o conteúdo */
+}
+
+/* Estilo dos pontinhos */
+.dot {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%; /* Pontos redondos */
+  animation: blink 3s infinite ease-in-out; /* Animação contínua */
+  opacity: 0; /* Inicialmente invisível */
+}
+
+/* Animação de piscar */
+@keyframes blink {
+  0% {
+    opacity: 0; /* Totalmente invisível */
+  }
+  50% {
+    opacity: 1; /* Totalmente visível */
+  }
+  100% {
+    opacity: 0; /* Invisível novamente */
+  }
+}
+
+.register-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Contêiner para o formulário e o cartão de foto */
+.form-and-image {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%; /* Ajuste o tamanho conforme necessário */
+}
+
+/* Cartão de perfil */
+.profile-card {
+  width: 650px; 
+  background-color: white;
+  padding: 3rem; /* Aumentado padding */
+  border-radius: 12px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.profile-image-container {
+  width: 200px; /* Aumentado tamanho da imagem */
+  height: 200px;
+  margin: 0 auto;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-image-placeholder {
+  width: 150px; /* Aumentado tamanho do placeholder */
+  height: 150px;
+  background-color: #ccc;
+  border-radius: 50%;
+}
+
+.image-upload-container {
+  display: flex;
+  justify-content: space-between; /* Agora os itens ficam um ao lado do outro */
+  align-items: center;
+  margin-top: 20px;
+  width: 60%; /* Ajusta a largura para os elementos ficarem alinhados */
+  height: 50px;
+}
+
+.image-upload-container input {
+  display: none;
+}
+
+.image-upload-container .photo-text-box {
+  font-size: 1rem;
+  color: #333;
+  padding: 1.5rem; /* Aumentado o padding */
+  background-color: #d3d3d3; /* Cinza claro */
+  border-radius: 6px;
+  width: 350px; /* Aumentado a largura da caixa */
+  height: 120px; /* Aumentado a altura */
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Formulário de Preenchimento */
+.register-form {
+  background: rgba(255, 255, 255, 0); /* Fundo translúcido */
+  padding: 2rem;
+  z-index: 3;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+h1.title {
+  font-size: 2rem;
+  margin-bottom: 2.5rem;
+  color: white;
+  font-weight: 700;
+  text-align: center; /* Centraliza o título */
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.form-group input {
+  width: 100%;
+  height: 2.5em;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #fff;
+  color: #333;
+  text-align: center;
+}
+
+.save-button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #fcbf49; 
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #ffffff;
+  margin-top: 1rem;
+}
+
+.save-button:hover {
+  background-color: #e2a71a; /* Cor mais escura ao passar o mouse */
+}
+
+.upload-button {
+  background-color: #fcbf49; 
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  }
+    
+.upload-button:hover {
+  background-color: #e2a71a; 
+  }
+
+@media (max-width: 768px) {
+  .form-and-image {
+    flex-direction: column;
+  }
+
+  .register-form {
+    padding: 1.5rem;
+    width:90%;
+  }
+}

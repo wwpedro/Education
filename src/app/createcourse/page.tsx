@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import "./createclass.css";
+import React, { useEffect, useState } from "react";
+import "./createcourse.css";
+import Link from "next/link";
 
-const CreateClassroomPage = () => {
+const CreateClassPage = () => {
   const [selectedCurriculum, setSelectedCurriculum] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState("");
 
   useEffect(() => {
     const starsContainer = document.querySelector(".stars");
@@ -16,16 +16,16 @@ const CreateClassroomPage = () => {
       star.classList.add("star");
 
       // Posição aleatória
-      star.style.top =`${Math.random() * 100}%`;
+      star.style.top = `${Math.random() * 100}%`;
       star.style.left = `${Math.random() * 100}%`;
 
       // Tamanho aleatório
       const size = Math.random() * 3 + 1; // Entre 1px e 4px
-      star.style.width =`${size}px`;
-      star.style.height =`${size}px`;
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
 
       // Atraso de animação aleatório
-      star.style.animationDelay =`${Math.random() * 2}s`;
+      star.style.animationDelay = `${Math.random() * 2}s`;
 
       // Adiciona a estrela ao contêiner
       starsContainer.appendChild(star);
@@ -44,7 +44,7 @@ const CreateClassroomPage = () => {
       <img src="/assets/image8.png" alt="Planeta" className="planet-upper-right" />
 
       {/* Conteúdo principal */}
-      <h1 className="title">Fábrica de Turmas</h1>
+      <h1 className="title">Fábrica de Cursos</h1>
       <form className="createclass-form">
         <label htmlFor="curriculum" className="label">
           Curriculum <span className="required">*</span>
@@ -87,67 +87,19 @@ const CreateClassroomPage = () => {
         </div>
 
         <label htmlFor="course" className="label">
-          Curso <span className="required">*</span>
+          Curso
         </label>
+        <input type="text" id="course" className="input" placeholder="Nome do curso" />
 
-        {/* Lista rolável para Curso */}
-        <div className="dropdown-list">
-          <ul>
-            <li
-              onClick={() => setSelectedCourse("Curso 1")}
-              className={selectedCourse === "Curso 1" ? "selected" : ""}
-            >
-              Curso 1
-            </li>
-            <li
-              onClick={() => setSelectedCourse("Curso 2")}
-              className={selectedCourse === "Curso 2" ? "selected" : ""}
-            >
-              Curso 2
-            </li>
-            <li
-              onClick={() => setSelectedCourse("Curso 3")}
-              className={selectedCourse === "Curso 3" ? "selected" : ""}
-            >
-              Curso 3
-            </li>
-            <li
-              onClick={() => setSelectedCourse("Curso 4")}
-              className={selectedCourse === "Curso 4" ? "selected" : ""}
-            >
-              Curso 4
-            </li>
-            <li
-              onClick={() => setSelectedCourse("Curso 5")}
-              className={selectedCourse === "Curso 5" ? "selected" : ""}
-            >
-              Curso 5
-            </li>
-          </ul>
-        </div>
-
-        <label htmlFor="class" className="label">
-          Turma
-        </label>
-        <input type="text" id="class" className="input" placeholder="Nome da turma" />
-
-        <label htmlFor="class-description" className="label">
+        <label htmlFor="description" className="label">
           Descrição
         </label>
-        <input type="text" id="class-description" className="input" placeholder="Descrição da turma" />
-
-        <label htmlFor="add-students" className="label">
-          Adicionar alunos
-        </label>
-        <div className="import-group">
-          <input type="text" id="add-students" className="input" placeholder="Adicionar alunos" />
-          <button type="button" className="add-button">
-            +
-          </button>
-        </div>
+        <input type="text" id="description" className="input" placeholder="Descrição do curso" />
 
         <div className="form-actions">
+        <Link href="/createclass" className="link">
           <button type="submit" className="submit-button">Avançar</button>
+          </Link>
           <button type="button" className="cancel-button">Cancelar</button>
         </div>
       </form>
@@ -155,4 +107,4 @@ const CreateClassroomPage = () => {
   );
 };
 
-export default CreateClassroomPage;
+export default CreateClassPage;

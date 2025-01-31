@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #102f54; /* Azul escuro */
+  color: white;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Fundo espacial */
+.space-background {
+    background: url('/path/to/star-background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Título */
+  .title {
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Imagens do fundo */
+  .planet {
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 150px;
+    height: auto;
+  }
+  
+  .comet {
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    width: 120px;
+    height: auto;
+  }
+  
+  .rocket {
+    position: absolute;
+    bottom: 10%;
+    left: 5%;
+    width: 100px;
+    height: auto;
+  }
+  
+  .earth {
+    position: absolute;
+    bottom: 5%;
+    right: 10%;
+    width: 150px;
+    height: auto;
+  }
+  
+  /* Container dos tópicos */
+  .topics-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+  }
+  
+  /* Nó (bolinha com título) */
+  .node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  /* Bolinha do tópico */
+  .node-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 8px;
+    transition: transform 0.2s ease;
+  }
+  
+  .node-circle:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Título do tópico */
+  .node-title {
+    color: white;
+    font-size: 1rem;
+  }
+  

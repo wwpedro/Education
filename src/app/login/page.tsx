@@ -1,31 +1,42 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Corrigido o import
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import "./login.css";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter(); // Certifique-se de que o roteador vem de 'next/navigation'
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:8081/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log("Login bem-sucedido!", data);
-      router.push("/profile"); // Redireciona para a página de perfil
-    } else {
-      console.error("Erro ao realizar login");
-      alert("Credenciais inválidas");
+    try {
+      const response = await fetch("http://localhost:8081/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Login bem-sucedido!", data);
+
+        // Armazena o token no localStorage
+        localStorage.setItem("accessToken", data.accessToken);
+
+        alert("Login realizado com sucesso!");
+        router.push("/profile"); // Redireciona para a página de perfil
+      } else {
+        console.error("Erro ao realizar login");
+        alert("Credenciais inválidas");
+      }
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+      alert("Ocorreu um erro ao tentar fazer login. Tente novamente.");
     }
   };
 

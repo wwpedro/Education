@@ -1,12 +1,58 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import "./profile.css";
 
+// Definição do tipo de usuário
+interface UserData {
+  id: number;
+  name: string;
+  email: string;
+  phone: string | null;
+  password: string;
+  createdAt: string;
+  lastLogin: string | null;
+  profilePicturePath: string | null;
+  status: string;
+  subjectSpecialty?: string; // Campo opcional para professores
+}
+
 const ProfilePage = () => {
+  const [userData, setUserData] = useState<UserData | null>(null);
   const router = useRouter();
 
   useEffect(() => {
+    // Função para buscar dados do usuário
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("accessToken"); // Recupera o token armazenado
+      if (!token) {
+        console.error("Token não encontrado");
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:8081/api/users/id", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
+          },
+        });
+
+        if (response.ok) {
+          const data: UserData = await response.json();
+          setUserData(data); // Armazena os dados do usuário
+        } else {
+          console.error("Erro ao buscar dados do usuário:", response.status, response.statusText);
+        }
+      } catch (error) {
+        console.error("Erro na requisição:", error);
+      }
+    };
+
+    fetchUserData();
+
+    // Adiciona os pontinhos animados
     const dotsContainer = document.querySelector(".dots");
     if (!dotsContainer) return;
 
@@ -34,18 +80,14 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-container">
-      {/* Contêiner para as waves */}
       <div className="wave-container1">
         <div className="wave1 wave-back1"></div>
         <div className="wave1 wave-front1"></div>
       </div>
 
-      {/* Contêiner para os pontinhos */}
       <div className="dots"></div>
 
-      {/* Header com imagem, informações e botões */}
       <div className="profile-header">
-        {/* Informações do usuário no lado esquerdo */}
         <div className="profile-info">
           <img
             src="assets/Pessoa-fisica-mobile.jpg"
@@ -53,32 +95,42 @@ const ProfilePage = () => {
             className="profile-picture"
           />
           <div className="profile-details">
-            <h1 className="profile-name">Olá, Girleide</h1>
-            <a href="/editprofile" className="edit-link">
-              Editar
-            </a>
-            <p className="profile-description">Estudante dedicada e apaixonada por tecnologia</p>
-            <p className="profile-role">Cargo: Professora</p>
+            {userData ? (
+              <>
+                <h1 className="profile-name">Olá, {userData.name}</h1>
+                <a href="/editprofile" className="edit-link">
+                  Editar
+                </a>
+                {userData.subjectSpecialty ? (
+                  <p className="profile-role">
+                    Cargo: Professor(a) - {userData.subjectSpecialty}
+                  </p>
+                ) : (
+                  <p className="profile-role">Cargo: Estudante</p>
+                )}
+              </>
+            ) : (
+              <p>Carregando informações...</p>
+            )}
           </div>
         </div>
 
-        {/* Botões no lado direito */}
         <div className="profile-buttons">
           <button
             className="accept-button"
-            onClick={() => router.push("/studantlist")}
+            onClick={() => router.push("/studentslist")}
           >
             Aceitar Alunos
           </button>
           <button
             className="create-class-button"
-            onClick={() => router.push("/createclass")}
+            onClick={() => router.push("/createcurriculum")}
           >
             Criar Aula
           </button>
           <button
             className="view-classes-button"
-            onClick={() => router.push("/classes")}
+            onClick={() => router.push("/classlist")}
           >
             Ver Classes
           </button>
