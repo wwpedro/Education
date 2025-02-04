@@ -26,12 +26,12 @@ const ClassListPage = () => {
       // Posição aleatória
       star.style.top = `${Math.random() * 100}%`;
       star.style.left = `${Math.random() * 100}%`;
-  
+
       // Tamanho aleatório
       const size = Math.random() * 3 + 1; // Entre 1px e 4px
       star.style.width = `${size}px`;
       star.style.height = `${size}px`;
-  
+
       // Atraso de animação aleatório
       star.style.animationDelay = `${Math.random() * 2}s`;
 

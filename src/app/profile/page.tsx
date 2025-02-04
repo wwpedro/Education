@@ -77,7 +77,7 @@ const ProfilePage = () => {
       dotsContainer.appendChild(dot);
     }
   }, []);
-
+  
   return (
     <div className="profile-container">
       <div className="wave-container1">
@@ -124,7 +124,7 @@ const ProfilePage = () => {
           </button>
           <button
             className="create-class-button"
-            onClick={() => router.push("/createcurriculum")}
+            onClick={() => router.push("/createclass")}
           >
             Criar Aula
           </button>
@@ -135,6 +135,17 @@ const ProfilePage = () => {
             Ver Classes
           </button>
         </div>
+        
+        {/* Botão de Logout */}
+        <button
+          className="logout-button"
+          onClick={() => {
+            localStorage.removeItem("accessToken");
+            router.push("/login"); // Redireciona para a tela de login
+          }}
+        >
+          Logout
+        </button>
       </div>
     </div>
   );
