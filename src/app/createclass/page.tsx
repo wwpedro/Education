@@ -157,7 +157,7 @@ const CreateClassroomPage = () => {
 
         <div className="form-actions">
           <button type="button" className="cancel-button" onClick={() => Router.back()}>Voltar</button>
-          <button type="submit" className="submit-button" onClick={() => "/topicsmenu"}>Avançar</button>
+          <button type="submit" className="submit-button" onClick={() => Router.push("/topicsprofile")}>Avançar</button>
           <button type="button" className="cancel-button">Cancelar</button>
         </div>
       </form>
