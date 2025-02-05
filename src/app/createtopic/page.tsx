@@ -1,109 +1,259 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import "./createtopic.css";
+import Link from "next/link";
+import Router from "next/router";
 
-import { useState } from 'react';
-import './createtopic.css';
+type Question = {
+  id: number;
+  description: string;
+  options: { text: string; isCorrect: boolean }[];
+};
 
-export default function CreateTopicPage() {
-  const [questions, setQuestions] = useState([]);
-  const [currentQuestion, setCurrentQuestion] = useState({ enunciado: '', alternativas: [{ texto: '', correta: false }] });
-  const [editingIndex, setEditingIndex] = useState(null);
+type ModalProps = {
+  message: string;
+  onClose: () => void;
+};
 
-  const handleAddAlternative = () => {
-    setCurrentQuestion({
-      ...currentQuestion,
-      alternativas: [...currentQuestion.alternativas, { texto: '', correta: false }],
-    });
-  };
+const Modal: React.FC<ModalProps> = ({ message, onClose }) => (
+  <div className="modal-overlay" style={modalOverlayStyle}>
+    <div className="modal-content" style={modalContentStyle}>
+      <p>{message}</p>
+      <button onClick={onClose} style={buttonStyle}>Fechar</button>
+    </div>
+  </div>
+);
 
-  const handleQuestionChange = (/*index, value*/) => {
-    const novasAlternativas = [...currentQuestion.alternativas];
-    /*novasAlternativas[index].texto = value*/;
-    setCurrentQuestion({ ...currentQuestion, alternativas: novasAlternativas });
-  };
+const modalOverlayStyle = {
+  position: "fixed" as const,
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: "rgba(0, 0, 0, 0.5)",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  zIndex: 1000,
+};
 
-  const handleCorrectChange = (/*index*/) => {
-    const novasAlternativas = [...currentQuestion.alternativas];
-    /*novasAlternativas[/*index].correta = !novasAlternativas[index].correta;
-    setCurrentQuestion({ ...currentQuestion, alternativas: novasAlternativas });*/
-  };
+const modalContentStyle = {
+  background: "#fff",
+  padding: "20px",
+  borderRadius: "8px",
+  boxShadow: "0 2px 10px rgba(0, 0, 0, 0.3)",
+  textAlign: "center" as const,
+  maxWidth: "300px",
+  width: "100%",
+};
+
+const buttonStyle = {
+  marginTop: "10px",
+  padding: "8px 16px",
+  backgroundColor: "#007bff",
+  color: "#fff",
+  border: "none",
+  borderRadius: "4px",
+  cursor: "pointer",
+};
+
+
+const CreateTopicPage: React.FC = () => {
+  const [selectedCurriculum, setSelectedCurriculum] = useState<string>("");
+  const [topicTitle, setTopicTitle] = useState<string>("");
+  const [topicDescription, setTopicDescription] = useState<string>("");
+  const [material, setMaterial] = useState<File | null>(null);
+  const [materialLink, setMaterialLink] = useState<string>("");
+  const [questionDescription, setQuestionDescription] = useState<string>("");
+  const [options, setOptions] = useState([{ text: "", isCorrect: false }]);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [editingQuestionId, setEditingQuestionId] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAddQuestion = () => {
-    if (editingIndex !== null) {
-      const updatedQuestions = [...questions];
-      /*updatedQuestions[editingIndex] = currentQuestion;*/
-      setQuestions(updatedQuestions);
-      setEditingIndex(null);
+    if (editingQuestionId !== null) {
+      setQuestions((prevQuestions) =>
+        prevQuestions.map((q) =>
+          q.id === editingQuestionId ? { ...q, description: questionDescription, options: [...options] } : q
+        )
+      );
+      setEditingQuestionId(null);
     } else {
-      setQuestions([/*...questions, currentQuestion*/]);
+      const newQuestion: Question = {
+        id: questions.length + 1,
+        description: questionDescription,
+        options: [...options],
+      };
+      setQuestions([...questions, newQuestion]);
     }
-    setCurrentQuestion({ enunciado: '', alternativas: [{ texto: '', correta: false }] });
+    setQuestionDescription("");
+    setOptions([{ text: "", isCorrect: false }]);
   };
 
-  const handleEditQuestion = (/*index*/) => {
-    /*setCurrentQuestion(questions[/*index]);*/
-    /*setEditingIndex(/*index/);*/
+  const handleOptionChange = (index: number, field: "text" | "isCorrect", value: string | boolean) => {
+    const updatedOptions = [...options];
+    if (field === "text") {
+      updatedOptions[index].text = value as string;
+    } else {
+      updatedOptions[index].isCorrect = value as boolean;
+    }
+    setOptions(updatedOptions);
   };
 
-  const handleDeleteQuestion = (/*index*/) => {
-    /*setQuestions(questions.filter(/*(_, i) => i !== /*index));*/
+  const handleAddOption = () => {
+    setOptions([...options, { text: "", isCorrect: false }]);
+  };
+
+  const handleEditQuestion = (question: Question) => {
+    setEditingQuestionId(question.id);
+    setQuestionDescription(question.description);
+    setOptions(question.options);
+  };
+
+  const handleDeleteQuestion = (id: number) => {
+    setQuestions(questions.filter((question) => question.id !== id));
+  };
+
+  useEffect(() => {
+    const starsContainer = document.querySelector(".stars");
+    if (!starsContainer) return;
+
+    const totalStars = 100;
+    for (let i = 0; i < totalStars; i++) {
+      const star = document.createElement("div");
+      star.classList.add("star");
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.left = `${Math.random() * 100}%`;
+      const size = Math.random() * 3 + 1;
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+      star.style.animationDelay = `${Math.random() * 2}s`;
+      starsContainer.appendChild(star);
+    }
+  }, []);
+
+  const handleSaveAndAdvance = (e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLButtonElement>) => {
+    if (topicTitle.trim() === "") {
+      e.preventDefault();
+      setIsModalOpen(true);
+    }
   };
 
   return (
-    <div className="container">
-      <div className="card">
-        <form className="form">
-          <input type="text" placeholder="Título" className="input" />
-          <textarea placeholder="Descrição" className="textarea"></textarea>
-          <input type="file" className="input" />
-          <input type="text" placeholder="Link" className="input" />
+    <div className="createclass-container">
+      <div className="stars"></div>
+      <img src="/assets/image9.png" alt="Planeta Terra" className="planet-earth" />
+      <img src="/assets/image8.png" alt="Planeta" className="planet-upper-right" />
 
-          <div className="question-form">
-            <textarea
-              placeholder="Enunciado da questão"
-              value={currentQuestion.enunciado}
-              onChange={(e) => setCurrentQuestion({ ...currentQuestion, enunciado: e.target.value })}
-              className="textarea"
-            ></textarea>
+      <h1 className="title">Fábrica de Tópicos</h1>
+      <form className="createclass-form">
+        
 
-            {currentQuestion.alternativas.map((alt, index) => (
-              <div key={index} className="alternative">
-                <input
-                  type="text"
-                  value={alt.texto}
-                  onChange={(e) => handleQuestionChange(/*index, e.target.value*/)}
-                  className="input"
-                  placeholder={`Alternativa ${index + 1}`}
-                />
-                <label>
-                  Correta
-                  <input
-                    type="checkbox"
-                    checked={alt.correta}
-                    onChange={() => handleCorrectChange(/*index*/)}
-                  />
-                </label>
-              </div>
-            ))}
-            <button type="button" onClick={handleAddAlternative} className="button">Adicionar Alternativa</button>
-            <button type="button" onClick={handleAddQuestion} className="button">Salvar Questão</button>
+        <label htmlFor="topic-title" className="label">Título do Tópico</label>
+        <input
+          type="text"
+          id="topic-title"
+          className="input"
+          value={topicTitle}
+          onChange={(e) => setTopicTitle(e.target.value)}
+          placeholder="Título do Tópico"
+        />
+
+        <label htmlFor="topic-description" className="label">Descrição do Tópico</label>
+        <textarea
+          id="topic-description"
+          className="input"
+          value={topicDescription}
+          onChange={(e) => setTopicDescription(e.target.value)}
+          placeholder="Descrição do Tópico"
+        ></textarea>
+
+        <label htmlFor="import-material" className="label">Importar Material</label>
+        <input
+          type="file"
+          id="import-material"
+          className="input"
+          onChange={(e) => setMaterial(e.target.files ? e.target.files[0] : null)}
+        />
+
+        <label htmlFor="material-link" className="label">Link do Material</label>
+        <input
+          type="url"
+          id="material-link"
+          className="input"
+          value={materialLink}
+          onChange={(e) => setMaterialLink(e.target.value)}
+          placeholder="https://exemplo.com"
+        />
+
+        <label htmlFor="question-description" className="label">Descrição da Questão</label>
+        <textarea
+          id="question-description"
+          className="input"
+          value={questionDescription}
+          onChange={(e) => setQuestionDescription(e.target.value)}
+          placeholder="Descrição da Questão"
+        ></textarea>
+
+        <label className="label">Alternativas</label>
+        {options.map((option, index) => (
+          <div key={index} className="import-group">
+            <input
+              type="text"
+              className="input"
+              placeholder={`Alternativa ${index + 1}`}
+              value={option.text}
+              onChange={(e) => handleOptionChange(index, "text", e.target.value)}
+            />
+            <label>
+              <input
+                type="checkbox"
+                checked={option.isCorrect}
+                onChange={(e) => handleOptionChange(index, "isCorrect", e.target.checked)}
+              />
+              Correta
+            </label>
           </div>
+        ))}
 
-          <div className="question-list">
-            {questions.map((q, index) => (
-              <div key={index} className="question-item">
-                <p>{/*q.enunciado*/}</p>
-                <button type="button" onClick={() => handleEditQuestion(/*index*/)} className="button">Editar</button>
-                <button type="button" onClick={() => handleDeleteQuestion(/*index*/)} className="button">Deletar</button>
-              </div>
-            ))}
-          </div>
+        <button type="button" className="add-button" onClick={handleAddOption}>Adicionar Alternativa</button>
+        <button type="button" className="add-button" onClick={handleAddQuestion}>
+          {editingQuestionId !== null ? "Salvar Alterações" : "Adicionar Questão"}
+        </button>
 
-          <div className="form-actions">
-            <button type="button" className="button save">Salvar e Avançar</button>
-            <button type="button" className="button cancel">Cancelar</button>
-          </div>
-        </form>
-      </div>
+        <div className="question-list-scrollable" style={{ maxHeight: "200px", overflowY: "auto", border: "1px solid #ccc", padding: "10px", marginTop: "20px", color: "black" }}>
+          <h2>Lista de Questões</h2>
+          {questions.length === 0 ? (
+            <p>Nenhuma questão adicionada ainda.</p>
+          ) : (
+            <ol>
+              {questions.map((question, index) => (
+                <li key={question.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span onClick={() => handleEditQuestion(question)} style={{ cursor: "pointer" }}>
+                    Questão {index + 1}
+                  </span>
+                  <button onClick={() => handleDeleteQuestion(question.id)} style={{ background: "red", color: "white", border: "none", padding: "5px 10px", cursor: "pointer" }}>Excluir</button>
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+
+        <div className="form-actions">
+          
+            <button type="submit" className="submit-button" onClick={() => {
+              Router.push("/createcourse");
+              handleSaveAndAdvance;
+            }}>Salvar e Avançar</button>
+
+          <button type="button" className="cancel-button" onClick={() => Router.push("/profile")}>Cancelar</button>
+        </div>
+      </form>
+
+      {isModalOpen && <Modal message="O título do tópico não deve ficar vazio." onClose={() => setIsModalOpen(false)} />}
+
     </div>
   );
-}
+};
+
+export default CreateTopicPage;

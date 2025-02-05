@@ -2,87 +2,59 @@
 import React, { useEffect, useState } from "react";
 import "./createcourse.css";
 import Link from "next/link";
+import Router from "next/router";
 
 const CreateClassPage = () => {
   const [selectedCurriculum, setSelectedCurriculum] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const starsContainer = document.querySelector(".stars");
     if (!starsContainer) return;
 
-    const totalStars = 100; // Quantidade de estrelas
+    const totalStars = 100;
     for (let i = 0; i < totalStars; i++) {
       const star = document.createElement("div");
       star.classList.add("star");
 
-      // Posição aleatória
       star.style.top = `${Math.random() * 100}%`;
       star.style.left = `${Math.random() * 100}%`;
 
-      // Tamanho aleatório
-      const size = Math.random() * 3 + 1; // Entre 1px e 4px
+      const size = Math.random() * 3 + 1;
       star.style.width = `${size}px`;
       star.style.height = `${size}px`;
 
-      // Atraso de animação aleatório
       star.style.animationDelay = `${Math.random() * 2}s`;
 
-      // Adiciona a estrela ao contêiner
       starsContainer.appendChild(star);
     }
   }, []);
 
   return (
     <div className="createclass-container">
-      {/* Estrelas no fundo */}
       <div className="stars"></div>
-
-      {/* Imagem do planeta Terra no fundo */}
       <img src="/assets/image9.png" alt="Planeta Terra" className="planet-earth" />
-
-      {/* Imagem do planeta no canto superior direito */}
       <img src="/assets/image8.png" alt="Planeta" className="planet-upper-right" />
 
-      {/* Conteúdo principal */}
       <h1 className="title">Fábrica de Cursos</h1>
       <form className="createclass-form">
+        <div className="info-icon" onClick={() => setIsModalOpen(true)}>i</div><br></br>
+
         <label htmlFor="curriculum" className="label">
           Curriculum <span className="required">*</span>
         </label>
 
-        {/* Lista rolável para Curriculum */}
         <div className="dropdown-list">
           <ul>
-            <li
-              onClick={() => setSelectedCurriculum("Curriculum 1")}
-              className={selectedCurriculum === "Curriculum 1" ? "selected" : ""}
-            >
-              Curriculum 1
-            </li>
-            <li
-              onClick={() => setSelectedCurriculum("Curriculum 2")}
-              className={selectedCurriculum === "Curriculum 2" ? "selected" : ""}
-            >
-              Curriculum 2
-            </li>
-            <li
-              onClick={() => setSelectedCurriculum("Curriculum 3")}
-              className={selectedCurriculum === "Curriculum 3" ? "selected" : ""}
-            >
-              Curriculum 3
-            </li>
-            <li
-              onClick={() => setSelectedCurriculum("Curriculum 4")}
-              className={selectedCurriculum === "Curriculum 4" ? "selected" : ""}
-            >
-              Curriculum 4
-            </li>
-            <li
-              onClick={() => setSelectedCurriculum("Curriculum 5")}
-              className={selectedCurriculum === "Curriculum 5" ? "selected" : ""}
-            >
-              Curriculum 5
-            </li>
+            {["Curriculum 1", "Curriculum 2", "Curriculum 3", "Curriculum 4", "Curriculum 5"].map((item) => (
+              <li
+                key={item}
+                onClick={() => setSelectedCurriculum(item)}
+                className={selectedCurriculum === item ? "selected" : ""}
+              >
+                {item}
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -97,12 +69,24 @@ const CreateClassPage = () => {
         <input type="text" id="description" className="input" placeholder="Descrição do curso" />
 
         <div className="form-actions">
-        <Link href="/createclass" className="link">
-          <button type="submit" className="submit-button">Avançar</button>
+          <button type="button" className="cancel-button" onClick={() => history.back()}>Voltar</button>
+          <Link href="/createclass" className="link">
+            <button type="submit" className="submit-button" onClick={() => Router.push("/createtopic")}>Avançar</button>
           </Link>
-          <button type="button" className="cancel-button">Cancelar</button>
+          <button type="button" className="cancel-button" onClick={() => Router.push("/profile")}>Cancelar</button>
         </div>
       </form>
+
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p>
+              É obrigatório ter um curriculum para a criação de cursos. Já para a criação de turma/classe é preciso já ter um curriculum e um curso cadastrados. Você pode avançar e voltar quando quiser.
+            </p>
+            <button className="close-button" onClick={() => setIsModalOpen(false)}>Fechar</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
