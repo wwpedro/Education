@@ -5,6 +5,14 @@ import "./createclass.css";
 const CreateClassroomPage = () => {
   const [selectedCurriculum, setSelectedCurriculum] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("");
+  const [curriculums, setCurriculums] = useState<{ 
+      curriculumId: number;
+      name: string;
+      description: string;
+      curriculumTopics: any[];
+    }[]>([]);
+  const [loadingCurriculums, setLoadingCurriculums] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const starsContainer = document.querySelector(".stars");
@@ -32,6 +40,35 @@ const CreateClassroomPage = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const fetchCurriculums = async () => {
+      const token = localStorage.getItem("accessToken"); 
+      if (!token) {
+        console.error("Token não encontrado");
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:8081/api/curriculums", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
+          },
+        });
+        if (!response.ok) throw new Error("Erro ao buscar currículos.");
+        const data = await response.json();
+        setCurriculums(data);
+      } catch (err) {
+        setError("Erro ao carregar currículos.");
+      } finally {
+        setLoadingCurriculums(false);
+      }
+    };
+
+    fetchCurriculums();
+  }, []);
+
   return (
     <div className="createclass-container">
       {/* Estrelas no fundo */}
@@ -52,38 +89,23 @@ const CreateClassroomPage = () => {
 
         {/* Lista rolável para Curriculum */}
         <div className="dropdown-list">
-          <ul>
-            <li
-              onClick={() => setSelectedCurriculum("Curriculum 1")}
-              className={selectedCurriculum === "Curriculum 1" ? "selected" : ""}
-            >
-              Curriculum 1
-            </li>
-            <li
-              onClick={() => setSelectedCurriculum("Curriculum 2")}
-              className={selectedCurriculum === "Curriculum 2" ? "selected" : ""}
-            >
-              Curriculum 2
-            </li>
-            <li
-              onClick={() => setSelectedCurriculum("Curriculum 3")}
-              className={selectedCurriculum === "Curriculum 3" ? "selected" : ""}
-            >
-              Curriculum 3
-            </li>
-            <li
-              onClick={() => setSelectedCurriculum("Curriculum 4")}
-              className={selectedCurriculum === "Curriculum 4" ? "selected" : ""}
-            >
-              Curriculum 4
-            </li>
-            <li
-              onClick={() => setSelectedCurriculum("Curriculum 5")}
-              className={selectedCurriculum === "Curriculum 5" ? "selected" : ""}
-            >
-              Curriculum 5
-            </li>
-          </ul>
+          {loadingCurriculums ? (
+            <p>Carregando currículos...</p>
+          ) : error ? (
+            <p className="error">{error}</p>
+          ) : (
+            <ul>
+              {curriculums.map((curriculum) => (
+                <li
+                  key={curriculum.curriculumId}
+                  onClick={() => setSelectedCurriculum(curriculum.name)}
+                  className={selectedCurriculum === curriculum.name ? "selected" : ""}
+                >
+                  {curriculum.name} 
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <label htmlFor="course" className="label">
