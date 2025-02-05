@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import "./classlist.css";
+import Router from "next/router";
 
 const classesList = [
   { curriculumTitle: "Currículo 1", className: "Matemática Avançada", description: "Descrição sobre a classe", isActive: true },
@@ -41,7 +42,7 @@ const ClassListPage = () => {
   }, []);
 
   const handleBackClick = () => {
-    // Aqui você pode implementar a ação de voltar (por exemplo, usando router)
+    window.history.back(); // Volta para a página anterior
     console.log("Botão de voltar clicado");
   };
 
@@ -70,7 +71,7 @@ const ClassListPage = () => {
               <h3>{classItem.className}</h3>
               <p>{classItem.description}</p>
               <p>Status: {classItem.isActive ? "Ativa" : "Inativa"}</p>
-              <button className="see-more-button">Ver mais</button>
+              <button className="see-more-button" onClick={() => Router.push("/topicsmenu")}>Ver mais</button>
             </div>
           </div>
         ))}

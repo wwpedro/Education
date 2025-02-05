@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import "./createclass.css";
+import Router from "next/router";
 
 const CreateClassroomPage = () => {
   const [selectedCurriculum, setSelectedCurriculum] = useState("");
@@ -147,8 +148,8 @@ const CreateClassroomPage = () => {
         </div>
 
         <div className="form-actions">
-          <button type="submit" className="submit-button">Avançar</button>
-          <button type="button" className="cancel-button">Cancelar</button>
+          <button type="submit" className="submit-button" onClick={() => Router.push("/profile")}>Avançar</button>
+          <button type="button" className="cancel-button" onClick={() => Router.push("/profile")}>Cancelar</button>
         </div>
       </form>
     </div>

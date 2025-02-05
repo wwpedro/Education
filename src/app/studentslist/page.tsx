@@ -24,33 +24,39 @@ const studentsList = [
   { name: "Mariana Souza", email: "mariana.souza@email.com" },
   { name: "Gustavo Lima", email: "gustavo.lima@email.com" },
 ];
+  
 
 const StudentsPage = () => {
   useEffect(() => {
     const starsContainer = document.querySelector(".stars");
     if (!starsContainer) return;
-  
+
     const totalStars = 100; // Quantidade de estrelas
     for (let i = 0; i < totalStars; i++) {
       const star = document.createElement("div");
       star.classList.add("star");
-  
+
       // Posição aleatória
       star.style.top = `${Math.random() * 100}%`;
       star.style.left = `${Math.random() * 100}%`;
-  
+
       // Tamanho aleatório
       const size = Math.random() * 3 + 1; // Entre 1px e 4px
       star.style.width = `${size}px`;
       star.style.height = `${size}px`;
-  
+
       // Atraso de animação aleatório
       star.style.animationDelay = `${Math.random() * 2}s`;
-  
+
       // Adiciona a estrela ao contêiner
       starsContainer.appendChild(star);
     }
   }, []);
+
+  const handleBackClick = () => {
+    window.history.back(); // Volta para a página anterior
+    console.log("Botão de voltar clicado");
+  };
   
 
   return (
@@ -86,6 +92,9 @@ const StudentsPage = () => {
           </div>
         ))}
       </div>
+
+      {/* Botão Voltar */}
+      <button className="back-button" onClick={handleBackClick}>Voltar</button>
     </div>
   );
 };

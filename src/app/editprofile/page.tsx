@@ -74,6 +74,11 @@ const EditProfilePage = () => {
     }
   }, []);
 
+  const handleBackClick = () => {
+    window.history.back(); // Volta para a página anterior
+    console.log("Botão de voltar clicado");
+  };
+
   return (
     <div className="register-container">
       <div className="wave wave-back"></div>
@@ -146,7 +151,7 @@ const EditProfilePage = () => {
                 required
               />
             </div>
-            <button type="submit" className="save-button">Salvar informações</button>
+            <button type="submit" className="save-button" onClick={handleBackClick}>Salvar informações</button>
           </form>
         </div>
 

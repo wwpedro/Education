@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "./createcourse.css";
 import Link from "next/link";
+import Router from "next/router";
 
 const CreateClassPage = () => {
   const [selectedCurriculum, setSelectedCurriculum] = useState("");
@@ -97,10 +98,9 @@ const CreateClassPage = () => {
         <input type="text" id="description" className="input" placeholder="Descrição do curso" />
 
         <div className="form-actions">
-        <Link href="/createclass" className="link">
-          <button type="submit" className="submit-button">Avançar</button>
-          </Link>
-          <button type="button" className="cancel-button">Cancelar</button>
+        
+          <button type="submit" className="submit-button" onClick={() => Router.push("/createtopic")}>Avançar</button>
+          <button type="button" className="cancel-button" onClick={() => Router.push("/profile")}>Cancelar</button>
         </div>
       </form>
     </div>
