@@ -116,17 +116,17 @@ const ProfilePage = () => {
         </div>
 
         <div className="profile-buttons">
-          <button
+          {/*<button
             className="accept-button"
             onClick={() => router.push("/studentslist")}
           >
             Aceitar Alunos
-          </button>
+          </button>*/}
           <button
             className="create-class-button"
-            onClick={() => router.push("/createclass")}
+            onClick={() => router.push("/createclassmenu")}
           >
-            Criar Aula
+            Criar Classe
           </button>
           <button
             className="view-classes-button"

@@ -93,10 +93,14 @@ body {
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 500px;
-  overflow-y: auto; /* Faz o formulário inteiro ser rolável */
-  max-height: 80vh; /* Limita a altura do formulário */
+  width: 90%;
+  max-width: 1200px; /* Limita a largura para evitar que fique grande demais */
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden; /* Evita rolagem do card inteiro */
 }
 
 .label {
@@ -105,14 +109,17 @@ body {
   color: #333;
 }
 
-.input {
+.input, .dropdown-list {
   width: 100%;
-  color: black;
   padding: 0.8rem;
+  font-size: 1rem;
+}
+
+.input {
+  color: black;
   border: 1px solid #ccc;
   border-radius: 8px;
   margin-bottom: 1rem;
-  font-size: 1rem;
 }
 
 .import-group {
@@ -123,7 +130,6 @@ body {
 
 /* Estilo para a lista rolável */
 .dropdown-list {
-  width: 100%;
   max-height: 100px; /* Diminui a altura máxima ainda mais */
   overflow-y: auto; /* Permite rolar se necessário */
   margin-bottom: 1rem;
@@ -157,7 +163,7 @@ body {
   background-color: #2196f3; /* Azul */
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0,5rem;
   border-radius: 8px;
   font-size: 1.2rem;
   cursor: pointer;
@@ -171,7 +177,8 @@ body {
 .form-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 2rem;
+  width: 100%;
+  padding: 1rem 0;
 }
 
 .submit-button {
@@ -386,4 +393,232 @@ body {
 
 .cancel-button:hover {
   background-color: #ddd;
+}
+
+.form-content {
+  display: flex;
+  flex-direction: row; /* Mantém as colunas lado a lado */
+  width: 100%;
+  height: 100%;
+  gap: 2rem; /* Espaçamento entre as colunas */
+  overflow: hidden;
+}
+
+.form-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 70vh; /* Limita a altura para ativar o scroll apenas dentro */
+  overflow-y: auto; /* Habilita rolagem apenas na coluna */
+  padding-right: 10px;
+}
+
+.form-column::-webkit-scrollbar {
+  width: 0px; /* Oculta a barra de rolagem */
+}
+
+/* Oculta a barra de rolagem no Firefox */
+.form-column {
+  scrollbar-width: none;
+}
+
+/* Agrupamento dos botões */
+.button-group {
+  display: flex;
+  gap: 1rem; /* Espaço entre os botões */
+  margin-top: 1rem;
+}
+
+/* Estilo do botão "Importar Tópicos" */
+.import-button {
+  background-color: #ff9800; /* Laranja */
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.import-button:hover {
+  background-color: #f57c00; /* Laranja mais escuro */
+}
+
+/* Estilo do botão "Importar Tópicos" */
+.material-button {
+  background-color: #00b3ff; /* Laranja */
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.material-button:hover {
+  background-color: #268cb8; /* Laranja mais escuro */
+}
+
+
+/* Estilo do botão "Adicionar Questão" */
+.add-question-button {
+  background-color: #4caf50; /* Verde */
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.add-question-button:hover {
+  background-color: #388e3c; /* Verde mais escuro */
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+}
+
+.close-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.close-button:hover {
+  background-color: #d32f2f;
+}
+
+.add-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.add-button:hover {
+  background-color: #388e3c;
+}
+
+
+/* Container flexível para Curriculum e Curso */
+.curriculum-course-container {
+  display: flex;
+  justify-content: space-between; /* Distribui os elementos */
+  align-items: flex-start; /* Alinha os rótulos na parte superior */
+  gap: 2rem; /* Espaço entre os dois campos */
+  width: 100%; /* Ocupa toda a largura disponível */
+}
+
+/* Cada seção ocupa 50% do espaço */
+.curriculum-section, .course-section {
+  flex: 1;
+  min-width: 250px; /* Garante que não fique muito pequeno */
+}
+
+/* Ajuste do dropdown para ocupar o espaço corretamente */
+.dropdown-list {
+  width: 100%;
+  max-height: 150px; /* Limite da altura da lista */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: white;
+  padding: 0;
+  list-style: none;
+}
+
+/* Estiliza os itens dentro do dropdown */
+.dropdown-list li {
+  padding: 0.8rem;
+  cursor: pointer;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+.dropdown-list li:hover {
+  background-color: #f1f1f1;
+}
+
+.selected {
+  background-color: #f7cf20;
+  color: white;
+  font-weight: bold;
+  border-left: 4px solid #fcbf23;
+}
+
+/* Aumenta a altura do campo "Descrição do Tópico" */
+#topic-description {
+  min-height: 200px; /* Antes estava menor */
+  resize: vertical; /* Permite redimensionamento manual */
+}
+
+/* Aumenta a altura da lista de questões */
+.question-list-scrollable {
+  max-height: 400px; /* Defina um valor maior para mais espaço */
+  height: 100%; /* Garante que a altura seja aplicada */
+  overflow-y: auto; /* Permite rolagem apenas quando necessário */
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-top: 20px;
+  color: black;
+}
+
+/* Oculta completamente a barra de rolagem no Chrome e Edge */
+.question-list-scrollable::-webkit-scrollbar {
+  width: 0px;
+}
+
+/* Oculta a barra de rolagem no Firefox */
+.question-list-scrollable {
+  scrollbar-width: none;
+}
+
+/* Garante que a altura seja ajustável */
+.createclass-form {
+  height: 85vh; /* Mantém a altura fixa do formulário */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Garante que a área que contém a lista de questões possa expandir */
+.form-column {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Permite expansão conforme o conteúdo */
 }

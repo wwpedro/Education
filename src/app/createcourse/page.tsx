@@ -71,7 +71,7 @@ const CreateClassPage = () => {
         <div className="form-actions">
           <button type="button" className="cancel-button" onClick={() => history.back()}>Voltar</button>
           <Link href="/createclass" className="link">
-            <button type="submit" className="submit-button" onClick={() => Router.push("/createtopic")}>Avançar</button>
+            <button type="submit" className="submit-button" onClick={() => Router.push("/creaclass")}>Avançar</button>
           </Link>
           <button type="button" className="cancel-button" onClick={() => Router.push("/profile")}>Cancelar</button>
         </div>

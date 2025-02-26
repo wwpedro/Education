@@ -24,22 +24,22 @@ const Topico: React.FC = () => {
       {/* Título do Tópico */}
       <div className="title">
         <h1>{title}</h1>
-        <button className="yellow-button">Ditar Tópico</button>
+        <button className="yellow-button">editar Tópico</button>
       </div>
 
       {/* Botões redondos */}
       <div className="topics-container">
-        <div className="node" onClick={() => router.push(`/topics/${topicId}/conteudo`)}> 
+        <div className="node" onClick={() => router.push(`/topic/${topicId}/conteudo`)}> 
           <div className="node-circle" style={{ backgroundColor: "#D9D9D9" }}></div>
           <p className="node-title">AULA</p>
         </div>
 
-        <div className="node" onClick={() => router.push(`/topics/${topicId}/questoes`)}> 
+        <div className="node" onClick={() => router.push(`/topic/${topicId}/question`)}> 
           <div className="node-circle" style={{ backgroundColor: "#FFD700" }}></div>
           <p className="node-title">EXERCÍCIOS</p>
         </div>
 
-        <div className="node" onClick={() => router.push(`/topics/${topicId}/resultado`)}> 
+        <div className="node" onClick={() => router.push(`/topic/${topicId}/won`)}> 
           <div className="node-circle" style={{ backgroundColor: "#FF4C4C" }}></div>
           <p className="node-title">RESULTADO</p>
         </div>

@@ -100,7 +100,7 @@ body {
   justify-content: space-between; /* Agora os itens ficam um ao lado do outro */
   align-items: center;
   margin-top: 20px;
-  width: 60%; /* Ajusta a largura para os elementos ficarem alinhados */
+  width: 100%; /* Ajusta a largura para os elementos ficarem alinhados */
   height: 50px;
 }
 
@@ -115,11 +115,13 @@ body {
   background-color: #d3d3d3; /* Cinza claro */
   border-radius: 6px;
   width: 350px; /* Aumentado a largura da caixa */
-  height: 120px; /* Aumentado a altura */
+  height: 10px; /* Aumentado a altura */
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 95px;
+  margin-left: 100px;
 }
 
 /* Formulário de Preenchimento */
@@ -189,6 +191,7 @@ h1.title {
   border-radius: 8px;
   font-size: 1.2rem;
   cursor: pointer;
+  margin-left: 300px;
   }
     
 .upload-button:hover {

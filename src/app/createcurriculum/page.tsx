@@ -54,9 +54,9 @@ const CreateCurriculumPage = () => {
         </div>
 
         <div className="form-actions">
-          <button type="button" className="cancel-button">Cancelar</button>
-          <button type="button" className="cancel-button" onClick={() => Router.back()}>Voltar</button>
-          <button type="submit" className="submit-button" onClick={() => Router.push("/createcourse")}>Avançar</button>
+          <button type="button" className="cancel-button"onClick={() => Router.back()}>Cancelar</button>
+          <button type="button" className="cancel-button" onClick={() => Router.push("/profile")}>Voltar</button>
+          <button type="submit" className="submit-button" onClick={() => Router.push("/createcourse")}>Salvar e Avançar</button>
         </div>
       </form>
 

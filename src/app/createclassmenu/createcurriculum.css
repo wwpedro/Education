@@ -1,0 +1,193 @@
+/* Configuração Geral */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #102f54; /* Fundo azul */
+  color: black;
+  position: relative;
+  overflow: hidden; /* Impede que imagens se estendam para fora */
+}
+
+/* Container principal */
+.createclass-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Imagem do planeta Terra no fundo inferior */
+.planet-earth {
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 40%;
+  z-index: -1;
+  opacity: 80%;
+  animation: rotate 600s linear infinite;
+}
+
+/* Imagem do planeta no canto superior direito */
+.planet-upper-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20%;
+  z-index: -1;
+}
+
+/* Animação de rotação */
+@keyframes rotate {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(360deg);
+  }
+}
+
+/* Estrelas no fundo */
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -2;
+}
+
+/* Cada estrela */
+.star {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: blink 2s infinite ease-in-out;
+}
+
+/* Animação de piscar das estrelas */
+@keyframes blink {
+  0%, 100% {
+      opacity: 0;
+  }
+  50% {
+      opacity: 1;
+  }
+}
+
+/* Título e ícone de informação */
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title {
+  font-size: 2rem;
+  color: white;
+}
+
+/* Ícone de informação */
+.info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: #af984c;
+  color: white;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.info-icon:hover {
+  background-color: #3e8e41;
+}
+
+/* Botão de voltar */
+.cancel-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Grupo de botões centralizados */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Botões principais */
+.action-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  min-width: 150px;
+}
+
+.action-button:hover {
+  background-color: #3e8e41;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+}
+
+/* Botão de fechar no modal */
+.close-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.close-button:hover {
+  background-color: #3e8e41;
+}

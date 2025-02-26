@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation"; // Para navegação
-import "./topicsmenu.css"; // Arquivo CSS para os estilos
+import "./topicsmenu.css"; // Importação absoluta para evitar erros
 
 // Interface para representar um tópico
 interface Topic {
@@ -28,7 +28,7 @@ const TopicsMenu: React.FC = () => {
 
   // Função para lidar com cliques nos tópicos
   const handleTopicClick = (id: number) => {
-    router.push(`/topics/${id}`); // Redireciona para a página do tópico
+    router.push(`/topic/${id}`); // Corrigido para usar a pasta correta
   };
 
   // Função para definir cores dinâmicas
@@ -36,38 +36,36 @@ const TopicsMenu: React.FC = () => {
     const colors = ["yellow", "red", "blue", "pink", "green"];
     return colors[index % colors.length];
   };
-  
 
   useEffect(() => {
     const dotsContainer = document.querySelector(".dots");
     if (!dotsContainer) return;
-  
+
     const totalDots = 150; // Quantidade de pontinhos na tela
-  
+
     // Limpa os pontos antigos, caso o efeito seja recarregado
     dotsContainer.innerHTML = "";
-  
+
     for (let i = 0; i < totalDots; i++) {
       const dot = document.createElement("div");
       dot.classList.add("dot");
-  
+
       // Posições aleatórias dentro da tela visível
       dot.style.top = `${Math.random() * 100}vh`; // Altura relativa à janela de visualização
       dot.style.left = `${Math.random() * 100}vw`; // Largura relativa à janela de visualização
-  
+
       // Tamanhos aleatórios
       const size = Math.random() * 3 + 2; // Entre 2px e 5px
       dot.style.width = `${size}px`;
       dot.style.height = `${size}px`;
-  
+
       // Atraso de animação aleatório
       dot.style.animationDelay = `${Math.random() * 5}s`;
-  
+
       // Adiciona o ponto ao contêiner
       dotsContainer.appendChild(dot);
     }
   }, []);
-   
 
   return (
     <div className="space-background scrollable">
@@ -81,7 +79,7 @@ const TopicsMenu: React.FC = () => {
       <div className="dots"></div>
 
       {/* Título da Matéria */}
-      <div className="title"> 
+      <div className="title">
         <h1>Topicos</h1>
         <button className="yellow-button">Editar classe</button>
       </div>

@@ -5,13 +5,13 @@ import Router from "next/router";
 
 const classesList = [
   { curriculumTitle: "Currículo 1", className: "Matemática Avançada", description: "Descrição sobre a classe", isActive: true },
-  { curriculumTitle: "Currículo 2", className: "História da Arte", description: "Descrição sobre a classe", isActive: false },
+  { curriculumTitle: "Currículo 2", className: "História da Arte", description: "Descrição sobre a classe", isActive: true },
   { curriculumTitle: "Currículo 3", className: "Física Experimental", description: "Descrição sobre a classe", isActive: true },
-  { curriculumTitle: "Currículo 4", className: "Literatura Brasileira", description: "Descrição sobre a classe", isActive: false },
+  { curriculumTitle: "Currículo 4", className: "Literatura Brasileira", description: "Descrição sobre a classe", isActive: true},
   { curriculumTitle: "Currículo 5", className: "Química Orgânica", description: "Descrição sobre a classe", isActive: true },
-  { curriculumTitle: "Currículo 6", className: "Geografia Global", description: "Descrição sobre a classe", isActive: false },
+  { curriculumTitle: "Currículo 6", className: "Geografia Global", description: "Descrição sobre a classe", isActive: true },
   { curriculumTitle: "Currículo 7", className: "Engenharia de Software", description: "Descrição sobre a classe", isActive: true },
-  { curriculumTitle: "Currículo 8", className: "Design Gráfico", description: "Descrição sobre a classe", isActive: false },
+  { curriculumTitle: "Currículo 8", className: "Design Gráfico", description: "Descrição sobre a classe", isActive: true },
 ];
 
 const ClassListPage = () => {
@@ -71,7 +71,7 @@ const ClassListPage = () => {
               <h3>{classItem.className}</h3>
               <p>{classItem.description}</p>
               <p>Status: {classItem.isActive ? "Ativa" : "Inativa"}</p>
-              <button className="see-more-button" onClick={() => Router.push("/topicsmenu")}>Ver mais</button>
+              <button className="see-more-button" onClick={() => Router.push("/topics")}>Ver mais</button>
             </div>
           </div>
         ))}
