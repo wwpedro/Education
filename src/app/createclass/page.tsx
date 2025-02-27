@@ -150,11 +150,22 @@ const CreateClassroomPage: React.FC = () => {
   const [editingQuestionId, setEditingQuestionId] = useState<number | null>(null);
   const [showQuestionPopup, setShowQuestionPopup] = useState(false);
   const [showImportMaterial, setShowImportMaterial] = useState(false);
+  const [savedMaterials, setSavedMaterials] = useState<string[]>([]);
+  const [showImportTopic, setShowImportTopic] = useState(false);
+  const [savedTopics, setSavedTopics] = useState<string[]>([]);
 
+  const handleOpenImportTopic = () => setShowImportTopic(true);
+  const handleCloseImportTopic = () => setShowImportTopic(false);
   const handleOpenQuestionPopup = () => setShowQuestionPopup(true);
   const handleCloseQuestionPopup = () => setShowQuestionPopup(false);
   const handleOpenImportMaterial = () => setShowImportMaterial(true);
   const handleCloseImportMaterial = () => setShowImportMaterial(false);
+
+  const handleSaveQuestions = () => {
+    setQuestions([...questions]); // Mantém as questões salvas no estado global
+    setShowQuestionPopup(false);
+  };
+  
 
   const [topicsList] = useState<string[]>([
     "Matemática", 
@@ -200,15 +211,17 @@ const CreateClassroomPage: React.FC = () => {
       setOptions([...options, { text: "", isCorrect: false }]);
     };
   
-    const handleEditQuestion = (question: Question) => {
-      setEditingQuestionId(question.id);
-      setQuestionDescription(question.description);
-      setOptions(question.options);
-    };
+    // Editar questão ao clicar na lista
+  const handleEditQuestion = (question: Question) => {
+    setEditingQuestionId(question.id);
+    setQuestionDescription(question.description);
+    setOptions(question.options);
+  };
   
-    const handleDeleteQuestion = (id: number) => {
-      setQuestions(questions.filter((question) => question.id !== id));
-    };
+    // Excluir questão
+  const handleDeleteQuestion = (id: number) => {
+    setQuestions(questions.filter((question) => question.id !== id));
+  };
   
     useEffect(() => {
       const starsContainer = document.querySelector(".stars");
@@ -286,70 +299,146 @@ const CreateClassroomPage: React.FC = () => {
     setTopics((prevTopics) => [...prevTopics, newTopic]);
   };
 
-  const QuestionPopup: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const QuestionPopup: React.FC<{ onClose: () => void; questions: Question[]; setQuestions: (questions: Question[]) => void; }> = ({ onClose, questions, setQuestions }) => {
     const [questionDescription, setQuestionDescription] = useState("");
     const [options, setOptions] = useState([{ text: "", isCorrect: false }]);
+    const [editingQuestionId, setEditingQuestionId] = useState<number | null>(null);
   
-    const handleAddOption = () => {
-      setOptions([...options, { text: "", isCorrect: false }]);
-    };
+    // Adicionar nova alternativa
+  const handleAddOption = () => {
+    setOptions([...options, { text: "", isCorrect: false }]);
+  };
+
+    // Alterar texto ou checkbox da alternativa
+  const handleOptionChange = (index: number, field: "text" | "isCorrect", value: string | boolean) => {
+    const updatedOptions = [...options];
+    if (field === "text") {
+      updatedOptions[index].text = value as string;
+    } else {
+      updatedOptions[index].isCorrect = value as boolean;
+    }
+    setOptions(updatedOptions);
+  };
   
-    const handleOptionChange = (index: number, field: "text" | "isCorrect", value: string | boolean) => {
-      const updatedOptions = [...options];
-      if (field === "text") {
-        updatedOptions[index].text = value as string;
-      } else {
-        updatedOptions[index].isCorrect = value as boolean;
-      }
-      setOptions(updatedOptions);
-    };
+    // Criar ou editar questão
+  const handleCreateOrUpdateQuestion = () => {
+    if (questionDescription.trim() === "") return; // Evita salvar questões vazias
+
+    if (editingQuestionId !== null) {
+      // Edita a questão existente
+      setQuestions(questions.map(q =>
+        q.id === editingQuestionId ? { ...q, description: questionDescription, options: [...options] } : q
+      ));
+      setEditingQuestionId(null);
+    } else {
+      // Cria uma nova questão
+      const newQuestion: Question = {
+        id: Date.now(),
+        description: questionDescription,
+        options: [...options],
+      };
+      setQuestions([...questions, newQuestion]);
+    }
+
+    setQuestionDescription("");
+    setOptions([{ text: "", isCorrect: false }]);
+  };
+
+  // Editar questão ao clicar na lista
+  const handleEditQuestion = (question: Question) => {
+    setEditingQuestionId(question.id);
+    setQuestionDescription(question.description);
+    setOptions(question.options);
+  };
+
+  // Excluir questão
+  const handleDeleteQuestion = (id: number) => {
+    setQuestions(questions.filter(question => question.id !== id));
+  };
   
-    const handleAddQuestion = () => {
-      console.log("Nova Questão:", { questionDescription, options });
-      onClose(); // Fecha o popup após adicionar a questão
-    };
-  
-    return (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <h2>Adicionar Questão</h2>
-  
-          <label htmlFor="question-description" className="label">Descrição da Questão</label>
-          <textarea
-            id="question-description"
-            className="input"
-            value={questionDescription}
-            onChange={(e) => setQuestionDescription(e.target.value)}
-            placeholder="Descrição da Questão"
-          ></textarea>
-  
-          <label className="label">Alternativas</label>
-          {options.map((option, index) => (
-            <div key={index} className="import-group">
-              <input
-                type="text"
-                className="input"
-                placeholder={`Alternativa ${index + 1}`}
-                value={option.text}
-                onChange={(e) => handleOptionChange(index, "text", e.target.value)}
-              />
-              <label>
-                <input
-                  type="checkbox"
-                  checked={option.isCorrect}
-                  onChange={(e) => handleOptionChange(index, "isCorrect", e.target.checked)}
-                />
-                Correta
-              </label>
+  return (
+    <div className="modal-overlay">
+      <div id="question-modal">
+        {/* Botão de fechar no canto superior esquerdo */}
+        <button type="button" className="close-button" onClick={onClose}>✖</button>
+
+        <h2>Adicionar Questão</h2>
+
+        <div id="question-modal-body">
+          {/* Coluna esquerda - Formulário */}
+          <div id="question-form">
+            <label htmlFor="question-description" className="label">Descrição da Questão</label>
+            <textarea
+              id="question-description"
+              className="input"
+              value={questionDescription}
+              onChange={(e) => setQuestionDescription(e.target.value)}
+              placeholder="Descrição da Questão"
+            ></textarea>
+
+            <label className="label">Alternativas</label>
+            <div className="options-container">
+              {options.map((option, index) => (
+                <div key={index} className="import-group">
+                  <input
+                    type="text"
+                    className="input"
+                    placeholder={`Alternativa ${index + 1}`}
+                    value={option.text}
+                    onChange={(e) => handleOptionChange(index, "text", e.target.value)}
+                  />
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={option.isCorrect}
+                      onChange={(e) => handleOptionChange(index, "isCorrect", e.target.checked)}
+                    />
+                    Correta
+                  </label>
+                </div>
+              ))}
             </div>
-          ))}
-  
-          <button type="button" className="add-button" onClick={handleAddOption}>Adicionar Alternativa</button>
-          <button type="button" className="add-button" onClick={handleAddQuestion}>Salvar Questão</button>
-          <button type="button" className="close-button" onClick={onClose}>Fechar</button>
+
+            {/* Botões lado a lado com espaçamento */}
+            <div id="button-group">
+              <button type="button" className="add-button" onClick={handleAddOption}>Adicionar Alternativa</button>
+              <button type="button" className="add-button" onClick={handleCreateOrUpdateQuestion}>
+                {editingQuestionId !== null ? "Salvar Alterações" : "Criar Questão"}
+              </button>
+            </div>
+          </div>
+
+          {/* Coluna direita - Lista de Questões */}
+          <div id="question-list">
+            <h3>Questões Salvas</h3>
+            {questions.length === 0 ? (
+              <p>Nenhuma questão adicionada ainda.</p>
+            ) : (
+              <ul>
+                {questions.map((question, index) => (
+                  <li
+                    key={question.id}
+                    className={`question-item ${editingQuestionId === question.id ? "selected-question" : ""}`}
+                    onClick={() => handleEditQuestion(question)}
+                  >
+                    <strong>Questão {index + 1}</strong>
+                    <button className="delete-question-button" onClick={(e) => { e.stopPropagation(); handleDeleteQuestion(question.id); }}>🗑</button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+
+        {/* Botão Salvar Questões (mantém o estado e não fecha o pop-up) */}
+        <div id="question-modal-footer">
+          <button type="button" id="save-question-button" onClick={onClose}>
+            Salvar Questões
+          </button>
         </div>
       </div>
-    );
+    </div>
+  );
   };
 
   const ImportMaterial: React.FC<{ 
@@ -358,25 +447,74 @@ const CreateClassroomPage: React.FC = () => {
     setMaterial: (file: File | null) => void;
     materialLink: string;
     setMaterialLink: (link: string) => void;
-  }> = ({ onClose, material, setMaterial, materialLink, setMaterialLink }) => {
+    savedMaterials: string[];
+    setSavedMaterials: (materials: string[]) => void;
+  }> = ({ onClose, material, setMaterial, materialLink, setMaterialLink, savedMaterials, setSavedMaterials }) => {
     
+    const [previewFile, setPreviewFile] = useState<string | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  
+    // Adiciona material à lista ao salvar
+    const handleSaveMaterial = () => {
+      if (materialLink.trim() !== "") {
+        setSavedMaterials([...savedMaterials, materialLink]);
+        setMaterialLink(""); // Limpa o campo após salvar
+      } else if (material) {
+        const fileUrl = URL.createObjectURL(material); // Cria um link temporário para o arquivo
+        setSavedMaterials([...savedMaterials, fileUrl]);
+        setMaterial(null); // Limpa o arquivo após salvar
+      }
+    };
+
+    const truncateFileName = (name: string, maxLength = 20) => {
+      return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
+    };
+
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setMaterial(e.target.files ? e.target.files[0] : null);
+      const file = e.target.files ? e.target.files[0] : null;
+      setMaterial(file);
+    };
+  
+    // Remove um material da lista
+    const handleDeleteMaterial = (index: number) => {
+      const updatedMaterials = savedMaterials.filter((_, i) => i !== index);
+      setSavedMaterials(updatedMaterials);
+    };
+  
+    // Limita o título do material a 10 caracteres
+    const truncateTitle = (title: string) => (title.length > 10 ? title.substring(0, 10) + "..." : title);
+  
+    // Verifica se um material é um link externo
+    const isLink = (item: string) => item.startsWith("http");
+  
+    // Abre a pré-visualização de um arquivo PDF
+    const handlePreviewFile = (fileUrl: string) => {
+      setPreviewUrl(fileUrl);
     };
   
     return (
       <div className="modal-overlay">
         <div className="modal-content">
-          <h2>Importar Tópicos</h2>
+          {/* Botão de fechar no canto superior direito */}
+          <button type="button" className="close-button" onClick={onClose}>✖</button>
+        
+          <h1>Importar Materiais</h1>
   
-          <label htmlFor="import-material" className="label">Importar Material</label>
+          {/* Input de arquivo customizado */}
+        <div className="file-input-container">
+          <label htmlFor="import-material" className="file-label">Selecionar Arquivo</label>
           <input
             type="file"
             id="import-material"
-            className="input"
+            className="file-input"
+            accept="application/pdf"
             onChange={handleFileChange}
           />
-  
+          <span className="file-name">
+            {material ? truncateFileName(material.name) : "Clique para escolher um arquivo"}
+          </span>
+        </div>
+          
           <label htmlFor="material-link" className="label">Link do Material</label>
           <input
             type="url"
@@ -387,8 +525,129 @@ const CreateClassroomPage: React.FC = () => {
             placeholder="https://exemplo.com"
           />
   
-          <button type="button" className="add-button" onClick={onClose}>Salvar</button>
-          <button type="button" className="close-button" onClick={onClose}>Fechar</button>
+          <button type="button" className="add-button" onClick={handleSaveMaterial}>Adicionar Material à Lista</button>
+  
+          {/* Lista de Materiais Salvos */}
+          <div className="material-list">
+            <h3>Materiais Salvos</h3>
+            {savedMaterials.length === 0 ? (
+              <p className="empty-message">Ainda não temos nenhum material na lista.</p>
+            ) : (
+              <ul>
+                {savedMaterials.map((item, index) => (
+                  <li key={index} className="material-item">
+                    {isLink(item) ? (
+                      <a href={item} target="_blank" rel="noopener noreferrer">{truncateTitle(item)}</a>
+                    ) : (
+                      <span className="file-preview" onClick={() => handlePreviewFile(item)}>{truncateTitle(item)}</span>
+                    )}
+                    <button className="delete-button" onClick={() => handleDeleteMaterial(index)}>🗑</button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="add-button" onClick={handleSaveMaterial}>Salvar</button>
+          </div>
+        </div>
+  
+        {/* Pop-up de Pré-visualização do PDF */}
+        {previewUrl && (
+          <div className="modal-overlay">
+            <div className="modal-content preview-modal">
+              <button type="button" className="close-button" onClick={() => setPreviewUrl(null)}>✖</button>
+              <h3>Pré-visualização do PDF</h3>
+              <iframe src={previewUrl} className="pdf-preview"></iframe>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+  
+  
+  
+  const ImportTopicPopup: React.FC<{ 
+    onClose: () => void;
+    savedTopics: string[];
+    setSavedTopics: (topics: string[]) => void;
+  }> = ({ onClose, savedTopics, setSavedTopics }) => {
+  
+    const [topicFile, setTopicFile] = useState<File | null>(null);
+    const [topicName, setTopicName] = useState("");
+  
+    // Trunca o nome do arquivo caso seja muito grande
+    const truncateFileName = (name: string, maxLength = 20) => {
+      return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
+    };
+  
+    // Atualiza o estado ao selecionar um arquivo
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files ? e.target.files[0] : null;
+      setTopicFile(file);
+    };
+  
+    // Adiciona um novo tópico à lista
+    const handleAddTopic = () => {
+      if (topicName.trim() !== "") {
+        setSavedTopics([...savedTopics, topicName]);
+        setTopicName("");
+      }
+    };
+  
+    // Remove um tópico da lista
+    const handleDeleteTopic = (index: number) => {
+      const updatedTopics = savedTopics.filter((_, i) => i !== index);
+      setSavedTopics(updatedTopics);
+    };
+  
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          {/* Botão de fechar no canto superior direito */}
+          <button type="button" className="close-button" onClick={onClose}>✖</button>
+  
+          <h2>Importar Tópico</h2>
+  
+          {/* Input de arquivo customizado */}
+          <div className="file-input-container">
+            <label htmlFor="import-topic" className="file-label">Selecionar Arquivo</label>
+            <input
+              type="file"
+              id="import-topic"
+              className="file-input"
+              accept=".txt,.csv,.json"
+              onChange={handleFileChange}
+            />
+            <span className="file-name">
+              {topicFile ? truncateFileName(topicFile.name) : "Clique para escolher um arquivo"}
+            </span>
+          </div>
+
+          
+            <button type="button" className="add-button" onClick={handleAddTopic}>Adicionar Tópico</button>
+          
+
+          {/* Lista de Tópicos Salvos */}
+          <div className="topic-list">
+            <h3>Tópicos Salvos</h3>
+            {savedTopics.length === 0 ? (
+              <p className="empty-message">Ainda não temos nenhum tópico na lista.</p>
+            ) : (
+              <ul>
+                {savedTopics.map((item, index) => (
+                  <li key={index} className="topic-item">
+                    <span>{item}</span>
+                    <button className="delete-button" onClick={() => handleDeleteTopic(index)}>🗑</button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div className="modal-footer">
+          <button type="button" className="add-button">Salvar</button>
+          </div>
         </div>
       </div>
     );
@@ -493,7 +752,7 @@ const CreateClassroomPage: React.FC = () => {
         ></textarea>
 
         <div className="button-group">
-          <button type="button" className="import-button" onClick={handleOpenImportMaterial}>
+            <button type="button" className="import-button" onClick={handleOpenImportTopic}>
             Importar Tópico
           </button>
           <button type="button" className="material-button" onClick={handleOpenImportMaterial}>
@@ -504,92 +763,6 @@ const CreateClassroomPage: React.FC = () => {
           </button>
         </div>
 
-
-        {/*<label htmlFor="import-material" className="label">Importar Material</label>
-        <input
-          type="file"
-          id="import-material"
-          className="input"
-          onChange={(e) => setMaterial(e.target.files ? e.target.files[0] : null)}
-        />
-
-        <label htmlFor="material-link" className="label">Link do Material</label>
-        <input
-          type="url"
-          id="material-link"
-          className="input"
-          value={materialLink}
-          onChange={(e) => setMaterialLink(e.target.value)}
-          placeholder="https://exemplo.com"
-        />
-
-        <label htmlFor="question-description" className="label">Descrição da Questão</label>
-        <textarea
-          id="question-description"
-          className="input"
-          value={questionDescription}
-          onChange={(e) => setQuestionDescription(e.target.value)}
-          placeholder="Descrição da Questão"
-        ></textarea>
-
-        <label className="label">Alternativas</label>
-        {options.map((option, index) => (
-          <div key={index} className="import-group">
-            <input
-              type="text"
-              className="input"
-              placeholder={`Alternativa ${index + 1}`}
-              value={option.text}
-              onChange={(e) => handleOptionChange(index, "text", e.target.value)}
-            />
-            <label>
-              <input
-                type="checkbox"
-                checked={option.isCorrect}
-                onChange={(e) => handleOptionChange(index, "isCorrect", e.target.checked)}
-              />
-              Correta
-            </label>
-          </div>
-        ))}
-
-        <button type="button" className="add-button" onClick={handleAddOption}>Adicionar Alternativa</button>
-        <button type="button" className="add-button" onClick={handleAddQuestion}>
-          {editingQuestionId !== null ? "Salvar Alterações" : "Adicionar Questão"}
-        </button>*/}
-
-        <div className="question-list-scrollable">
-          <h2>Lista de Questões</h2>
-          {questions.length === 0 ? (
-            <p>Nenhuma questão adicionada ainda.</p>
-          ) : (
-            <ol>
-              {questions.map((question, index) => (
-                <li key={question.id} 
-                    onClick={() => handleEditQuestion(question)}
-                    style={{ 
-                      cursor: "pointer", 
-                      display: "flex", 
-                      justifyContent: "space-between", 
-                      alignItems: "center", 
-                      padding: "10px 0"
-                    }}>
-                  <span>Questão {index + 1}</span>
-                  <button onClick={(e) => { e.stopPropagation(); handleDeleteQuestion(question.id); }} 
-                          style={{ 
-                            background: "red", 
-                            color: "white", 
-                            border: "none", 
-                            padding: "5px 10px", 
-                            cursor: "pointer" 
-                          }}>
-                    Excluir
-                  </button>
-                </li>
-              ))}
-            </ol>
-          )}
-        </div>
 
       </div>
     </div>
@@ -602,9 +775,28 @@ const CreateClassroomPage: React.FC = () => {
     </div>
   </form>
 
-  {showPopup && <StudentPopup students={students} onClose={() => setShowPopup(false)} />}
-  {showQuestionPopup && <QuestionPopup onClose={handleCloseQuestionPopup} />}
-  {showImportMaterial && (<ImportMaterial onClose={handleCloseImportMaterial} material={material} setMaterial={setMaterial} materialLink={materialLink} setMaterialLink={setMaterialLink} />)}
+  {showImportTopic && (
+        <ImportTopicPopup 
+          onClose={handleCloseImportTopic} 
+          savedTopics={savedTopics} 
+          setSavedTopics={setSavedTopics} 
+        />
+      )}
+  {showQuestionPopup && (
+        <QuestionPopup onClose={handleCloseQuestionPopup} questions={questions} setQuestions={setQuestions} />
+      )}
+  {showImportMaterial && (
+        <ImportMaterial 
+          onClose={handleCloseImportMaterial} 
+          material={material} 
+          setMaterial={setMaterial} 
+          materialLink={materialLink} 
+          setMaterialLink={setMaterialLink} 
+          savedMaterials={savedMaterials}
+          setSavedMaterials={setSavedMaterials} 
+        />
+      )}
+
 </div>
 
   );

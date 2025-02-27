@@ -215,44 +215,8 @@ body {
   background-color: rgb(202, 198, 198); /* Azul escuro */
   color: white;
 }
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-}
 
-.modal-content {
-  background: white;
-  color: black;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-}
 
-.close-button {
-  background-color: #2196f3;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 1rem;
-}
-
-.close-button:hover {
-  background-color: #1976d2;
-}
 .scroll-invisible {
   max-height: 300px; /* Altura máxima para o scroll */
   overflow-y: auto;
@@ -332,6 +296,7 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  overflow-y: auto;
 }
 
 /* Modal Content */
@@ -343,22 +308,24 @@ body {
   max-width: 400px;
   text-align: center;
   position: relative;
+  color: black;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  max-height: 600px;
+  overflow: hidden;
 }
 
-/* Close Button */
-.close-button {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 1rem;
+/* Área de conteúdo rolável dentro do popup */
+.modal-body {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 1rem;
 }
 
-.close-button:hover {
-  background-color: #3e8e41;
-}
 
 /* Info Icon */
 .info-icon {
@@ -480,45 +447,6 @@ body {
 }
 
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  text-align: center;
-  max-width: 500px;
-  width: 90%;
-  position: relative;
-}
-
-.close-button {
-  background-color: #f44336;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 1rem;
-}
-
-.close-button:hover {
-  background-color: #d32f2f;
-}
-
 .add-button {
   background-color: #4caf50;
   color: white;
@@ -600,7 +528,7 @@ body {
 
 /* Oculta completamente a barra de rolagem no Chrome e Edge */
 .question-list-scrollable::-webkit-scrollbar {
-  width: 0px;
+  width: 5px;
 }
 
 /* Oculta a barra de rolagem no Firefox */
@@ -609,16 +537,404 @@ body {
 }
 
 /* Garante que a altura seja ajustável */
-.createclass-form {
-  height: 85vh; /* Mantém a altura fixa do formulário */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
 
 /* Garante que a área que contém a lista de questões possa expandir */
 .form-column {
   display: flex;
   flex-direction: column;
   flex-grow: 1; /* Permite expansão conforme o conteúdo */
+}
+
+/* Scroll para a lista de alternativas */
+.options-container {
+  max-height: 200px; /* Ajuste conforme necessário */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: white;
+}
+
+/* Personalizar barra de rolagem no Chrome */
+.options-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.options-container::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+.options-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+/* Oculta a barra de rolagem no Firefox */
+.options-container {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f0f0f0;
+}
+
+
+/* Layout para telas grandes: três colunas */
+@media (min-width: 768px) {
+  .form-content {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+
+  .form-column, .question-list-container {
+    flex: 1;
+  }
+}
+
+/* Layout para telas menores: lista de questões abaixo */
+@media (max-width: 767px) {
+  .form-content {
+    flex-direction: column;
+  }
+
+  .question-list-container {
+    order: 3;
+  }
+}
+
+/* Estilo do quadro de questões adicionadas */
+.question-list-container {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Oculta a barra de rolagem no Chrome */
+.question-list-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.question-list-container::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+.question-list-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+/* Botão de fechar em "X" no canto superior esquerdo do modal */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #f44336;
+}
+
+.close-button:hover {
+  color: #981616;
+  background-color: white;
+}
+
+/* Questão selecionada */
+.selected-question {
+  background-color: #4caf50 !important; /* Verde */
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Questão não selecionada */
+.unselected-question {
+  background-color: #f44336 !important; /* Vermelho */
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Botões fixos no final */
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background: white;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  background: white;
+}
+
+/* ===== MODAL POPUP ===== */
+#question-modal {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  max-height: 600px;
+  width: 100%;
+  max-width: 750px; /* Aumentando a largura do pop-up */
+  overflow: hidden;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 1.5rem;
+  color: black; /* Garantindo que todos os textos fiquem pretos */
+}
+
+/* Centraliza o título */
+#question-modal h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: black; /* Garantindo que o título também seja preto */
+}
+
+/* Modal dividido em duas colunas */
+#question-modal-body {
+  display: flex;
+  gap: 1rem;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* Coluna esquerda - Formulário */
+#question-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Coluna direita - Lista de questões */
+#question-list {
+  flex: 1;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: white;
+}
+
+/* Barra de rolagem personalizada */
+#question-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+#question-list::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+#question-list::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+/* Estilo das questões na lista */
+.question-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f1f1f1;
+  color: black; /* Garantindo que os textos das questões fiquem pretos */
+}
+
+.question-item:hover {
+  background-color: #ddd;
+}
+
+.selected-question {
+  background-color: #4caf50 !important; /* Verde */
+  color: white;
+  font-weight: bold;
+}
+
+/* Botão pequeno para excluir questão */
+.delete-question-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.delete-question-button:hover {
+  background-color: #d32f2f;
+}
+
+/* Botões de ação no final */
+#question-modal-footer {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  background: white;
+}
+
+/* Botão Salvar Alterações centralizado */
+#save-question-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 50%;
+}
+
+#save-question-button:hover {
+  background-color: #388e3c;
+}
+
+/* Botões lado a lado com espaçamento */
+#button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  gap: 10px; /* Pequeno espaço entre os botões */
+}
+
+
+
+/* Nome do arquivo escolhido */
+.file-name {
+  font-size: 14px;
+  color: #555;
+  margin-top: 5px;
+}
+
+/* Lista de materiais salvos */
+.material-list {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  max-height: 150px;
+  overflow-y: auto;
+  min-height: 100px; /* Mantém o quadro fixo */
+}
+
+/* Mensagem quando não há materiais */
+.empty-message {
+  font-size: 14px;
+  color: #777;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Cada item da lista */
+.material-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+/* Botão de excluir material */
+.delete-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f;
+}
+
+/* Elemento clicável para pré-visualizar arquivos */
+.file-preview {
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.file-preview:hover {
+  color: #0056b3;
+}
+
+/* Estilização do pop-up de visualização do PDF */
+.preview-modal {
+  width: 80%;
+  max-width: 700px;
+  height: 80%;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Visualização do PDF dentro do pop-up */
+.pdf-preview {
+  width: 100%;
+  height: 500px;
+  border: none;
+}
+
+/* Container do input de arquivo */
+.file-input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  width: 100%;
+  background: white;
+  cursor: pointer;
+}
+
+/* Esconde o input real */
+.file-input {
+  display: none;
+}
+
+/* Estiliza o botão de escolher arquivo */
+.file-label {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}
+
+.file-label:hover {
+  background-color: #0056b3;
+}
+
+/* Nome do arquivo selecionado */
+.file-name {
+  font-size: 14px;
+  color: #555;
+  flex-grow: 1;
+  text-align: center;
 }
