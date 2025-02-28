@@ -29,7 +29,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 50px;
+  gap: 80px;
   padding: 20px;
   min-height: 150vh; /* Garante que tenha altura suficiente para ativar o scroll */
   overflow-x: hidden; /* Evita o scroll horizontal */
@@ -104,17 +104,46 @@ body {
   }
   
   /* Bolinha do tópico */
-  .node-circle {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-bottom: 8px;
-    transition: transform 0.2s ease;
-  }
-  
-  .node-circle:hover {
-    transform: scale(1.1);
-  }
+  /* Nó (tópico) */
+.node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Bolinha do tópico */
+.node-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.node-circle:hover {
+  transform: scale(1.1);
+}
+
+/* Ícone dentro da bolinha */
+.topic-icon {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+}
+
+/* Cadeado */
+.lock-icon {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  font-size: 30px; /* Ajusta o tamanho do ícone */
+  color: white;
+  cursor: pointer;
+}
   
   /* Título do tópico */
   .node-title {
@@ -177,4 +206,87 @@ body {
   0% { opacity: 0; }
   50% { opacity: 1; }
   100% { opacity: 0; }
+}
+
+/* Botão de voltar */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
+
+.back-icon {
+  font-size: 32px;
+  color: white;
+  transition: transform 0.2s ease;
+}
+
+.back-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Botão amarelo */
+.yellow-button {
+  background-color: yellow;
+  border: none;
+  color: black;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.yellow-button:hover {
+  background-color: #ffd700; /* Amarelo dourado ao passar o mouse */
+}
+
+/* Fundo escuro de sobreposição com alta opacidade */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.664); /* Preto com opacidade alta */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Janela do pop-up */
+.popup {
+  background-color: rgb(255, 248, 248);
+  padding: 50px;
+  border-radius: 10px;
+  color: black;
+  text-align: center;
+  width: 500px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.108);
+}
+
+/* Texto dentro do pop-up */
+.popup-content p {
+  font-size: 1.2rem;
+  margin-bottom: 50px;
+  color: black;
+}
+
+/* Botão vermelho para fechar */
+.close-button {
+  background-color: #ff0000;
+  border: none;
+  color: rgb(255, 255, 255);
+  padding: 8px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: #be0000;
 }

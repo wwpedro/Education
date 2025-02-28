@@ -109,7 +109,7 @@ body {
     
     /* Botão amarelo */
   .yellow-button {
-    background-color: yellow;
+    background-color: rgba(255, 255, 0, 0);
     border: none;
     color: black;
     padding: 10px 20px;
@@ -122,7 +122,7 @@ body {
   }
   
   .yellow-button:hover {
-    background-color: #ffd700; /* Amarelo dourado ao passar o mouse */
+    background-color: #ffd90000; /* Amarelo dourado ao passar o mouse */
   }
   
   /* Contêiner dos pontinhos */
@@ -169,7 +169,7 @@ body {
     position: absolute;
     top: 20px;
     left: 20px;
-    background-color: yellow;
+    background-color: rgba(255, 255, 0, 0);
     border: none;
     border-radius: 50%;
     width: 40px;
@@ -183,13 +183,13 @@ body {
   }
   
   .back-button:hover {
-    background-color: #ffd700; /* Amarelo dourado */
+    background-color: #ffd90000; /* Amarelo dourado */
   }
   
 
   /* Botão amarelo para 'Ditar Tópico' */
 .yellow-button {
-    background-color: yellow;
+    background-color: rgba(255, 255, 0, 0);
     border: none;
     color: black;
     padding: 10px 20px;
@@ -201,17 +201,18 @@ body {
   }
   
   .yellow-button:hover {
-    background-color: #ffd700; /* Amarelo dourado */
+    background-color: #ffd90000; /* Amarelo dourado */
   }
   
   /* Imagem do planeta no canto superior direito */
   .planet-top {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 100px; /* Ajuste conforme necessário */
+    top: -100px;
+    right: -200px;
+    width: 700px; /* Ajuste conforme necessário */
     height: auto;
     z-index: -1; /* Fica atrás do conteúdo */
+    opacity: 50%;
   }
   
   /* Imagem do planeta no canto inferior esquerdo */
@@ -222,4 +223,272 @@ body {
     width: 100px; /* Ajuste conforme necessário */
     height: auto;
     z-index: -1; /* Fica atrás do conteúdo */
+    opacity: 50%;
   }
+
+
+  /* Fundo escuro de sobreposição com alta opacidade */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Preto com opacidade alta */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Janela do pop-up */
+.popup {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  color: black;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Texto dentro do pop-up */
+.popup-content p {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: black;
+}
+
+/* Botão vermelho para fechar */
+.close-button {
+  background-color: red;
+  border: none;
+  color: white;
+  padding: 8px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: darkred;
+}
+
+/* Nó (botões redondos) */
+.node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Bolinhas maiores */
+.node-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.node-circle:hover {
+  transform: scale(1.1);
+}
+
+/* Ícones dentro das bolinhas */
+.node-icon {
+  width: 200px;
+  height: 200px;
+}
+
+/* Cadeado na bolinha de "RESULTADO" */
+.lock-icon {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+/* Fundo espacial */
+.space-background {
+  background: url('/path/to/star-background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 50px;
+  overflow-x: hidden; /* Impede rolagem horizontal */
+}
+
+/* Centralizando os elementos principais */
+.topics-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Centraliza verticalmente */
+  gap: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centraliza no meio da página */
+}
+
+/* Ajustando o título para ficar centralizado */
+.title {
+  text-align: center;
+  font-size: 2rem;
+  color: white;
+  margin-bottom: 20px;
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Botão de voltar no canto superior esquerdo */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
+
+.back-icon {
+  font-size: 32px;
+  color: white;
+  transition: transform 0.2s ease;
+}
+
+.back-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Ajustando a imagem inferior para o canto inferior */
+.planet-bottom {
+  position: absolute;
+  bottom: -700px; /* Move para o canto inferior */
+  left: -200px;
+  width: 1000px; /* Ajustável conforme necessário */
+  height: auto;
+  z-index: -1;
+}
+
+/* Nó (botões redondos) */
+.node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Bolinhas maiores */
+.node-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.node-circle:hover {
+  transform: scale(1.1);
+}
+
+/* Ícones dentro das bolinhas */
+.node-icon {
+  width: 70px;
+  height: 70px;
+}
+
+/* Cadeado na bolinha de "RESULTADO" */
+.lock-icon {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+/* Fundo escuro de sobreposição com alta opacidade */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Preto com opacidade alta */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Janela do pop-up */
+.popup {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  color: black;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Botão vermelho para fechar */
+.close-button {
+  background-color: red;
+  border: none;
+  color: white;
+  padding: 8px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: darkred;
+}
+
+
+/* Contêiner dos pontinhos */
+.dots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1; /* Fica atrás de todo o conteúdo */
+}
+
+/* Contêiner dos pontinhos fixo e cobrindo toda a tela */
+.dots {
+  position: fixed; /* Fica fixo atrás do conteúdo */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Atrás do conteúdo principal */
+  pointer-events: none; /* Não bloqueia interações com outros elementos */
+  overflow: hidden; /* Evita que pontinhos saiam da tela */
+}
+
+/* Estilo dos pontinhos */
+.dot {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%; 
+  animation: blink 3s infinite ease-in-out;
+  opacity: 0;
+}

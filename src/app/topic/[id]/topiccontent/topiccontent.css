@@ -1,0 +1,188 @@
+/* Body ajustado para permitir rolagem vertical apenas */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #102f54;
+    color: white;
+    min-height: 100vh; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: auto; /* Scroll apenas na vertical */
+    overflow-x: hidden; /* Impede rolagem horizontal */
+  }
+  
+/* Fundo espacial */
+.space-background {
+    background: url('/path/to/star-background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Contêiner dos pontinhos */
+.dots {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1; /* Fica atrás de todo o conteúdo */
+  }
+  
+  /* Contêiner dos pontinhos fixo e cobrindo toda a tela */
+  .dots {
+    position: fixed; /* Fica fixo atrás do conteúdo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Atrás do conteúdo principal */
+    pointer-events: none; /* Não bloqueia interações com outros elementos */
+    overflow: hidden; /* Evita que pontinhos saiam da tela */
+  }
+  
+  /* Estilo dos pontinhos */
+  .dot {
+    position: absolute;
+    background-color: white;
+    border-radius: 50%; 
+    animation: blink 3s infinite ease-in-out;
+    opacity: 0;
+  }
+  
+  /* Animação de piscar */
+  @keyframes blink {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  /* Botão de voltar no canto superior esquerdo */
+  .back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+  }
+  
+  .back-icon {
+    font-size: 32px;
+    color: white;
+    transition: transform 0.2s ease;
+  }
+  
+  .back-icon:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Círculo azul no topo do card */
+  .circle-container {
+    position: fixed;
+    top: 3%;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    z-index: 2;
+  }
+  
+  .circle {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(0, 0, 255, 0);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .circle-icon {
+    font-size: 40px;
+    color: white;
+  }
+  
+  /* Card fixo no centro */
+  .content-card {
+    background: white;
+    width: 60%;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+  }
+  
+  /* Indicador de progresso no canto superior direito */
+  .progress-indicator {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+  }
+  
+  /* Título do conteúdo */
+  .content-title {
+    font-size: 1.8rem;
+    color: black;
+    margin-bottom: 20px;
+  }
+  
+  /* Área de exibição do PDF ou Vídeo */
+  .content-viewer {
+    width: 100%;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .video-frame {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .pdf-frame {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Botões de navegação */
+  .navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+  
+  .nav-button {
+    background: #fde5ad;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .nav-button:hover {
+    background: #ffc43a;
+  }
+  
+  .nav-button:disabled {
+    background: #fde5ad;
+    cursor: not-allowed;
+  }
+  
+
+  
