@@ -18,15 +18,15 @@ interface Topic {
 
 // Lista inicial de tópicos
 const initialTopics: Topic[] = [
-  { id: 1, title: "Fundamentos I", icon: "https://cdn-icons-png.flaticon.com/512/276/276020.png", isLocked: false },
-  { id: 2, title: "Fundamentos II", icon: "https://cdn-icons-png.flaticon.com/512/276/276020.png", isLocked: true },
-  { id: 3, title: "Avançado", icon: "https://cdn-icons-png.flaticon.com/512/276/276020.png", isLocked: false },
-  { id: 4, title: "Introdução à Matemática", icon: "https://cdn-icons-png.flaticon.com/512/276/276020.png", isLocked: true },
-  { id: 5, title: "Física Básica", icon: "https://cdn-icons-png.flaticon.com/512/276/276020.png", isLocked: false },
-  { id: 6, title: "Fundamentos II - Avançado", icon: "https://cdn-icons-png.flaticon.com/512/276/276020.png", isLocked: false },
-  { id: 7, title: "Avançado Plus", icon: "https://cdn-icons-png.flaticon.com/512/276/276020.png", isLocked: true },
-  { id: 8, title: "Matemática Aplicada", icon: "https://cdn-icons-png.flaticon.com/512/276/276020.png", isLocked: false },
-  { id: 9, title: "Física Experimental", icon: "https://cdn-icons-png.flaticon.com/512/276/276020.png", isLocked: true },
+  { id: 1, title: "Fundamentos I", icon: "/assets/star.png", isLocked: false },
+  { id: 2, title: "Fundamentos II", icon: "/assets/star.png", isLocked: true },
+  { id: 3, title: "Avançado", icon: "/assets/star.png", isLocked: false },
+  { id: 4, title: "Introdução à Matemática", icon: "/assets/star.png", isLocked: true },
+  { id: 5, title: "Física Básica", icon: "/assets/star.png", isLocked: false },
+  { id: 6, title: "Fundamentos II - Avançado", icon: "/assets/star.png", isLocked: false },
+  { id: 7, title: "Avançado Plus", icon: "/assets/star.png", isLocked: true },
+  { id: 8, title: "Matemática Aplicada", icon: "/assets/star.png", isLocked: false },
+  { id: 9, title: "Física Experimental", icon: "/assets/star.png", isLocked: true },
 ];
 
 const TopicsMenu: React.FC = () => {

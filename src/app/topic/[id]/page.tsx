@@ -78,21 +78,21 @@ const Topico: React.FC = () => {
       <div className="topics-container">
         <div className="node" onClick={() => router.push(`/topic/${topicId}/topiccontent`)}> 
           <div className="node-circle" style={{ backgroundColor: "#D9D9D9" }}>
-            <img src="https://cdn-icons-png.flaticon.com/512/619/619175.png" alt="Ícone Aula" className="node-icon" />
+            <img src="/assets/22.png" alt="Ícone Aula" className="node-icon" />
           </div>
           <p className="node-title">AULA</p>
         </div>
 
         <div className="node" onClick={() => router.push(`/topic/${topicId}/question`)}> 
           <div className="node-circle" style={{ backgroundColor: "#FFD700" }}>
-            <img src="https://cdn-icons-png.flaticon.com/512/10301/10301575.png" alt="Ícone Exercícios" className="node-icon" />
+            <img src="/assets/24.png" alt="Ícone Exercícios" className="node-icon" />
           </div>
           <p className="node-title">EXERCÍCIOS</p>
         </div>
 
         <div className="node" onClick={handleResultClick}> 
           <div className="node-circle" style={{ backgroundColor: "#FF4C4C" }}>
-            <img src="https://cdn-icons-png.flaticon.com/512/2617/2617955.png" alt="Ícone Resultado" className="node-icon" />
+            <img src="/assets/23.png" alt="Ícone Resultado" className="node-icon" />
             {isLocked ? (
               <LockIcon className="lock-icon" onClick={toggleLock} />
             ) : (

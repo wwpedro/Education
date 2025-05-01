@@ -70,10 +70,13 @@ const LoginPage = () => {
     <div className="login-container">
       {/* Waves no fundo */}
       <div className="wave-container">
-        <div className="wave wave-back"></div>
-        <div className="wave wave-front"></div>
+        <svg className="wave-svg back" viewBox="0 0 1800 400" preserveAspectRatio="none">
+          <path className="wave-path back" d="" />
+        </svg>
+        <svg className="wave-svg front" viewBox="0 0 1800 400" preserveAspectRatio="none">
+          <path className="wave-path front" d="" />
+        </svg>
       </div>
-
       {/* Contêiner para os pontinhos */}
       <div className="dots"></div>
 

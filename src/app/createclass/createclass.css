@@ -9,7 +9,7 @@ body {
 }
 
 /* Container principal */
-.createclass-container {
+.classroom-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,7 +20,7 @@ body {
 }
 
 /* Imagem do planeta Terra no fundo */
-.planet-earth {
+.planet-earth-img {
   position: absolute;
   bottom: -30%; /* Ajuste a posição vertical */
   left: -10%; /* Ajuste a posição horizontal */
@@ -31,7 +31,7 @@ body {
 }
 
 /* Imagem do planeta no canto superior direito */
-.planet-upper-right {
+.planet-topright-img {
   position: absolute;
   top: 0;
   right: 0;
@@ -50,7 +50,7 @@ body {
 }
 
 /* Estrelas no fundo */
-.stars {
+.stars-background {
   position: absolute;
   top: 0;
   left: 0;
@@ -81,14 +81,14 @@ body {
 }
 
 /* Título */
-.title {
+.classroom-title {
   font-size: 2rem;
   margin-bottom: 2rem;
   color: white;
 }
 
 /* Formulário */
-.createclass-form {
+.classroom-form {
   background: white;
   padding: 2rem;
   border-radius: 12px;
@@ -105,7 +105,7 @@ body {
 
 .label {
   font-size: 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.2rem;
   color: #333;
 }
 
@@ -159,7 +159,7 @@ body {
 }
 
 /* Botão "Adicionar" azul */
-.add-button {
+.plus-button {
   background-color: #2196f3; /* Azul */
   color: white;
   border: none;
@@ -169,12 +169,12 @@ body {
   cursor: pointer;
 }
 
-.add-button:hover {
+.plus-button:hover {
   background-color: #1976d2; /* Tom mais escuro de azul */
 }
 
 /* Ações do formulário */
-.form-actions {
+.footer-button-row {
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -362,7 +362,7 @@ body {
   background-color: #ddd;
 }
 
-.form-content {
+.form-grid {
   display: flex;
   flex-direction: row; /* Mantém as colunas lado a lado */
   width: 100%;
@@ -391,7 +391,7 @@ body {
 }
 
 /* Agrupamento dos botões */
-.button-group {
+.triple-button-group {
   display: flex;
   gap: 1rem; /* Espaço entre os botões */
   margin-top: 1rem;
@@ -447,7 +447,7 @@ body {
 }
 
 
-.add-button {
+.plus-button {
   background-color: #4caf50;
   color: white;
   border: none;
@@ -458,7 +458,7 @@ body {
   margin-top: 1rem;
 }
 
-.add-button:hover {
+.plus-button:hover {
   background-color: #388e3c;
 }
 
@@ -578,7 +578,7 @@ body {
 
 /* Layout para telas grandes: três colunas */
 @media (min-width: 768px) {
-  .form-content {
+  .form-grid {
     display: flex;
     flex-direction: row;
     gap: 2rem;
@@ -591,7 +591,7 @@ body {
 
 /* Layout para telas menores: lista de questões abaixo */
 @media (max-width: 767px) {
-  .form-content {
+  .form-grid {
     flex-direction: column;
   }
 
@@ -809,7 +809,7 @@ body {
 }
 
 /* Botões lado a lado com espaçamento */
-#button-group {
+#triple-button-group {
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
@@ -937,4 +937,92 @@ body {
   color: #555;
   flex-grow: 1;
   text-align: center;
+}
+
+.center-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.modal-close-btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.alunos-button {
+  background-color: #9c27b0;
+  color: #fff;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.add-topic-button {
+  background-color: #9c27b0;
+  color: #fff;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: none;
+  margin-top: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.input, textarea {
+  background-color: #e0e0e0;
+}
+
+.topic-list-display {
+  margin-top: 1rem;
+}
+
+.topic-item-display {
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.topic-item-display .delete-button {
+  background: none;
+  border: none;
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.save-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.save-button:hover {
+  background-color: #388e3c;
+}
+
+
+.cancel-disabled {
+  background-color: transparent;
+  color: #999;
+  border: none;
+  font-weight: normal;
+  cursor: not-allowed;
 }

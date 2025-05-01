@@ -9,15 +9,18 @@ body {
 .profile-container {
   position: relative;
   width: 100%;
-  height: 100vh; /* Altura total da tela */
+  height: 100vh;
+  background-color: #102f54;
   display: flex;
   flex-direction: column;
-  padding: 2rem;
+  justify-content: flex-start;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 /* Contêiner das waves */
 .wave-container1 {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -33,6 +36,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   animation: alternateWave 12s ease-in-out infinite;
+  pointer-events: none; /* ← Permite interação com elementos acima */
 }
 
 .wave-back1 {
@@ -56,19 +60,24 @@ body {
 /* Header com imagem, informações e botões */
 .profile-header {
   display: flex;
-  justify-content: space-between; /* Informações no lado esquerdo, botões no lado direito */
-  align-items: flex-start;
+  flex-direction: column; /* ← Agora tudo fica em coluna */
+  justify-content: center;
+  align-items: center;
   z-index: 2;
   width: 100%;
+  height: 85vh;
+  padding: 2rem;
+  box-sizing: border-box;
 }
 
-/* Informações do usuário no lado esquerdo */
+/* Informações do usuário */
 .profile-info {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem; /* Espaço entre imagem e texto */
-  margin-top: 4.5rem;
-  margin-left: 1rem;
+  text-align: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .profile-picture {
@@ -109,14 +118,13 @@ body {
   color: #ddd;
 }
 
-/* Botões no lado direito */
+/* Botões */
 .profile-buttons {
   display: flex;
-  flex-direction: row; /* Alinha os botões em uma linha */
-  justify-content: flex-start; /* Alinha os botões à esquerda */
-  gap: 1rem; /* Espaçamento horizontal entre os botões */
-  margin-right: 4rem; /* Move os botões para a esquerda */
-  margin-top: 35%;
+  flex-direction: column; /* ← Um botão abaixo do outro */
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0 0 0;
 }
 
 .profile-buttons button {
@@ -138,7 +146,6 @@ body {
 .accept-button {
   background-color: #4caf50;
 }
-
 .accept-button:hover {
   background-color: #3e8e41;
 }
@@ -146,7 +153,6 @@ body {
 .create-class-button {
   background-color: #007bff;
 }
-
 .create-class-button:hover {
   background-color: #0056b3;
 }
@@ -154,7 +160,6 @@ body {
 .view-classes-button {
   background-color: #ff5722;
 }
-
 .view-classes-button:hover {
   background-color: #e64a19;
 }
@@ -173,14 +178,13 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  z-index: 3; /* Garante que o botão fique por cima de outros elementos */
+  z-index: 3;
 }
-
 .logout-button:hover {
   background-color: #c50000;
 }
 
-/* Contêiner dos pontinhos */
+/* Pontinhos animados */
 .dots {
   position: absolute;
   top: 0;
@@ -188,27 +192,43 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  z-index: 0; /* Fica atrás de todo o conteúdo */
+  z-index: 0;
 }
 
-/* Estilo dos pontinhos */
 .dot {
   position: absolute;
   background-color: white;
-  border-radius: 50%; /* Pontos redondos */
-  animation: blink 3s infinite ease-in-out; /* Animação contínua */
-  opacity: 0; /* Inicialmente invisível */
+  border-radius: 50%;
+  animation: blink 3s infinite ease-in-out;
+  opacity: 0;
 }
 
-/* Animação de piscar */
 @keyframes blink {
-  0% {
-    opacity: 0; /* Totalmente invisível */
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .profile-header {
+    padding: 1rem;
+    height: auto;
   }
-  50% {
-    opacity: 1; /* Totalmente visível */
+
+  .logout-button {
+    top: 10px;
+    right: 10px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
   }
-  100% {
-    opacity: 0; /* Invisível novamente */
+
+  .profile-picture {
+    width: 160px;
+    height: 160px;
+  }
+
+  .profile-name {
+    font-size: 1.5rem;
   }
 }

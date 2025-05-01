@@ -13,7 +13,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Alinha para o topo */
+    justify-content: flex-start;
     height: 100vh;
     padding: 2rem;
     position: relative;
@@ -81,11 +81,13 @@ body {
   .class-cards-container {
     display: flex;
     flex-direction: column;
+    align-items: center; /* ← centraliza horizontalmente */
     gap: 1rem;
     width: 100%;
     max-width: 800px;
-    overflow-y: auto; /* Adiciona a rolagem vertical */
-    max-height: 70vh; /* Limita a altura para 70% da altura da tela */
+    overflow-y: auto;
+    max-height: 70vh;
+    padding: 1rem 0;
   }
   
   /* Cartão de Título */
@@ -140,21 +142,103 @@ body {
     background-color: #fbc02d;
   }
   
-  /* Botão de Voltar */
-  .back-button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 0.7rem 1.5rem; /* Ajustado para ser menor */
-    border-radius: 8px;
-    font-size: 1rem; /* Tamanho ajustado */
-    cursor: pointer;
-    position: absolute;
-    bottom: 3rem; /* Coloca o botão um pouco acima da borda inferior */
-    z-index: 10; /* Garante que o botão fique acima do conteúdo */
-  }
-  
-  .back-button:hover {
-    background-color: #45a049;
-  }
-  
+  /* BOTÃO DE VOLTAR COMO SETA BRANCA NO TOPO ESQUERDO */
+.back-button {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.back-button:hover {
+  color: #fdd835;
+}
+
+/* SCROLL CUSTOMIZADO PARA O CONTAINER DOS CARDS */
+.class-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+  overflow-y: auto;
+  max-height: 70vh;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #aaa transparent;
+}
+
+.class-cards-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.class-cards-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.class-cards-container::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 8px;
+}
+
+
+.custom-class-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 1rem 1.5rem;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-family: 'Arial', sans-serif;
+}
+
+.class-card-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.class-semester {
+  font-weight: 500;
+}
+
+.class-status {
+  text-align: right;
+}
+
+.class-card-body .class-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #000;
+  margin: 0;
+}
+
+.class-description {
+  font-size: 0.9rem;
+  color: #999;
+  margin: 0;
+}
+
+.view-class-button {
+  background-color: #f2b705;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.view-class-button:hover {
+  background-color: #d29e00;
+}

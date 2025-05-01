@@ -1,171 +1,173 @@
 /* Configuração Geral */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #102f54; /* Fundo azul */
-    color: black;
-    position: relative; /* Necessário para posicionar imagens absolutas */
-    overflow: hidden; /* Impede que imagens se estendam para fora */
-  }
-  
-  /* Container principal */
-  .createclass-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    padding: 2rem;
-  }
-  
-  /* Imagem do planeta Terra no fundo inferior */
-  .planet-earth {
-    position: absolute;
-    bottom: -30%; /* Ajuste a posição vertical */
-    left: -10%; /* Ajuste a posição horizontal */
-    width: 40%; /* Largura proporcional */
-    z-index: -1; /* Coloca a imagem atrás do conteúdo */
-    opacity: 80%;
-    animation: rotate 600s linear infinite; /* Animação de rotação contínua */
-  }
-  
-  /* Imagem do planeta no canto superior direito */
-  .planet-upper-right {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 20%; /* Largura proporcional */
-    z-index: -1; /* Coloca a imagem atrás do conteúdo */
-  }
-  
-  /* Animação de rotação */
-  @keyframes rotate {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-  /* Estrelas no fundo */
-  .stars {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: -2; /* Fica atrás de todo o conteúdo */
-  }
-  
-  /* Cada estrela */
-  .star {
-    position: absolute;
-    background-color: white;
-    border-radius: 50%; /* Pontos redondos */
-    opacity: 0; /* Inicialmente invisível */
-    animation: blink 2s infinite ease-in-out; /* Animação contínua */
-  }
-  
-  /* Animação de piscar das estrelas */
-  @keyframes blink {
-    0%,
-    100% {
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
-    }
-  }
-  
-  /* Título */
-  .title {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: white;
-  }
-  
-  /* Formulário */
-  .createclass-form {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 500px;
-  }
-  
-  .label {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-    color: #333;
-  }
-  
-  .input {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-  }
-  
-  .import-group {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .add-button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
-  
-  .add-button:hover {
-    background-color: #3e8e41;
-  }
-  
-  .form-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
-  }
-  
-  .submit-button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  
-  .submit-button:hover {
-    background-color: #3e8e41;
-  }
-  
-  .cancel-button {
-    background-color: transparent;
-    color: #666;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  
-  .cancel-button:hover {
-    background-color: #ddd;
-  }  
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #102f54;
+  color: black;
+  position: relative;
+  overflow: hidden; /* Impede qualquer rolagem */
+  height: 100vh;
+}
 
- /* Modal Overlay */
+/* Container principal */
+.createclass-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* força ocupar a tela inteira */
+  padding: 2rem;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Planetas */
+.planet-earth {
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 40%;
+  z-index: -1;
+  opacity: 0.8;
+  animation: rotate 600s linear infinite;
+}
+
+.planet-upper-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20%;
+  z-index: -1;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Estrelas */
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -2;
+}
+
+.star {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: blink 2s infinite ease-in-out;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Título */
+.title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+/* Formulário */
+.createclass-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 500px;
+  max-width: 90%;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+}
+
+/* Labels e Inputs */
+.label {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+  display: block;
+  text-align: left;
+}
+
+.input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.import-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.add-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: #3e8e41;
+}
+
+/* Botões */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.submit-button,
+.cancel-button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  min-width: 140px;
+  cursor: pointer;
+}
+
+.submit-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.submit-button:hover {
+  background-color: #3e8e41;
+}
+
+.cancel-button {
+  background-color: #ccc;
+  color: #333;
+}
+
+.cancel-button:hover {
+  background-color: #bbb;
+}
+
+/* Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -179,21 +181,6 @@ body {
   z-index: 1000;
 }
 
-/* Modal Overlay */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-/* Modal Content */
 .modal-content {
   background: white;
   padding: 2rem;
@@ -204,7 +191,6 @@ body {
   position: relative;
 }
 
-/* Close Button */
 .close-button {
   background-color: #4caf50;
   color: white;
@@ -219,26 +205,6 @@ body {
   background-color: #3e8e41;
 }
 
-/* Info Button Small */
-.info-button-small {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 0.3rem 0.6rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: bold;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-.info-button-small:hover {
-  background-color: #3e8e41;
-}
-
-/* Info Icon */
 .info-icon {
   display: inline-flex;
   align-items: center;
@@ -256,4 +222,26 @@ body {
 
 .info-icon:hover {
   background-color: #3e8e41;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .createclass-container {
+    padding: 1rem;
+  }
+
+  .createclass-form {
+    width: 100%;
+    padding: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form-actions button {
+    width: 100%;
+    max-width: 300px;
+  }
 }

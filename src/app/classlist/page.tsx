@@ -7,7 +7,7 @@ const classesList = [
   { curriculumTitle: "Currículo 1", className: "Matemática Avançada", description: "Descrição sobre a classe", isActive: true },
   { curriculumTitle: "Currículo 2", className: "História da Arte", description: "Descrição sobre a classe", isActive: true },
   { curriculumTitle: "Currículo 3", className: "Física Experimental", description: "Descrição sobre a classe", isActive: true },
-  { curriculumTitle: "Currículo 4", className: "Literatura Brasileira", description: "Descrição sobre a classe", isActive: true},
+  { curriculumTitle: "Currículo 4", className: "Literatura Brasileira", description: "Descrição sobre a classe", isActive: true },
   { curriculumTitle: "Currículo 5", className: "Química Orgânica", description: "Descrição sobre a classe", isActive: true },
   { curriculumTitle: "Currículo 6", className: "Geografia Global", description: "Descrição sobre a classe", isActive: true },
   { curriculumTitle: "Currículo 7", className: "Engenharia de Software", description: "Descrição sobre a classe", isActive: true },
@@ -63,23 +63,30 @@ const ClassListPage = () => {
       {/* Área rolável dos cartões */}
       <div className="class-cards-container">
         {classesList.map((classItem, index) => (
-          <div key={index} className="class-card">
-            <div className="curriculum-title">
-              <h2>{classItem.curriculumTitle}</h2>
+          <div key={index} className="custom-class-card">
+            <div className="class-card-header">
+              <span className="class-semester">Turma 2024.2</span>
+              <span className="class-status">Status: andamento</span>
             </div>
-            <div className="class-details">
-              <h3>{classItem.className}</h3>
-              <p>{classItem.description}</p>
-              <p>Status: {classItem.isActive ? "Ativa" : "Inativa"}</p>
-              <button className="see-more-button" onClick={() => Router.push("/topics")}>Ver mais</button>
+
+            <div className="class-card-body">
+              <h3 className="class-title">Introdução a programação</h3>
+              <p className="class-description">Descrição classe</p>
             </div>
+
+            <button
+              className="view-class-button"
+              onClick={() => window.location.href = "http://localhost:3000/topics"}
+            >
+              Ver classe
+            </button>
           </div>
         ))}
       </div>
 
       {/* Botão de Voltar */}
       <button className="back-button" onClick={handleBackClick}>
-        Voltar
+        ←
       </button>
     </div>
   );

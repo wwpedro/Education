@@ -80,27 +80,6 @@ body {
       z-index: -3;
     }
     
-    /* Nó (bolinha com título) */
-    .node {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-    
-    /* Bolinha do tópico */
-    .node-circle {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      margin-bottom: 8px;
-      transition: transform 0.2s ease;
-    }
-    
-    .node-circle:hover {
-      transform: scale(1.1);
-    }
-    
     /* Título do tópico */
     .node-title {
       color: white;
@@ -285,8 +264,8 @@ body {
 
 /* Bolinhas maiores */
 .node-circle {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   display: flex;
   align-items: center;

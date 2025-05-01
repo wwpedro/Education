@@ -2,13 +2,13 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #102f54; /* Fundo azul */
+  background-color: #102f54;
   color: white;
-  position: relative; /* Necessário para posicionar imagens absolutas */
-  overflow: hidden; /* Impede que imagens se estendam para fora */
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
 }
 
-/* Container principal */
 .createclass-container {
   display: flex;
   flex-direction: column;
@@ -17,39 +17,34 @@ body {
   height: 100vh;
   padding: 2rem;
   position: relative;
+  box-sizing: border-box;
+  text-align: center;
+  z-index: 1;
 }
 
-/* Imagem do planeta Terra no fundo */
 .planet-earth {
   position: absolute;
-  bottom: -30%; /* Ajuste a posição vertical */
-  left: -10%; /* Ajuste a posição horizontal */
-  width: 40%; /* Largura proporcional */
-  z-index: -1; /* Coloca a imagem atrás do conteúdo */
-  opacity: 80%;
-  animation: rotate 600s linear infinite; /* Animação de rotação contínua */
+  bottom: -30%;
+  left: -10%;
+  width: 40%;
+  z-index: -1;
+  opacity: 0.8;
+  animation: rotate 600s linear infinite;
 }
 
-/* Imagem do planeta no canto superior direito */
 .planet-upper-right {
   position: absolute;
   top: 0;
   right: 0;
-  width: 20%; /* Largura proporcional */
-  z-index: -1; /* Coloca a imagem atrás do conteúdo */
+  width: 20%;
+  z-index: -1;
 }
 
-/* Animação de rotação */
 @keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Estrelas no fundo */
 .stars {
   position: absolute;
   top: 0;
@@ -57,52 +52,48 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  z-index: -2; /* Fica atrás de todo o conteúdo */
+  z-index: -2;
 }
 
-/* Cada estrela */
 .star {
   position: absolute;
   background-color: white;
-  border-radius: 50%; /* Pontos redondos */
-  opacity: 0; /* Inicialmente invisível */
-  animation: blink 2s infinite ease-in-out; /* Animação contínua */
+  border-radius: 50%;
+  opacity: 0;
+  animation: blink 2s infinite ease-in-out;
 }
 
-/* Animação de piscar das estrelas */
 @keyframes blink {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 
-/* Título */
 .title {
   font-size: 2rem;
   margin-bottom: 2rem;
   color: white;
 }
 
-/* Formulário */
 .createclass-form {
   background: white;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 500px;
-  overflow-y: auto; /* Faz o formulário inteiro ser rolável */
-  max-height: 80vh; /* Limita a altura do formulário */
+  width: 600px;
+  max-width: 95%;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+  overflow-y: auto;
+  max-height: 80vh;
 }
 
 .label {
   font-size: 1rem;
   margin-bottom: 0.5rem;
   color: #333;
+  display: block;
+  text-align: left;
 }
 
 .input {
@@ -113,6 +104,7 @@ body {
   border-radius: 8px;
   margin-bottom: 1rem;
   font-size: 1rem;
+  box-sizing: border-box;
 }
 
 .import-group {
@@ -121,11 +113,10 @@ body {
   gap: 0.5rem;
 }
 
-/* Estilo para a lista rolável */
 .dropdown-list {
   width: 100%;
-  max-height: 120px; /* Altura máxima da lista rolável */
-  overflow-y: auto; /* Permite rolar se necessário */
+  max-height: 120px;
+  overflow-y: auto;
   margin-bottom: 1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -134,27 +125,26 @@ body {
 .dropdown-list ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .dropdown-list li {
   padding: 0.8rem;
   cursor: pointer;
-  color: #333; /* Cor visível para o texto */
+  color: #333;
 }
 
 .dropdown-list li:hover {
   background-color: #f1f1f1;
 }
 
-/* Asterisco vermelho indicando campo não editável */
 .required {
   color: red;
   font-size: 1.2rem;
 }
 
-/* Botão "Adicionar" azul */
 .add-button {
-  background-color: #2196f3; /* Azul */
+  background-color: #2196f3;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -164,51 +154,47 @@ body {
 }
 
 .add-button:hover {
-  background-color: #1976d2; /* Tom mais escuro de azul */
+  background-color: #1976d2;
 }
 
-/* Ações do formulário */
 .form-actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
   margin-top: 2rem;
 }
 
-.submit-button {
-  background-color: #2196f3; /* Azul */
-  color: white;
-  border: none;
+.submit-button,
+.cancel-button {
   padding: 0.8rem 1.5rem;
-  border-radius: 8px;
   font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  width: 150px;
+  max-width: 150px;
   cursor: pointer;
+  text-align: center;
+}
+
+.submit-button {
+  background-color: #2196f3;
+  color: white;
 }
 
 .submit-button:hover {
-  background-color: #1976d2; /* Tom mais escuro de azul */
+  background-color: #1976d2;
 }
 
-/* Botão "Cancelar" sem alteração */
 .cancel-button {
-  background-color: transparent;
-  color: #666;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
+  background-color: #ccc;
+  color: #333;
 }
 
 .cancel-button:hover {
-  background-color: #ddd;
+  background-color: #bbb;
 }
 
-/* Destacar o item selecionado */
-.selected {
-  background-color: #c2c3c5; 
-}
-
-/* Modal Overlay */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -222,7 +208,6 @@ body {
   z-index: 1000;
 }
 
-/* Modal Content */
 .modal-content {
   background: white;
   color: black;
@@ -234,7 +219,6 @@ body {
   position: relative;
 }
 
-/* Close Button */
 .close-button {
   background-color: #4caf50;
   color: white;
@@ -249,7 +233,6 @@ body {
   background-color: #3e8e41;
 }
 
-/* Info Icon */
 .info-icon {
   display: inline-flex;
   align-items: center;
@@ -269,17 +252,24 @@ body {
   background-color: #3e8e41;
 }
 
-/* Botão "Voltar" */
-.cancel-button {
-  background-color: transparent;
-  color: #666;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-}
+@media (max-width: 768px) {
+  .createclass-container {
+    padding: 1rem;
+  }
 
-.cancel-button:hover {
-  background-color: #ddd;
+  .createclass-form {
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 95%;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form-actions button {
+    width: 100%;
+    max-width: 300px;
+  }
 }
