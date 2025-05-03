@@ -1,0 +1,152 @@
+.result-screen {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: #102f54;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Texto de aviso */
+  .warning-text {
+    position: fixed;
+    top: 5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 4.0vh;
+    font-weight: bold;
+    text-align: center;
+    z-index: 2;
+  }
+  
+  /* Resumo em vermelho */
+  .summary-box.red {
+    background: #b0303d;
+    position: fixed;
+    left: 13vw;
+    top: 35vh;
+    padding: 2vh 2vw;
+    border-radius: 1.2vh;
+    color: white;
+    box-shadow: 0 0 1vh rgba(0, 0, 0, 0.3);
+    width: 18vw;
+    height: auto;
+    font-size: 2.3vh;
+    z-index: 2;
+  }
+  
+  /* Botão revisar */
+  .finish-button {
+    position: fixed;
+    bottom: 10vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ffc107;
+    border: none;
+    padding: 1.2vh 2vw;
+    border-radius: 1vh;
+    font-size: 1.8vh;
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 0.4vh 0.6vh rgba(0, 0, 0, 0.3);
+  }
+  
+  .finish-button:hover {
+    background-color: #e0a800;
+  }
+  
+  /* Astronauta diferente */
+  .astronaut-img {
+    position: fixed;
+    bottom: 20vh;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 45vh;
+    z-index: 2;
+  }
+  
+  /* Terra */
+  .earth-img {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 15vw;
+    z-index: 1;
+  }
+  
+  /* Lua (curva inferior) */
+  .moon-curve {
+    position: fixed;
+    bottom: -70%;
+    width: 90vw;
+    height: 90vh;
+    background-color: #fbe29d;
+    border-radius: 50%;
+    left: -50%;
+    z-index: 1;
+  }
+  
+
+
+  @media (max-width: 676px) {
+    .warning-text {
+      font-size: 3.5vh;
+      top: 6vh;
+    }
+  
+    .summary-box.red {
+      width: 70vw;
+      top: 28vh;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2vh;
+      padding: 2vh 4vw;
+    }
+  
+    .astronaut-img {
+      height: 38vh;
+      bottom: 14vh;
+    }
+  
+    .earth-img {
+      width: 25vw;
+      top: 1vh;
+    }
+  
+    .finish-button {
+      bottom: 6vh;
+      font-size: 2vh;
+      padding: 1vh 5vw;
+    }
+  }
+  
+  @media (max-width: 405px) {
+    .warning-text {
+      font-size: 2.6vh;
+      top: 8vh;
+    }
+  
+    .summary-box.red {
+      top: 30vh;
+      width: 80vw;
+      font-size: 1.8vh;
+      padding: 1vh 3vw;
+    }
+  
+    .astronaut-img {
+      height: 26vh;
+      bottom: 20vh;
+    }
+  
+    .earth-img {
+      width: 30vw;
+    }
+  
+    .finish-button {
+      font-size: 1.5vh;
+      padding: 1vh 4vw;
+      bottom: 14vh;
+    }
+  }
+  

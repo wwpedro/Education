@@ -1,88 +1,172 @@
-.page {
-    background-color: #102f54;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+/* Reset e estrutura */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
 }
 
-.box {
-    background-color: white;
-    width: 80%;
-    max-width: 1200px;
-    padding: 350px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
+.result-screen {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: #102f54;
+    overflow: hidden;
+}
+
+/* Texto de parabéns */
+.congrats-text {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 5vh;
+    font-weight: bold;
+    z-index: 2;
     text-align: center;
 }
 
-h1 {
-    color: #102f54;
-    font-weight: bold;
-    font-size: 24px;
-    margin-bottom: 50px;
-    position: absolute;
-    top: 90px;
-    left: 50%;
-    transform: translateX(-50%);
+/* Box verde com resumo */
+/* Box verde com resumo */
+.summary-box {
+    position: fixed;
+    left: 13vw;
+    top: 35vh;
+    background: #18a557ca;
+    padding: 2vh 2vw;
+    border-radius: 1.2vh;
+    color: white;
+    box-shadow: 0 0 1vh rgba(0, 0, 0, 0.3);
+    width: 18vw;
+    height: 18vw;
+    z-index: 2;
 }
 
-.image-container {
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-}
 
-.logo1 {
-    width: 70px;
-}
-
-.trophy-container {
-    position: absolute;
-    top: 200px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.logo2 {
-    width: 300px;
-}
-
+/* Botão finalizar */
 .finish-button {
-    background-color: #FFC107;
-    color: #102f54;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    position: absolute;  /* Posiciona o botão de forma absoluta */
-    bottom: 30px; /* Distância da parte inferior da caixa */
+    position: fixed;
+    bottom: 10vh;
     left: 50%;
-    transform: translateX(-50%); /* Centraliza horizontalmente */
+    transform: translateX(-50%);
+    background-color: #ffa807;
+    border: none;
+    padding: 1.2vh 2vw;
+    border-radius: 1vh;
+    font-size: 1.8vh;
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 0.4vh 0.6vh rgba(0, 0, 0, 0.3);
 }
 
 .finish-button:hover {
-    background-color: #ffb300;
+    background-color: #e0a800;
 }
 
-.text-box {
-    position: absolute;
-    bottom: 90px; /* Ajuste a distância da parte inferior */
-    left: 20px; /* Alinha à esquerda do cartão */
-    background-color: #f4f4f4; 
-    padding: 10px; /* Espaçamento interno */
-    border-radius: 5px; /* Bordas arredondadas */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra suave */
-    font-size: 14px; /* Ajuste o tamanho da fonte */
-    text-align: left; /* Alinha o texto à esquerda */
+/* Astronauta */
+.astronaut-img {
+    position: fixed;
+    bottom: 20vh;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 55vh;
+    z-index: 2;
 }
 
-.text-box p {
-    margin: 5px 0; /* Espaçamento entre as linhas */
-    color:#102f54;
-    font-weight: bold;
+/* Planeta Terra */
+.earth-img {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 15vw;
+    z-index: 1;
+
+}
+
+/* Bola inferior simulando lua */
+.moon-curve {
+    position: fixed;
+    bottom: -60%;
+    width: 200vw;
+    height: 100vh;
+    background-color: #fbe29d;
+    border-radius: 50%;
+    left: -50%;
+    z-index: 1;
+}
+
+@media (max-width: 990px) {
+    .congrats-text {
+        font-size: 3.5vh;
+        top: 5vh;
+    }
+
+    .summary-box {
+        font-size: 1.9vh;
+    }
+}
+
+@media (max-width: 676px) {
+    .congrats-text {
+        font-size: 3.5vh;
+        top: 5vh;
+    }
+
+    .summary-box {
+        width: 70vw;
+        height: auto;
+        top: 28vh;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 2.2vh;
+        padding: 2vh 4vw;
+    }
+
+    .astronaut-img {
+        height: 40vh;
+        bottom: 14vh;
+    }
+
+    .earth-img {
+        width: 25vw;
+        top: 1vh;
+    }
+
+    .finish-button {
+        bottom: 6vh;
+        font-size: 2vh;
+        padding: 1vh 5vw;
+    }
+}
+
+@media (max-width: 374px) {
+    .congrats-text {
+        font-size: 2.6vh;
+        top: 8vh;
+    }
+
+    .summary-box {
+        top: 30vh;
+        width: 80vw;
+        font-size: 1.8vh;
+        padding: 1vh 3vw;
+    }
+
+    .astronaut-img {
+        height: 25vh;
+        bottom: 25vh;
+    }
+
+    .earth-img {
+        width: 30vw;
+    }
+
+    .finish-button {
+        font-size: 1.5vh;
+        padding: 1vh 4vw;
+        bottom: 20vh;
+    }
 }

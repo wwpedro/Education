@@ -10,17 +10,17 @@ import "./topiccontent.css";
 const contents = [
     { 
       id: 1, 
-      title: "Introdução ao Tópico", 
+      title: "Material", 
       type: "video", 
       src: "https://www.youtube.com/embed/Xn599R0ZBwg", // Lady Gaga - Bad Romance
-      icon: "https://cdn-icons-png.flaticon.com/512/777/777242.png" // Ícone de vídeo
+      //icon: "https://cdn-icons-png.flaticon.com/512/777/777242.png" // Ícone de vídeo
     },
     { 
       id: 2, 
-      title: "Material Complementar", 
+      title: "Material", 
       type: "pdf", 
       src: "https://educapes.capes.gov.br/bitstream/capes/206523/2/Matemática%20Básica%20I-Livro.pdf", // PDF válido
-      icon: "https://cdn-icons-png.flaticon.com/512/337/337946.png" // Ícone de PDF
+      //icon: "https://cdn-icons-png.flaticon.com/512/337/337946.png" // Ícone de PDF
     }
 ];  
 
@@ -77,12 +77,12 @@ const TopicContent: React.FC = () => {
       {/* Dots de fundo */}
       <div className="dots"></div>
 
-      {/* Círculo azul com ícone dinâmico */}
+      {/* Círculo azul com ícone dinâmico 
       <div className="circle-container">
         <div className="circle">
           <img src={currentContent.icon} alt="Ícone do conteúdo" className="circle-icon" />
         </div>
-      </div>
+      </div>*/}
 
       {/* Card principal */}
       <div className="content-card">

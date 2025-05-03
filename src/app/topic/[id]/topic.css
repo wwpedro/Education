@@ -9,8 +9,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    overflow-y: auto; /* Scroll apenas na vertical */
-    overflow-x: hidden; /* Impede rolagem horizontal */
+    overflow: hidden; /* Impede rolagem horizontal */
+    height: 100%;
   }
   
   /* Fundo espacial ajustado */
@@ -21,7 +21,7 @@ body {
     min-height: 100vh;
     position: relative;
     padding-bottom: 50px;
-    overflow-x: hidden; /* Impede rolagem horizontal */
+    overflow: hidden; /* Impede rolagem horizontal */
   }
   
   /* Container dos tópicos com mais altura para garantir rolagem vertical */
@@ -263,26 +263,14 @@ body {
 }
 
 /* Bolinhas maiores */
-.node-circle {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  transition: transform 0.2s ease;
-}
+
 
 .node-circle:hover {
   transform: scale(1.1);
 }
 
 /* Ícones dentro das bolinhas */
-.node-icon {
-  width: 200px;
-  height: 200px;
-}
+
 
 /* Cadeado na bolinha de "RESULTADO" */
 .lock-icon {
@@ -384,8 +372,8 @@ body {
 
 /* Ícones dentro das bolinhas */
 .node-icon {
-  width: 70px;
-  height: 70px;
+  width: 100px;
+  height: 100px;
 }
 
 /* Cadeado na bolinha de "RESULTADO" */
