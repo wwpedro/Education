@@ -165,7 +165,7 @@ body {
 }
 
 /* Botão de Logout */
-.logout-button {
+.logout-button-perfil{
   position: absolute;
   top: 20px;
   right: 20px;
@@ -180,7 +180,7 @@ body {
   transition: background-color 0.3s ease;
   z-index: 3;
 }
-.logout-button:hover {
+.logout-button-perfil:hover {
   background-color: #c50000;
 }
 
@@ -216,7 +216,7 @@ body {
     height: auto;
   }
 
-  .logout-button {
+  .logout-button-perfil {
     top: 10px;
     right: 10px;
     padding: 0.6rem 1.2rem;

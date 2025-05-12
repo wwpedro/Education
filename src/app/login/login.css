@@ -152,7 +152,7 @@ body {
   text-align: center;
 }
 
-button {
+.button {
   width: 50%;
   padding: 0.8rem;
   background: linear-gradient(to right, #d29e01 50%, #E3AA00 50%);

@@ -8,17 +8,26 @@ const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalError, setModalError] = useState(false);
   const router = useRouter();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (password !== confirmPassword) {
+      setModalMessage("As senhas não coincidem.");
+      setModalError(true);
+      setShowModal(true);
+      return;
+    }
+
     const userData = {
       name,
       email,
       password,
-      phone,
       role: "student",
     };
 
@@ -32,18 +41,29 @@ const RegisterPage = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        console.log("Usuário cadastrado com sucesso!", data);
-        router.push("/popup");
+        setModalMessage("Cadastro realizado com sucesso!");
+        setModalError(false);
+        setShowModal(true);
       } else {
-        console.error("Erro ao cadastrar usuário");
-        alert("Erro no cadastro. Verifique os dados.");
+        const data = await response.json();
+        setModalMessage(data.message || "Erro ao cadastrar usuário.");
+        setModalError(true);
+        setShowModal(true);
       }
     } catch (error) {
-      console.error("Erro no servidor:", error);
-      alert("Erro no servidor. Tente novamente mais tarde.");
+      setModalMessage("Erro no servidor. Tente novamente mais tarde.");
+      setModalError(true);
+      setShowModal(true);
     }
   };
+
+  const closeModal = () => {
+    setShowModal(false);
+    if (!modalError) {
+      router.push("/login");
+    }
+  };
+
 
   useEffect(() => {
     const dotsContainer = document.querySelector(".dots");
@@ -63,8 +83,33 @@ const RegisterPage = () => {
     }
   }, []);
 
+  type ModalProps = {
+    message: string;
+    isError: boolean;
+    onClose: () => void;
+  };
+
+  const Modal: React.FC<ModalProps> = ({ message, isError, onClose }) => (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <p className={isError ? "error-text" : "success-text"}>{message}</p>
+        <button className="modal-close-btn" onClick={onClose}>Fechar</button>
+      </div>
+    </div>
+  );
+
+
+
   return (
     <>
+
+      {showModal && (
+        <Modal
+          message={modalMessage}
+          isError={modalError}
+          onClose={closeModal}
+        />
+      )}
       {/* 🔵 ONDAS FORA do container */}
       <div className="wave-container">
         <svg className="wave-svg back" viewBox="0 0 1800 400" preserveAspectRatio="none">
@@ -126,12 +171,12 @@ const RegisterPage = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="phone">Telefone</label>
+            <label htmlFor="confirmPassword">Confirmar Senha</label>
             <input
-              type="text"
-              id="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              type="password"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
           </div>

@@ -35,38 +35,6 @@ const Modal: React.FC<ModalProps> = ({ message, onClose }) => (
   </div>
 );
 
-const modalOverlayStyle = {
-  position: "fixed" as const,
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  backgroundColor: "rgba(0, 0, 0, 0.5)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  zIndex: 1000,
-};
-
-const modalContentStyle = {
-  background: "#fff",
-  padding: "20px",
-  borderRadius: "8px",
-  boxShadow: "0 2px 10px rgba(0, 0, 0, 0.3)",
-  textAlign: "center" as const,
-  maxWidth: "300px",
-  width: "100%",
-};
-
-const buttonStyle = {
-  marginTop: "10px",
-  padding: "8px 16px",
-  backgroundColor: "#007bff",
-  color: "#fff",
-  border: "none",
-  borderRadius: "4px",
-  cursor: "pointer",
-};
 
 const StudentPopup: React.FC<StudentPopupProps> = ({ students, onClose }) => {
   return (
@@ -123,6 +91,8 @@ const Material: React.FC<MaterialProps> = ({ topics, onAddTopic, onClose }) => {
 };
 
 const CreateClassroomPage: React.FC = () => {
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loadingCourses, setLoadingCourses] = useState(true);
   const [selectedCurriculum, setSelectedCurriculum] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("");
   const [curriculums, setCurriculums] = useState<{
@@ -153,6 +123,8 @@ const CreateClassroomPage: React.FC = () => {
   const [savedMaterials, setSavedMaterials] = useState<string[]>([]);
   const [showImportTopic, setShowImportTopic] = useState(false);
   const [savedTopics, setSavedTopics] = useState<string[]>([]);
+  const [classTitle, setClassTitle] = useState(""); // Nome da turma
+  const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null); // ID do curso
 
   const handleOpenImportTopic = () => setShowImportTopic(true);
   const handleCloseImportTopic = () => setShowImportTopic(false);
@@ -161,19 +133,42 @@ const CreateClassroomPage: React.FC = () => {
   const handleOpenImportMaterial = () => setShowImportMaterial(true);
   const handleCloseImportMaterial = () => setShowImportMaterial(false);
 
-  const handleSaveQuestions = () => {
-    setQuestions([...questions]); // Mantém as questões salvas no estado global
-    setShowQuestionPopup(false);
-  };
+  useEffect(() => {
+    const fetchCourses = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        console.error("Token não encontrado");
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:8081/api/courses", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(`Erro ${response.status}: ${text}`);
+        }
+
+        const data = await response.json();
+        setCourses(data);
+      } catch (err) {
+        console.error("Erro ao buscar cursos:", err);
+        setError("Erro ao carregar cursos.");
+      } finally {
+        setLoadingCourses(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
 
-  const [topicsList] = useState<string[]>([
-    "Matemática",
-    "História",
-    "Geografia",
-    "Física",
-    "Química"
-  ]);
   const [topics, setTopics] = useState<string[]>([]);
   const [showMaterial, setShowMaterial] = useState(false);
 
@@ -223,24 +218,6 @@ const CreateClassroomPage: React.FC = () => {
     setQuestions(questions.filter((question) => question.id !== id));
   };
 
-  useEffect(() => {
-    const starsContainer = document.querySelector(".stars");
-    if (!starsContainer) return;
-
-    const totalStars = 100;
-    for (let i = 0; i < totalStars; i++) {
-      const star = document.createElement("div");
-      star.classList.add("star");
-      star.style.top = `${Math.random() * 100}%`;
-      star.style.left = `${Math.random() * 100}%`;
-      const size = Math.random() * 3 + 1;
-      star.style.width = `${size}px`;
-      star.style.height = `${size}px`;
-      star.style.animationDelay = `${Math.random() * 2}s`;
-      starsContainer.appendChild(star);
-    }
-  }, []);
-
   const handleSaveAndAdvance = (e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLButtonElement>) => {
     if (topicTitle.trim() === "") {
       e.preventDefault();
@@ -279,13 +256,21 @@ const CreateClassroomPage: React.FC = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
+            Authorization: `Bearer ${token}`,
           },
         });
-        if (!response.ok) throw new Error("Erro ao buscar currículos.");
+
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(`Erro ${response.status}: ${text}`);
+        }
+
         const data = await response.json();
+
+        // Filtra ou transforma os dados se necessário
         setCurriculums(data);
       } catch (err) {
+        console.error("Erro ao buscar currículos:", err);
         setError("Erro ao carregar currículos.");
       } finally {
         setLoadingCurriculums(false);
@@ -294,6 +279,7 @@ const CreateClassroomPage: React.FC = () => {
 
     fetchCurriculums();
   }, []);
+
 
   const handleAddTopic = (newTopic: string) => {
     setTopics((prevTopics) => [...prevTopics, newTopic]);
@@ -693,10 +679,44 @@ const CreateClassroomPage: React.FC = () => {
     updatedList.splice(index, 1);
     setTopicList(updatedList);
   };
-  
 
+  const handleCreateClass = async (e: React.FormEvent) => {
+  e.preventDefault();
 
+  const token = localStorage.getItem("accessToken");
+  if (!token || !classTitle || !selectedCourseId) {
+    alert("Preencha todos os campos obrigatórios.");
+    return;
+  }
 
+  const payload = {
+    description: classTitle,
+    course: {
+      courseId: selectedCourseId
+    }
+  };
+
+  try {
+    const response = await fetch("http://localhost:8081/api/classes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (response.ok) {
+      alert("Turma criada com sucesso!");
+      Router.push("/topicsprofile"); // redirecionamento
+    } else {
+      alert("Erro ao criar turma.");
+    }
+  } catch (err) {
+    console.error("Erro ao criar turma:", err);
+    alert("Erro no servidor.");
+  }
+};
 
   return (
     <div className="classroom-container">
@@ -715,15 +735,17 @@ const CreateClassroomPage: React.FC = () => {
               <div className="curriculum-section">
                 <label className="label">Curriculum <span className="required">*</span></label>
                 <div className="dropdown-list">
-                  {["Curriculum 1", "Curriculum 2"].map(item => (
-                    <li
-                      key={item}
-                      onClick={() => setSelectedCurriculum(item)}
-                      className={selectedCurriculum === item ? "selected" : ""}
-                    >
-                      {item}
-                    </li>
-                  ))}
+                  <ul>
+                    {curriculums.map((curriculum) => (
+                      <li
+                        key={curriculum.curriculumId}
+                        onClick={() => setSelectedCurriculum(curriculum.curriculumId.toString())}
+                        className={selectedCurriculum === curriculum.curriculumId.toString() ? "selected" : ""}
+                      >
+                        {curriculum.name}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
                 <div className="center-button">
                   <button type="button" className="plus-button">adicionar Curriculum</button>
@@ -751,21 +773,33 @@ const CreateClassroomPage: React.FC = () => {
               <div className="course-section">
                 <label className="label">Curso <span className="required">*</span></label>
                 <div className="dropdown-list">
-                  {["Curso 1", "Curso 2"].map(item => (
-                    <li
-                      key={item}
-                      onClick={() => setSelectedCourse(item)}
-                      className={selectedCourse === item ? "selected" : ""}
-                    >
-                      {item}
-                    </li>
-                  ))}
+                  {courses.map((course) => (
+  <li
+    key={course.courseId}
+    onClick={() => {
+      setSelectedCourseId(course.courseId);
+      setSelectedCourse(course.name); // opcional para exibir no UI
+    }}
+    className={selectedCourseId === course.courseId ? "selected" : ""}
+  >
+    {course.name}
+  </li>
+))}
+
                 </div>
                 <button type="button" className="plus-button">Adicionar Curso</button>
               </div>
             </div>
             <label className="label">Turma</label>
-            <input type="text" className="input" placeholder="Nome da Classe" />
+<input
+  type="text"
+  className="input"
+  value={classTitle}
+  onChange={(e) => setClassTitle(e.target.value)}
+  placeholder="Nome da Classe"
+/>
+
+
 
             <label className="label">Descrição</label>
             <input type="text" className="input" placeholder="Descrição da Classe" />

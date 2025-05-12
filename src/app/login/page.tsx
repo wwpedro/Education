@@ -27,8 +27,6 @@ const LoginPage = () => {
 
         // Armazena o token no localStorage
         localStorage.setItem("accessToken", data.accessToken);
-
-        alert("Login realizado com sucesso!");
         router.push("/profile"); // Redireciona para a página de perfil
       } else {
         console.error("Erro ao realizar login");
@@ -103,7 +101,7 @@ const LoginPage = () => {
             required
           />
         </div>
-        <button type="submit">Logar</button>
+        <button type="submit" className="button">Logar</button>
         <p className="redirect">
           Não tem uma conta?{" "}
           <Link href="/register" className="link">

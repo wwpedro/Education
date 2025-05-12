@@ -273,3 +273,10 @@ body {
     max-width: 300px;
   }
 }
+
+.dropdown-list .selected {
+  background-color: #003ae636;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  border-radius: 4px;
+}

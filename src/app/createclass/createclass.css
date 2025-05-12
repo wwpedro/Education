@@ -1026,3 +1026,14 @@ body {
   font-weight: normal;
   cursor: not-allowed;
 }
+
+
+.curriculum-disabled li.selected {
+  pointer-events: none;
+  background-color: #f7cf20;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  cursor: default;
+  pointer-events: none;
+}
+

@@ -44,7 +44,7 @@ body {
 }
 
 
-.login-container {
+.register-container {
   position: relative;
   overflow: hidden; /* Garante que as ondas não escapem da área visível */
   height: 100vh;
@@ -63,7 +63,7 @@ body {
   width: 100vw;
   height: 400px;
   overflow: hidden;
-  z-index: 0;
+  z-index: -1;
 }
 
 .wave-svg {
@@ -103,7 +103,7 @@ body {
 
 
 /* Formulário */
-.login-form {
+.register-form {
   background: rgba(255, 255, 255, 0); /* Fundo translúcido */
   padding: 2rem;
   /*border-radius: 12px;
@@ -185,7 +185,7 @@ button:hover {
 }
 
 @media (max-width: 768px) {
-  .login-form {
+  .register-form {
     padding: 1.5rem;
     width: 90%;
   }
@@ -201,22 +201,53 @@ button:hover {
 }
 
 .img-planet {
-  position: absolute;
-  bottom: -150;
-  left: 120%;
-  transform: translateX(-300%);
-  height: 300px;
+  position: fixed;
+  left: 15vw;
+  bottom: 350px;
+  height: 280px;
   width: auto;
   opacity: 0.5;
+  z-index: 0;
 }
 
 .img-astro {
-  position: absolute;
-  bottom: -440;
-  left: 400%;
-  transform: translateX(-300%);
-  width: auto; /* Define largura */
-  height: 250px; /* Mantém proporção */
+  position: fixed;
+  right: 15vw;
+  bottom: 200px;
+  height: 250px;
+  width: auto;
   opacity: 0.8;
-  border-radius: 30%; /* Exemplo: transforma a imagem em um círculo */
+  border-radius: 30%;
+  z-index: 0;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+}
+
+.modal-close-btn {
+  margin-top: 1rem;
+  background-color: #102f54;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
 }

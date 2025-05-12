@@ -1,10 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import "./createcurriculum.css";
-import Router from "next/router";
 
 const CreateCurriculumPage = () => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const starsContainer = document.querySelector(".stars");
@@ -28,6 +31,42 @@ const CreateCurriculumPage = () => {
     }
   }, []);
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("Usuário não autenticado.");
+      return;
+    }
+
+    const curriculumData = {
+      name,
+      description,
+    };
+
+    try {
+      const response = await fetch("http://localhost:8081/api/curriculums", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(curriculumData),
+      });
+
+      if (response.ok) {
+        alert("Curriculum criado com sucesso!");
+        router.push("/createcourse");
+      } else {
+        alert("Erro ao criar curriculum.");
+      }
+    } catch (error) {
+      console.error("Erro ao conectar com o servidor:", error);
+      alert("Erro no servidor.");
+    }
+  };
+
   return (
     <div className="createclass-container">
       <div className="stars"></div>
@@ -37,26 +76,35 @@ const CreateCurriculumPage = () => {
 
       <h1 className="title">Fábrica de Curriculum</h1>
 
-      <form className="createclass-form">       
-
-        <div className="info-icon" onClick={(e) => { e.preventDefault(); setIsModalOpen(true); }}>i</div><br></br>
+      <form className="createclass-form" onSubmit={handleSubmit}>
+        <div className="info-icon" onClick={(e) => { e.preventDefault(); setIsModalOpen(true); }}>i</div><br />
 
         <label htmlFor="curriculum" className="label">Curriculum</label>
-        <input type="text" id="curriculum" className="input" placeholder="Nome do curriculum" />
+        <input
+          type="text"
+          id="curriculum"
+          className="input"
+          placeholder="Nome do curriculum"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
 
         <label htmlFor="curriculum-description" className="label">Descrição</label>
-        <input type="text" id="curriculum-description" className="input" placeholder="Descrição do curriculum" />
-
-        <label htmlFor="import" className="label">Import</label>
-        <div className="import-group">
-          <input type="text" id="import" className="input" placeholder="Importar dados" />
-          <button type="button" className="add-button">+</button>
-        </div>
+        <input
+          type="text"
+          id="curriculum-description"
+          className="input"
+          placeholder="Descrição do curriculum"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
 
         <div className="form-actions">
-          <button type="button" className="cancel-button"onClick={() => Router.back()}>Cancelar</button>
-          <button type="button" className="cancel-button" onClick={() => Router.push("/profile")}>Voltar</button>
-          <button type="submit" className="submit-button" onClick={() => Router.push("/createcourse")}>Salvar e Avançar</button>
+          <button type="button" className="cancel-button" onClick={() => router.back()}>Cancelar</button>
+          <button type="button" className="cancel-button" onClick={() => router.push("/profile")}>Voltar</button>
+          <button type="submit" className="submit-button">Salvar e Avançar</button>
         </div>
       </form>
 

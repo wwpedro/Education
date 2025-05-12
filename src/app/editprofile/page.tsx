@@ -1,56 +1,69 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Importa o hook useRouter
+import { useRouter } from "next/navigation";
 import "./editprofile.css";
 
 const EditProfilePage = () => {
+  const [userId, setUserId] = useState<number | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState(""); // Estado para telefone
-  const [profileImage, setProfileImage] = useState(null); // Estado para imagem de perfil
-  const router = useRouter(); // Inicializa o hook para redirecionamento
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [role, setRole] = useState("student");
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const router = useRouter();
+
+  const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const userData = {
-      name,
-      email,
-      password,
-      phone,
-      role: "student", // Papel padrão definido automaticamente
+    if (password && password !== confirmPassword) {
+      alert("As senhas não coincidem.");
+      return;
+    }
+
+    const token = localStorage.getItem("accessToken");
+    if (!token || userId === null) return;
+
+    const updatedData: Record<string, string> = {
+      role,
+      status: "ativo", // sempre enviado, mas não mostrado
     };
 
+    if (name) updatedData.name = name;
+    if (email) updatedData.email = email;
+    if (phone) updatedData.phone = phone;
+    if (password) updatedData.password = password;
+
     try {
-      const response = await fetch("http://localhost:8081/api/users", {
-        method: "POST",
+      const response = await fetch(`http://localhost:8081/api/users/${userId}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(updatedData),
       });
 
       if (response.ok) {
-        const data = await response.json();
-        console.log("Usuário cadastrado com sucesso!", data);
-        router.push("/popup"); // Redireciona para a rota /popup
+        alert("Informações atualizadas com sucesso!");
+        router.push("/profile");
       } else {
-        console.error("Erro ao cadastrar usuário");
-        alert("Erro no cadastro. Verifique os dados.");
+        alert("Erro ao atualizar informações.");
       }
     } catch (error) {
-      console.error("Erro no servidor:", error);
-      alert("Erro no servidor. Tente novamente mais tarde.");
+      console.error("Erro ao atualizar:", error);
+      alert("Erro no servidor.");
     }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
+    const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        //setProfileImage(reader.result as string);
+        setProfileImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -74,10 +87,35 @@ const EditProfilePage = () => {
     }
   }, []);
 
-  const handleBackClick = () => {
-    window.history.back(); // Volta para a página anterior
-    console.log("Botão de voltar clicado");
-  };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) return;
+
+      try {
+        const response = await fetch("http://localhost:8081/api/auth/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserId(data.id);
+          setName(data.name || "");
+          setEmail(data.email || "");
+          setPhone(data.phone || "");
+          setRole(data.role || "student");
+        } else {
+          alert("Erro ao carregar dados do perfil.");
+        }
+      } catch (err) {
+        console.error("Erro ao buscar dados do usuário", err);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   return (
     <div className="register-container">
@@ -86,30 +124,30 @@ const EditProfilePage = () => {
       <div className="dots"></div>
 
       <div className="form-and-image">
-        {/* Cartão de Adicionar Foto */}
         <div className="left-side">
           <div className="profile-card">
             <div className="profile-image-container">
               {profileImage ? (
                 <img src={profileImage} alt="Imagem de perfil" className="profile-image" />
               ) : (
-                <div className="profile-image-placeholder"></div>
+                <div className="profile-image-placeholder" />
               )}
             </div>
-            <div className="image-upload-container">
-              <div className="photo-text-box">Adicione sua foto</div>
-              <input type="file" accept="image/*" onChange={handleImageChange} />              
-            </div>
-            {/* Botão "+" ao lado da caixa */}
             <div className="button-container">
-                <button className="upload-button">+</button>
+              <label htmlFor="fileInput" className="upload-button">Escolher Foto</label>
+              <input
+                type="file"
+                id="fileInput"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+              />
             </div>
           </div>
         </div>
 
-        {/* Formulário de Preenchimento */}
         <div className="right-side">
-          <form className="register-form" onSubmit={handleRegister}>
+          <form className="register-form" onSubmit={handleUpdate}>
             <h1 className="title">Informações do usuário</h1>
             <div className="form-group">
               <label htmlFor="name">Nome</label>
@@ -118,7 +156,6 @@ const EditProfilePage = () => {
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                required
               />
             </div>
             <div className="form-group">
@@ -128,17 +165,6 @@ const EditProfilePage = () => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Senha</label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
               />
             </div>
             <div className="form-group">
@@ -148,14 +174,29 @@ const EditProfilePage = () => {
                 id="phone"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                required
               />
             </div>
-            <button type="submit" className="save-button" onClick={handleBackClick}>Salvar informações</button>
+            <div className="form-group">
+              <label htmlFor="password">Nova Senha</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirmar Senha</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+            <button type="submit" className="save-button">Salvar informações</button>
           </form>
         </div>
-
-        
       </div>
     </div>
   );

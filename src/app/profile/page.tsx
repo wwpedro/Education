@@ -138,7 +138,7 @@ const ProfilePage = () => {
         
         {/* Botão de Logout */}
         <button
-          className="logout-button"
+          className="logout-button-perfil"
           onClick={() => {
             localStorage.removeItem("accessToken");
             router.push("/login"); // Redireciona para a tela de login
