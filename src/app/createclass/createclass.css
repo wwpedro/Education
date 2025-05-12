@@ -475,7 +475,7 @@ body {
 /* Cada seção ocupa 50% do espaço */
 .curriculum-section, .course-section {
   flex: 1;
-  min-width: 250px; /* Garante que não fique muito pequeno */
+  min-width: 250px;
 }
 
 /* Ajuste do dropdown para ocupar o espaço corretamente */
@@ -1025,6 +1025,8 @@ body {
   border: none;
   font-weight: normal;
   cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.8;
 }
 
 
@@ -1037,3 +1039,8 @@ body {
   pointer-events: none;
 }
 
+.center-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}

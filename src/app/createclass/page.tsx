@@ -110,6 +110,7 @@ const CreateClassroomPage: React.FC = () => {
     { name: "João Silva", email: "joao.silva@email.com" },
     { name: "Maria Oliveira", email: "maria.oliveira@email.com" }
   ]);
+  const [classId, setClassId] = useState<number | null>(null);
   const [topicTitle, setTopicTitle] = useState<string>("");
   const [topicDescription, setTopicDescription] = useState<string>("");
   const [material, setMaterial] = useState<File | null>(null);
@@ -427,6 +428,111 @@ const CreateClassroomPage: React.FC = () => {
     );
   };
 
+  // Adicione isso dentro do componente CreateClassroomPage
+
+  const [allStudents, setAllStudents] = useState<Student[]>([]);
+  const [selectedStudents, setSelectedStudents] = useState<Student[]>([]);
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) return;
+
+      try {
+        const response = await fetch("http://localhost:8081/api/users", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Erro ${response.status}: ${errorText}`);
+        }
+
+        const data = await response.json();
+        setAllStudents(data);
+      } catch (error) {
+        console.error("Erro ao buscar alunos", error);
+      }
+    };
+
+    fetchStudents();
+  }, []);
+
+
+  const handleAddStudent = (student: Student) => {
+    if (!selectedStudents.find(s => s.email === student.email)) {
+      setSelectedStudents([...selectedStudents, student]);
+    }
+  };
+
+  const handleRemoveStudent = (email: string) => {
+    setSelectedStudents(selectedStudents.filter(s => s.email !== email));
+  };
+
+  const handleAddAll = () => {
+    setSelectedStudents(allStudents);
+  };
+
+  const handleRemoveAll = () => {
+    setSelectedStudents([]);
+  };
+
+  const saveStudentList = () => {
+    if (selectedStudents.length === 0) {
+      alert("Selecione pelo menos um aluno.");
+      return;
+    }
+
+    // Fecha o modal e mantém os alunos no estado
+    setShowPopup(false);
+    alert("Alunos selecionados e salvos localmente para a turma.");
+  };
+
+
+  // Substitua o StudentPopup existente por:
+
+  const StudentPopup: React.FC<{ onClose: () => void }> = ({ onClose }) => (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <button className="close-button" onClick={onClose}>✖</button>
+        <h2>Gerenciar Alunos da Turma</h2>
+        <div style={{ display: "flex", gap: "2rem" }}>
+          <div>
+            <h3>Todos os Alunos</h3>
+            <button onClick={handleAddAll}>Adicionar todos</button>
+            <ul>
+              {allStudents.map((student, i) => (
+                <li key={i}>
+                  {student.name} - {student.email}
+                  <button onClick={() => handleAddStudent(student)}>+</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3>Alunos da Turma</h3>
+            <button onClick={handleRemoveAll}>Remover todos</button>
+            <ul>
+              {selectedStudents.map((student, i) => (
+                <li key={i}>
+                  {student.name}
+                  <button onClick={() => handleRemoveStudent(student.email)}>x</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="center-button">
+          <button className="save-button" onClick={saveStudentList}>Salvar Alunos da Turma</button>
+        </div>
+      </div>
+    </div>
+  );
+
   const ImportMaterial: React.FC<{
     onClose: () => void;
     material: File | null;
@@ -681,42 +787,69 @@ const CreateClassroomPage: React.FC = () => {
   };
 
   const handleCreateClass = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const token = localStorage.getItem("accessToken");
-  if (!token || !classTitle || !selectedCourseId) {
-    alert("Preencha todos os campos obrigatórios.");
-    return;
-  }
+    const token = localStorage.getItem("accessToken");
+    if (!token || !classTitle || !selectedCourseId) {
+      alert("Preencha todos os campos obrigatórios.");
+      return;
+    }
 
-  const payload = {
-    description: classTitle,
-    course: {
-      courseId: selectedCourseId
+    const payload = {
+      description: classTitle,
+      course: {
+        courseId: selectedCourseId
+      }
+    };
+
+    try {
+      // 1. Cria a turma
+      const response = await fetch("http://localhost:8081/api/classes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Erro ${response.status}: ${errorText}`);
+      }
+
+      const data = await response.json(); // recebe o classId
+      const createdClassId = data.classId;
+
+      // 2. Envia os alunos vinculados
+      if (selectedStudents.length > 0) {
+        const studentResponse = await fetch("http://localhost:8081/api/student-classes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(
+            selectedStudents.map((student) => ({
+              studentEmail: student.email,
+              classId: createdClassId,
+            }))
+          ),
+        });
+
+        if (!studentResponse.ok) {
+          const text = await studentResponse.text();
+          throw new Error(`Erro ao adicionar alunos: ${text}`);
+        }
+      }
+
+      alert("Turma e alunos criados com sucesso!");
+      Router.push("/topicsprofile");
+    } catch (err) {
+      console.error("Erro ao criar turma ou adicionar alunos:", err);
+      alert("Erro ao criar turma ou adicionar alunos. Veja o console.");
     }
   };
-
-  try {
-    const response = await fetch("http://localhost:8081/api/classes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (response.ok) {
-      alert("Turma criada com sucesso!");
-      Router.push("/topicsprofile"); // redirecionamento
-    } else {
-      alert("Erro ao criar turma.");
-    }
-  } catch (err) {
-    console.error("Erro ao criar turma:", err);
-    alert("Erro no servidor.");
-  }
-};
 
   return (
     <div className="classroom-container">
@@ -734,12 +867,11 @@ const CreateClassroomPage: React.FC = () => {
               {/* Seção de Curriculum */}
               <div className="curriculum-section">
                 <label className="label">Curriculum <span className="required">*</span></label>
-                <div className="dropdown-list">
+                <div className="dropdown-list curriculum-disabled">
                   <ul>
                     {curriculums.map((curriculum) => (
                       <li
                         key={curriculum.curriculumId}
-                        onClick={() => setSelectedCurriculum(curriculum.curriculumId.toString())}
                         className={selectedCurriculum === curriculum.curriculumId.toString() ? "selected" : ""}
                       >
                         {curriculum.name}
@@ -747,66 +879,52 @@ const CreateClassroomPage: React.FC = () => {
                     ))}
                   </ul>
                 </div>
-                <div className="center-button">
-                  <button type="button" className="plus-button">adicionar Curriculum</button>
-                </div>
               </div>
-              {/*<div className="dropdown-list">
-            {loadingCurriculums ? (
-              <p>Carregando currículos...</p>
-            ) : (
-              <ul>
-                {curriculums.map((curriculum) => (
-                  <li
-                    key={curriculum.curriculumId}
-                    onClick={() => setSelectedCurriculum(curriculum.name)}
-                    className={selectedCurriculum === curriculum.name ? "selected" : ""}
-                  >
-                    {curriculum.name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>*/}
 
               {/* Seção de Curso */}
               <div className="course-section">
                 <label className="label">Curso <span className="required">*</span></label>
                 <div className="dropdown-list">
                   {courses.map((course) => (
-  <li
-    key={course.courseId}
-    onClick={() => {
-      setSelectedCourseId(course.courseId);
-      setSelectedCourse(course.name); // opcional para exibir no UI
-    }}
-    className={selectedCourseId === course.courseId ? "selected" : ""}
-  >
-    {course.name}
-  </li>
-))}
+                    <li
+                      key={course.courseId}
+                      onClick={() => {
+                        setSelectedCourseId(course.courseId);
+                        setSelectedCourse(course.name);
+
+                        // Adiciona esta parte para selecionar o currículo automaticamente
+                        if (course.curriculum && course.curriculum.curriculumId) {
+                          setSelectedCurriculum(course.curriculum.curriculumId.toString());
+                        }
+                      }}
+                      className={selectedCourseId === course.courseId ? "selected" : ""}
+                    >
+                      {course.name}
+                    </li>
+                  ))}
 
                 </div>
                 <button type="button" className="plus-button">Adicionar Curso</button>
               </div>
             </div>
-            <label className="label">Turma</label>
-<input
-  type="text"
-  className="input"
-  value={classTitle}
-  onChange={(e) => setClassTitle(e.target.value)}
-  placeholder="Nome da Classe"
-/>
+            <label className="label">Nome da Turma <span className="required">*</span></label>
+            <input
+              type="text"
+              className="input"
+              value={classTitle}
+              onChange={(e) => setClassTitle(e.target.value)}
+              placeholder="Ex: Turma de Programação 2025.1"
+            />
 
-
-
-            <label className="label">Descrição</label>
-            <input type="text" className="input" placeholder="Descrição da Classe" />
             <div className="center-button">
-              <button type="button" className="alunos-button" onClick={() => setShowPopup(true)}>
+              <button
+                type="button"
+                className="alunos-button"
+                onClick={() => setShowPopup(true)}
+              >
                 Alunos da turma
               </button>
+
             </div>
 
           </div>
@@ -891,6 +1009,11 @@ const CreateClassroomPage: React.FC = () => {
           setSavedMaterials={setSavedMaterials}
         />
       )}
+
+      {showPopup && (
+        <StudentPopup onClose={() => setShowPopup(false)} />
+      )}
+
 
     </div>
 
