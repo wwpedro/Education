@@ -741,34 +741,81 @@ const CreateClassroomPage: React.FC = () => {
   const [topicList, setTopicList] = useState<{ title: string; description: string; questions: Question[]; materials: string[] }[]>([]);
   const [editingTopicIndex, setEditingTopicIndex] = useState<number | null>(null);
 
-  const handleAddOrEditTopic = () => {
-    if (!topicTitle.trim() || !topicDescription.trim()) {
-      alert("Preencha o título e a descrição do tópico.");
+  const handleAddOrEditTopic = async () => {
+    if (!topicTitle.trim()) {
+      alert("Preencha o título do tópico.");
       return;
     }
 
-    const newTopic = {
-      title: topicTitle,
-      description: topicDescription,
-      questions: [...questions],
-      materials: [...savedMaterials],
-    };
-
-    if (editingTopicIndex !== null) {
-      const updated = [...topicList];
-      updated[editingTopicIndex] = newTopic;
-      setTopicList(updated);
-      setEditingTopicIndex(null);
-    } else {
-      setTopicList([...topicList, newTopic]);
+    const token = localStorage.getItem("accessToken");
+    if (!token || !selectedCurriculum) {
+      alert("Currículo ou token não definido.");
+      return;
     }
 
-    // Limpa os campos após adicionar/editar
-    setTopicTitle("");
-    setTopicDescription("");
-    setQuestions([]);
-    setSavedMaterials([]);
+    try {
+      // 1. Cria o tópico
+      const response = await fetch("http://localhost:8081/api/topics", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          description: topicTitle,
+          estimatedTime: 1,
+          parentTopic: { topicId: 1 },
+        }),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Erro ao criar tópico: ${text}`);
+      }
+
+      const topicData = await response.json();
+      const newTopicId = topicData.topicId;
+
+      // 2. Associa ao currículo
+      const curriculumResponse = await fetch("http://localhost:8081/api/curriculum-topics", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          curriculumId: Number(selectedCurriculum),
+          topicId: newTopicId,
+        }),
+      });
+
+      if (!curriculumResponse.ok) {
+        const text = await curriculumResponse.text();
+        throw new Error(`Erro ao associar tópico ao currículo: ${text}`);
+      }
+
+      // ...
+
+      alert("Tópico criado e vinculado com sucesso!");
+
+      // Atualiza a lista de tópicos visível
+      const newTopic = {
+        title: topicTitle,
+        description: "",
+        questions: [],
+        materials: []
+      };
+      setTopicList([...topicList, newTopic]);
+
+      // Limpa o campo
+      setTopicTitle("");
+
+    } catch (error) {
+      console.error("Erro ao adicionar tópico:", error);
+      alert("Erro ao adicionar tópico. Veja o console.");
+    }
   };
+
 
 
   const handleEditTopic = (index: number) => {
@@ -853,6 +900,25 @@ const CreateClassroomPage: React.FC = () => {
 
   return (
     <div className="classroom-container">
+
+      <button
+        type="button"
+        onClick={() => Router.back()}
+        style={{
+          position: "absolute",
+          top: "30px",
+          left: "30px",
+          background: "none",
+          border: "none",
+          fontSize: "2rem",
+          color: "#f7cf20",
+          cursor: "pointer",
+          zIndex: 10
+        }}
+      >
+        ←
+      </button>
+
       <div className="stars"></div>
       <img src="/assets/image9.png" alt="Planeta Terra" className="planet-earth-img" />
       <img src="/assets/image8.png" alt="Planeta" className="planet-topright-img" />
@@ -864,22 +930,6 @@ const CreateClassroomPage: React.FC = () => {
           {/* Primeira coluna */}
           <div className="form-column">
             <div className="curriculum-course-container">
-              {/* Seção de Curriculum */}
-              <div className="curriculum-section">
-                <label className="label">Curriculum <span className="required">*</span></label>
-                <div className="dropdown-list curriculum-disabled">
-                  <ul>
-                    {curriculums.map((curriculum) => (
-                      <li
-                        key={curriculum.curriculumId}
-                        className={selectedCurriculum === curriculum.curriculumId.toString() ? "selected" : ""}
-                      >
-                        {curriculum.name}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
 
               {/* Seção de Curso */}
               <div className="course-section">
@@ -907,7 +957,7 @@ const CreateClassroomPage: React.FC = () => {
                 <button type="button" className="plus-button">Adicionar Curso</button>
               </div>
             </div>
-            <label className="label">Nome da Turma <span className="required">*</span></label>
+            <label className="label">Nome da Turma<span className="required">*</span></label>
             <input
               type="text"
               className="input"
@@ -931,38 +981,6 @@ const CreateClassroomPage: React.FC = () => {
 
           {/* Segunda coluna */}
           <div className="form-column">
-            <label htmlFor="topic-title" className="label">Título do Tópico</label>
-            <input
-              type="text"
-              id="topic-title"
-              className="input"
-              value={topicTitle}
-              onChange={(e) => setTopicTitle(e.target.value)}
-              placeholder="Título do Tópico"
-            />
-
-            <label htmlFor="topic-description" className="label">Descrição do Tópico</label>
-            <textarea
-              id="topic-description"
-              className="input"
-              value={topicDescription}
-              onChange={(e) => setTopicDescription(e.target.value)}
-              placeholder="Descrição do Tópico"
-            ></textarea>
-
-            <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
-              <button type="button" className="material-button" onClick={handleOpenImportMaterial}>
-                Importar Material
-              </button>
-              <button type="button" className="add-question-button" onClick={handleOpenQuestionPopup}>
-                Questões Tópico
-              </button>
-            </div>
-
-            <button type="button" className="add-topic-button" onClick={handleAddOrEditTopic}>
-              Adicionar Tópico a Classe
-            </button>
-
             {/* Lista dos tópicos adicionados */}
             <div className="topic-list-display">
               <label className="label">Tópicos da Turma</label>
@@ -976,15 +994,33 @@ const CreateClassroomPage: React.FC = () => {
               </ul>
             </div>
 
+
+            <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
+              <button type="button" className="material-button" onClick={handleOpenImportMaterial}>
+                Importar Material
+              </button>
+              <button type="button" className="add-question-button" onClick={handleOpenQuestionPopup}>
+                Questões Tópico
+              </button>
+            </div>
+
+            <label htmlFor="topic-title" className="label">Título do Tópico</label>
+            <input
+              type="text"
+              id="topic-title"
+              className="input"
+              value={topicTitle}
+              onChange={(e) => setTopicTitle(e.target.value)}
+              placeholder="Título do Tópico"
+            />
+
           </div>
 
         </div>
 
         {/* Botões abaixo das colunas */}
-        <div className="footer-button-row">
-          <button type="button" className="cancel-button" onClick={() => Router.back()}>Voltar</button>
-          <button type="submit" className="submit-button" onClick={() => Router.push("/topicsprofile")}>Avançar</button>
-          <button type="button" className="cancel-button" onClick={() => Router.push("/profile")}>Cancelar</button>
+        <div className="center-button" style={{ marginTop: "2rem" }}>
+          <button type="submit" className="submit-button" onClick={handleCreateClass}>Salvar</button>
         </div>
       </form>
 

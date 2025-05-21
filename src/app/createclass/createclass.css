@@ -480,8 +480,7 @@ body {
 
 /* Ajuste do dropdown para ocupar o espaço corretamente */
 .dropdown-list {
-  width: 100%;
-  max-height: 150px; /* Limite da altura da lista */
+  max-height: 180px; /* ou qualquer valor fixo que desejar */
   overflow-y: auto;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -985,6 +984,29 @@ body {
   margin-top: 1rem;
 }
 
+.topic-list-display ul {
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: white;
+  list-style: none;
+  margin: 0;
+}
+
+.topic-list-display ul::-webkit-scrollbar,
+.dropdown-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.topic-list-display ul::-webkit-scrollbar-thumb,
+.dropdown-list::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+
 .topic-item-display {
   background-color: #e0e0e0;
   border-radius: 8px;
@@ -1043,4 +1065,38 @@ body {
   display: flex;
   justify-content: center;
   margin-top: 0.5rem;
+}
+
+.dropdown-list-box {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #fff;
+  color: #000;
+}
+
+
+.topic-list-box {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fff;
+  color: #000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.topic-item-display {
+  padding: 0.5rem 0.8rem;
+  margin-bottom: 0.5rem;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.topic-item-display.selected {
+  background-color: #f7cf20;
+  font-weight: bold;
+  color: #000;
 }

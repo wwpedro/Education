@@ -160,8 +160,6 @@ body {
 .form-actions {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 1rem;
   margin-top: 2rem;
 }
 
@@ -279,4 +277,24 @@ body {
   color: rgb(0, 0, 0);
   font-weight: bold;
   border-radius: 4px;
+}
+
+.back-arrow {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #ffcb05;
+  color: #102f54;
+  font-size: 24px;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 10;
+  font-weight: bold;
+}
+
+.back-arrow:hover {
+  background-color: #f5b800;
 }

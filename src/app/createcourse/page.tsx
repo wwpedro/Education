@@ -128,7 +128,16 @@ const CreateClassPage = () => {
 
   return (
     <div className="createclass-container">
+      <button
+        className="back-arrow"
+        onClick={() => router.back()}
+        aria-label="Voltar"
+      >
+        ←
+      </button>
+
       <div className="stars"></div>
+
       <img src="/assets/image9.png" alt="Planeta Terra" className="planet-earth" />
       <img src="/assets/image8.png" alt="Planeta" className="planet-upper-right" />
 
@@ -181,9 +190,7 @@ const CreateClassPage = () => {
         />
 
         <div className="form-actions">
-          <button type="button" className="cancel-button" onClick={() => router.back()}>Voltar</button>
-          <button type="submit" className="submit-button">Avançar</button>
-          <button type="button" className="cancel-button" onClick={() => router.push("/profile")}>Cancelar</button>
+          <button type="submit" className="submit-button">Salvar</button>
         </div>
       </form>
 

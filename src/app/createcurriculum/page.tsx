@@ -1,12 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import "./createcurriculum.css";
 
 const CreateCurriculumPage = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [importedTopics, setImportedTopics] = useState<string[]>([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [fileName, setFileName] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -69,6 +73,13 @@ const CreateCurriculumPage = () => {
 
   return (
     <div className="createclass-container">
+      <button
+    className="back-arrow"
+    onClick={() => router.back()}
+    aria-label="Voltar"
+  >
+    <ArrowBackIcon className="back-icon" />
+  </button>
       <div className="stars"></div>
 
       <img src="/assets/image9.png" alt="Planeta Terra" className="planet-earth" />
@@ -101,10 +112,58 @@ const CreateCurriculumPage = () => {
           required
         />
 
+        <label className="label">Importar Tópicos do Currículo</label>
+        <div className="import-group">
+          <input
+            type="file"
+            id="curriculum-file"
+            style={{ display: "none" }}
+            accept=".json"
+            onChange={async (e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                const text = await file.text();
+                const json = JSON.parse(text);
+                const titles = json.elements
+                  .filter((el: any) => el.group === "nodes" && el.data?.id)
+                  .map((el: any) => el.data.id);
+
+                setImportedTopics(titles);
+                setFileName(file.name);
+                setShowPopup(true);
+              }
+            }}
+          />
+
+          <button
+            type="button"
+            className="add-button"
+            onClick={() => document.getElementById("curriculum-file")?.click()}
+          >
+            +
+          </button>
+
+          <input
+            type="text"
+            value={fileName || "Nenhum arquivo selecionado"}
+            readOnly
+            className="input"
+            onClick={() => fileName && setShowPopup(true)}
+            style={{
+              flex: 1,
+              marginLeft: "0.5rem",
+              backgroundColor: "#f3f3f3",
+              color: fileName ? "#333" : "#888",
+              fontStyle: fileName ? "normal" : "italic",
+              cursor: fileName ? "pointer" : "default"
+            }}
+          />
+        </div>
+
+
+
         <div className="form-actions">
-          <button type="button" className="cancel-button" onClick={() => router.back()}>Cancelar</button>
-          <button type="button" className="cancel-button" onClick={() => router.push("/profile")}>Voltar</button>
-          <button type="submit" className="submit-button">Salvar e Avançar</button>
+          <button type="submit" className="submit-button">Salvar</button>
         </div>
       </form>
 
@@ -118,6 +177,53 @@ const CreateCurriculumPage = () => {
           </div>
         </div>
       )}
+      {showPopup && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: "500px", position: "relative" }}>
+            <button
+              onClick={() => setShowPopup(false)}
+              style={{
+                position: "absolute",
+                top: "10px",
+                right: "15px",
+                fontSize: "1.2rem",
+                background: "transparent",
+                border: "none",
+                color: "#333",
+                cursor: "pointer"
+              }}
+              aria-label="Fechar"
+            >
+              ✖
+            </button>
+            <h2 style={{ marginBottom: "1rem", color: "#333" }}>Tópicos Importados</h2>
+            <ul style={{
+              textAlign: "left",
+              maxHeight: "300px",
+              overflowY: "auto",
+              padding: "0 1rem",
+              color: "#444",
+              listStyleType: "disc"
+            }}>
+              {importedTopics.map((topic, index) => (
+                <li key={index} style={{ marginBottom: "0.5rem" }}>{topic}</li>
+              ))}
+            </ul>
+
+            {/* Botão de salvar centralizado no rodapé */}
+            <div style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}>
+              <button
+                className="submit-button"
+                onClick={() => setShowPopup(false)}
+              >
+                Salvar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
     </div>
   );
 };
