@@ -183,20 +183,26 @@ h1.title {
   background-color: #e2a71a; /* Cor mais escura ao passar o mouse */
 }
 
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 .upload-button {
-  background-color: #fcbf49; 
+  background-color: #fcbf49;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 8px;
   font-size: 1.2rem;
   cursor: pointer;
-  margin-left: 300px;
-  }
-    
+  margin: 0 auto; /* Centraliza o botão horizontalmente */
+}
+
 .upload-button:hover {
-  background-color: #e2a71a; 
-  }
+  background-color: #e2a71a;
+}
 
 @media (max-width: 768px) {
   .form-and-image {

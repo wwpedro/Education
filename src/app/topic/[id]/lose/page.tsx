@@ -1,20 +1,53 @@
 "use client";
 
-import React from "react";
-import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useSearchParams, useParams } from "next/navigation";
 import "./lose.css";
+
+interface SolutionFeedback {
+  question: string;
+  correctOption: string;
+  selectedOption: string;
+  isCorrect: boolean;
+}
 
 const PerdaScreen: React.FC = () => {
   const params = useSearchParams();
+  const routeParams = useParams();
+  const topicId = routeParams.id as string;
 
   const correct = parseInt(params.get("acertos") || "0", 10);
   const incorrect = parseInt(params.get("erros") || "0", 10);
   const improvement = params.get("reforcar") || "Nenhum";
   const percentage = parseInt(params.get("porcentagem") || "0", 10);
 
+  const [solutions, setSolutions] = useState<SolutionFeedback[]>([]);
+
   const handleReview = () => {
     alert("Vamos revisar!");
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token || !topicId) return;
+
+    const fetchSolutions = async () => {
+      try {
+        const res = await fetch(`http://localhost:8081/api/solutions/by-topic/${topicId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!res.ok) throw new Error("Erro ao buscar soluções");
+        const data = await res.json();
+        setSolutions(data);
+      } catch (err) {
+        console.error("Erro ao carregar soluções:", err);
+      }
+    };
+
+    fetchSolutions();
+  }, [topicId]);
 
   return (
     <div className="result-screen">
@@ -34,6 +67,34 @@ const PerdaScreen: React.FC = () => {
         <p>reforçar: {improvement}</p>
         <p>porcentagem de aprendizado: {percentage}%</p>
       </div>
+
+      {solutions.length > 0 && (
+        <div className="table-wrapper">
+          <h2>Detalhamento das Respostas</h2>
+          <table className="solution-table">
+            <thead>
+              <tr>
+                <th>Pergunta</th>
+                <th>Você respondeu</th>
+                <th>Correta</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {solutions.map((sol, index) => (
+                <tr key={index}>
+                  <td>{sol.question}</td>
+                  <td>{sol.selectedOption}</td>
+                  <td>{sol.correctOption}</td>
+                  <td style={{ color: sol.isCorrect ? "green" : "red" }}>
+                    {sol.isCorrect ? "✔ Acertou" : "✘ Errou"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <img
         src="/assets/astronautll.png"

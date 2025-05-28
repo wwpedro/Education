@@ -1100,3 +1100,113 @@ body {
   font-weight: bold;
   color: #000;
 }
+
+/* Modal Alunos com layout mais limpo e alinhado */
+.student-modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 800px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  color: #000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  position: relative;
+}
+
+.student-columns {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.student-column {
+  flex: 1;
+  min-width: 320px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.student-column h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.student-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.student-column li {
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.student-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon-button {
+  border: none;
+  padding: 0.4rem 0.7rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}
+
+.icon-button.green {
+  background-color: #4caf50;
+}
+
+.icon-button.green:hover {
+  background-color: #388e3c;
+}
+
+.icon-button.red {
+  background-color: #f44336;
+}
+
+.icon-button.red:hover {
+  background-color: #d32f2f;
+}
+
+.action-button {
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.action-button.green {
+  background-color: #4caf50;
+}
+
+.action-button.green:hover {
+  background-color: #388e3c;
+}
+
+.action-button.red {
+  background-color: #f44336;
+}
+
+.action-button.red:hover {
+  background-color: #d32f2f;
+}

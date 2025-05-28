@@ -130,7 +130,7 @@ const CreateClassPage = () => {
     <div className="createclass-container">
       <button
         className="back-arrow"
-        onClick={() => router.back()}
+        onClick={() => router.push("/createclassmenu")}
         aria-label="Voltar"
       >
         ←

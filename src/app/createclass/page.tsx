@@ -1,10 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import "./createclass.css";
-import Router from "next/router";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+
 
 // Interface para Estudantes
 interface Student {
+  id: number;
   name: string;
   email: string;
 }
@@ -91,6 +94,10 @@ const Material: React.FC<MaterialProps> = ({ topics, onAddTopic, onClose }) => {
 };
 
 const CreateClassroomPage: React.FC = () => {
+  const router = useRouter();
+  const [materialTitle, setMaterialTitle] = useState<string>("");
+  const searchParams = useSearchParams(); // 👈 aqui dentro
+  const classIdFromParams = searchParams.get("classId");
   const [courses, setCourses] = useState<any[]>([]);
   const [loadingCourses, setLoadingCourses] = useState(true);
   const [selectedCurriculum, setSelectedCurriculum] = useState("");
@@ -101,15 +108,12 @@ const CreateClassroomPage: React.FC = () => {
     description: string;
     curriculumTopics: any[];
   }[]>([]);
+  const [curriculumTopics, setCurriculumTopics] = useState<string[]>([]);
   const [loadingCurriculums, setLoadingCurriculums] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedTopics, setSelectedTopics] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [students] = useState<Student[]>([
-    { name: "João Silva", email: "joao.silva@email.com" },
-    { name: "Maria Oliveira", email: "maria.oliveira@email.com" }
-  ]);
   const [classId, setClassId] = useState<number | null>(null);
   const [topicTitle, setTopicTitle] = useState<string>("");
   const [topicDescription, setTopicDescription] = useState<string>("");
@@ -121,11 +125,12 @@ const CreateClassroomPage: React.FC = () => {
   const [editingQuestionId, setEditingQuestionId] = useState<number | null>(null);
   const [showQuestionPopup, setShowQuestionPopup] = useState(false);
   const [showImportMaterial, setShowImportMaterial] = useState(false);
-  const [savedMaterials, setSavedMaterials] = useState<string[]>([]);
+  const [savedMaterials, setSavedMaterials] = useState<{ title: string; url: string }[]>([]);
   const [showImportTopic, setShowImportTopic] = useState(false);
   const [savedTopics, setSavedTopics] = useState<string[]>([]);
   const [classTitle, setClassTitle] = useState(""); // Nome da turma
   const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null); // ID do curso
+  const [selectedTopicIndex, setSelectedTopicIndex] = useState<number | null>(null);
 
   const handleOpenImportTopic = () => setShowImportTopic(true);
   const handleCloseImportTopic = () => setShowImportTopic(false);
@@ -134,40 +139,80 @@ const CreateClassroomPage: React.FC = () => {
   const handleOpenImportMaterial = () => setShowImportMaterial(true);
   const handleCloseImportMaterial = () => setShowImportMaterial(false);
 
+  const fetchClassStudents = async (classId: number, token: string) => {
+    try {
+      const res = await fetch(`http://localhost:8081/api/student-classes/class/${classId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("Erro ao buscar alunos da turma");
+
+      const students = await res.json();
+      setSelectedStudents(students); // preenche a lista de alunos no lado direito do popup
+    } catch (err) {
+      console.error("Erro ao buscar alunos da turma:", err);
+    }
+  };
+
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchClassData = async () => {
       const token = localStorage.getItem("accessToken");
-      if (!token) {
-        console.error("Token não encontrado");
-        return;
-      }
+      const search = searchParams.get("classId");
+      if (!token || !search) return;
+
+      const classIdNumber = parseInt(search);
+      setClassId(classIdNumber);
 
       try {
-        const response = await fetch("http://localhost:8081/api/courses", {
-          method: "GET",
+        // buscar dados da turma (já está aí)
+        const response = await fetch(`http://localhost:8081/api/classes/${classIdNumber}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
 
-        if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`Erro ${response.status}: ${text}`);
+        if (!response.ok) throw new Error("Erro ao buscar dados da turma");
+        const data = await response.json();
+
+        setClassTitle(data.description);
+        setSelectedCourseId(data.course.courseId);
+        setSelectedCourse(data.course.name);
+
+        const curriculumId = data.course.curriculum?.curriculumId;
+        if (curriculumId) {
+          setSelectedCurriculum(curriculumId.toString());
+          await fetchTopicsFromCurriculum(curriculumId);
         }
 
-        const data = await response.json();
-        setCourses(data);
+        const loadedTopics = data.course.curriculum.curriculumTopics
+          .filter((ct: any) => ct.topic)
+          .map((topic: any) => ({
+            title: topic.description,
+            description: topic.description,
+            questions: topic.questions || [],
+            materials: topic.materials || [],
+            topicId: topic.topicId,
+          }))
+          .sort((a: any, b: any) => a.topicId - b.topicId);
+
+        setTopicList(loadedTopics);
+        setCurriculumTopics(loadedTopics.map((t: any) => t.title));
+
+        // 🔽 NOVO: buscar os alunos da turma
+        await fetchClassStudents(classIdNumber, token);
+
       } catch (err) {
-        console.error("Erro ao buscar cursos:", err);
-        setError("Erro ao carregar cursos.");
-      } finally {
-        setLoadingCourses(false);
+        console.error("Erro ao carregar turma:", err);
       }
     };
 
-    fetchCourses();
+    fetchClassData();
   }, []);
+
 
 
   const [topics, setTopics] = useState<string[]>([]);
@@ -245,7 +290,7 @@ const CreateClassroomPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const fetchCurriculums = async () => {
+    const fetchCourses = async () => {
       const token = localStorage.getItem("accessToken");
       if (!token) {
         console.error("Token não encontrado");
@@ -253,7 +298,7 @@ const CreateClassroomPage: React.FC = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:8081/api/curriculums", {
+        const response = await fetch("http://localhost:8081/api/courses", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -267,19 +312,19 @@ const CreateClassroomPage: React.FC = () => {
         }
 
         const data = await response.json();
+        setCourses(data); // <- aqui você preenche a lista de cursos
 
-        // Filtra ou transforma os dados se necessário
-        setCurriculums(data);
       } catch (err) {
-        console.error("Erro ao buscar currículos:", err);
-        setError("Erro ao carregar currículos.");
+        console.error("Erro ao buscar cursos:", err);
+        setCourses([]);
       } finally {
-        setLoadingCurriculums(false);
+        setLoadingCourses(false);
       }
     };
 
-    fetchCurriculums();
+    fetchCourses();
   }, []);
+
 
 
   const handleAddTopic = (newTopic: string) => {
@@ -308,28 +353,86 @@ const CreateClassroomPage: React.FC = () => {
     };
 
     // Criar ou editar questão
-    const handleCreateOrUpdateQuestion = () => {
-      if (questionDescription.trim() === "") return; // Evita salvar questões vazias
-
-      if (editingQuestionId !== null) {
-        // Edita a questão existente
-        setQuestions(questions.map(q =>
-          q.id === editingQuestionId ? { ...q, description: questionDescription, options: [...options] } : q
-        ));
-        setEditingQuestionId(null);
-      } else {
-        // Cria uma nova questão
-        const newQuestion: Question = {
-          id: Date.now(),
-          description: questionDescription,
-          options: [...options],
-        };
-        setQuestions([...questions, newQuestion]);
+    const handleCreateOrUpdateQuestion = async () => {
+      if (questionDescription.trim() === "") {
+        alert("A descrição da questão está vazia.");
+        return;
       }
 
-      setQuestionDescription("");
-      setOptions([{ text: "", isCorrect: false }]);
+      const token = localStorage.getItem("accessToken");
+      if (!token || selectedTopicIndex === null) {
+        alert("Token não encontrado ou tópico não selecionado.");
+        return;
+      }
+
+      const topicId = topicList[selectedTopicIndex].topicId;
+      if (!topicId) {
+        alert("ID do tópico não encontrado.");
+        return;
+      }
+
+      const correctOption = options.find(o => o.isCorrect);
+      if (!correctOption) {
+        alert("Você precisa marcar pelo menos uma alternativa como correta.");
+        return;
+      }
+
+      const payload = {
+        content: questionDescription,
+        level: "EASY",
+        type: "MULTIPLE_CHOICE",
+        status: "ACTIVE",
+        answer: correctOption.text,
+        tags: "tag",
+        metadata: "meta",
+        topic: { topicId: topicId },
+        options: options
+      };
+
+      try {
+        const response = await fetch("http://localhost:8081/api/questions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Erro ao salvar questão: ${errorText}`);
+        }
+
+        const savedQuestion = await response.json();
+
+        const updatedQuestions = [...questions, {
+          id: savedQuestion.questionId,
+          description: savedQuestion.content,
+          options: savedQuestion.options
+        }];
+        setQuestions(updatedQuestions);
+
+        const updatedTopicList = [...topicList];
+        updatedTopicList[selectedTopicIndex].questions = updatedQuestions;
+        setTopicList(updatedTopicList);
+
+        setQuestionDescription("");
+        setOptions([{ text: "", isCorrect: false }]);
+
+        alert("Questão criada com sucesso!");
+
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error("Erro ao criar questão (mensagem):", error.message);
+        }
+        console.error("Erro completo:", error);
+        alert("Erro ao salvar questão. Verifique o console para mais detalhes.");
+      }
+
     };
+
+
 
     // Editar questão ao clicar na lista
     const handleEditQuestion = (question: Question) => {
@@ -497,41 +600,52 @@ const CreateClassroomPage: React.FC = () => {
 
   const StudentPopup: React.FC<{ onClose: () => void }> = ({ onClose }) => (
     <div className="modal-overlay">
-      <div className="modal-content">
+      <div className="student-modal">
         <button className="close-button" onClick={onClose}>✖</button>
         <h2>Gerenciar Alunos da Turma</h2>
-        <div style={{ display: "flex", gap: "2rem" }}>
-          <div>
+
+        <div className="student-columns">
+          <div className="student-column">
             <h3>Todos os Alunos</h3>
-            <button onClick={handleAddAll}>Adicionar todos</button>
+            <button className="action-button green" onClick={handleAddAll}>Adicionar todos</button>
             <ul>
               {allStudents.map((student, i) => (
                 <li key={i}>
-                  {student.name} - {student.email}
-                  <button onClick={() => handleAddStudent(student)}>+</button>
+                  <div className="student-info">
+                    <strong>{student.name}</strong>
+                    <small>{student.email}</small>
+                  </div>
+                  <button className="icon-button green" onClick={() => handleAddStudent(student)}>+</button>
                 </li>
               ))}
             </ul>
           </div>
-          <div>
+
+          <div className="student-column">
             <h3>Alunos da Turma</h3>
-            <button onClick={handleRemoveAll}>Remover todos</button>
+            <button className="action-button red" onClick={handleRemoveAll}>Remover todos</button>
             <ul>
               {selectedStudents.map((student, i) => (
                 <li key={i}>
-                  {student.name}
-                  <button onClick={() => handleRemoveStudent(student.email)}>x</button>
+                  <div className="student-info">
+                    <strong>{student.name}</strong>
+                  </div>
+                  <button className="icon-button red" onClick={() => handleRemoveStudent(student.email)}>x</button>
                 </li>
               ))}
             </ul>
           </div>
         </div>
-        <div className="center-button">
-          <button className="save-button" onClick={saveStudentList}>Salvar Alunos da Turma</button>
+
+        <div className="modal-footer-buttons">
+          <button className="save-button" onClick={saveStudentList}>
+            Salvar Alunos da Turma
+          </button>
         </div>
       </div>
     </div>
   );
+
 
   const ImportMaterial: React.FC<{
     onClose: () => void;
@@ -539,24 +653,116 @@ const CreateClassroomPage: React.FC = () => {
     setMaterial: (file: File | null) => void;
     materialLink: string;
     setMaterialLink: (link: string) => void;
-    savedMaterials: string[];
-    setSavedMaterials: (materials: string[]) => void;
+    savedMaterials: { title: string; url: string }[];
+    setSavedMaterials: (materials: { title: string; url: string }[]) => void;
   }> = ({ onClose, material, setMaterial, materialLink, setMaterialLink, savedMaterials, setSavedMaterials }) => {
 
     const [previewFile, setPreviewFile] = useState<string | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     // Adiciona material à lista ao salvar
-    const handleSaveMaterial = () => {
+    const handleSaveMaterial = async () => {
+      if (selectedTopicIndex === null) {
+        alert("Selecione um tópico antes de salvar o material.");
+        return;
+      }
+
+      if (!materialTitle.trim()) {
+        alert("Informe o título do material.");
+        return;
+      }
+
+      const newMaterial = { title: materialTitle, url: materialLink };
+      const updatedMaterials = [...savedMaterials, newMaterial];
+      setSavedMaterials(updatedMaterials);
+
+      const updatedTopics = [...topicList];
+      updatedTopics[selectedTopicIndex].materials = updatedMaterials;
+      setTopicList(updatedTopics);
+
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        alert("Token não encontrado.");
+        return;
+      }
+
+      const topicId = topicList[selectedTopicIndex].topicId;
+
+      // Enviar link
       if (materialLink.trim() !== "") {
-        setSavedMaterials([...savedMaterials, materialLink]);
-        setMaterialLink(""); // Limpa o campo após salvar
+        const payload = {
+          title: materialTitle,
+          url: materialLink,
+          topic: {
+            topicId: topicId
+          }
+        };
+
+        try {
+          const response = await fetch("http://localhost:8081/api/materials", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Erro ao salvar material: ${errorText}`);
+          }
+
+          const saved = await response.json();
+          alert("Material de link salvo com sucesso!");
+          setMaterialLink("");
+        } catch (error) {
+          console.error("Erro ao salvar material (link):", error);
+          alert("Erro ao salvar o material. Veja o console.");
+        }
+
       } else if (material) {
-        const fileUrl = URL.createObjectURL(material); // Cria um link temporário para o arquivo
-        setSavedMaterials([...savedMaterials, fileUrl]);
-        setMaterial(null); // Limpa o arquivo após salvar
+        const fakeUploadedUrl = URL.createObjectURL(material);
+
+        const payload = {
+          title: materialTitle,
+          url: materialLink,
+          topic: {
+            topicId: topicId
+          }
+        };
+
+
+
+        try {
+          const response = await fetch("http://localhost:8081/api/materials", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Erro ao salvar material:", errorText);
+            alert("Erro ao salvar material: " + errorText);
+            return;
+          }
+
+          const saved = await response.json();
+          alert("Material PDF salvo com sucesso!");
+          setMaterial(null);
+        } catch (error) {
+          console.error("Erro ao salvar material (PDF):", error);
+          alert("Erro ao salvar o material. Veja o console.");
+        }
       }
     };
+
+
+
 
     const truncateFileName = (name: string, maxLength = 20) => {
       return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
@@ -577,7 +783,7 @@ const CreateClassroomPage: React.FC = () => {
     const truncateTitle = (title: string) => (title.length > 10 ? title.substring(0, 10) + "..." : title);
 
     // Verifica se um material é um link externo
-    const isLink = (item: string) => item.startsWith("http");
+    const isLink = (url: string) => url.startsWith("http");
 
     // Abre a pré-visualização de um arquivo PDF
     const handlePreviewFile = (fileUrl: string) => {
@@ -587,6 +793,17 @@ const CreateClassroomPage: React.FC = () => {
     return (
       <div className="modal-overlay">
         <div className="modal-content">
+
+          <label htmlFor="material-title" className="label">Título do Material</label>
+          <input
+            type="text"
+            id="material-title"
+            className="input"
+            value={materialTitle}
+            onChange={(e) => setMaterialTitle(e.target.value)}
+            placeholder="Digite o título do material"
+          />
+
           {/* Botão de fechar no canto superior direito */}
           <button type="button" className="close-button" onClick={onClose}>✖</button>
 
@@ -628,10 +845,10 @@ const CreateClassroomPage: React.FC = () => {
               <ul>
                 {savedMaterials.map((item, index) => (
                   <li key={index} className="material-item">
-                    {isLink(item) ? (
-                      <a href={item} target="_blank" rel="noopener noreferrer">{truncateTitle(item)}</a>
+                    {isLink(item.url) ? (
+                      <a href={item.url} target="_blank" rel="noopener noreferrer">{truncateTitle(item.title)}</a>
                     ) : (
-                      <span className="file-preview" onClick={() => handlePreviewFile(item)}>{truncateTitle(item)}</span>
+                      <span className="file-preview" onClick={() => handlePreviewFile(item.url)}>{truncateTitle(item.title)}</span>
                     )}
                     <button className="delete-button" onClick={() => handleDeleteMaterial(index)}>🗑</button>
                   </li>
@@ -640,7 +857,7 @@ const CreateClassroomPage: React.FC = () => {
             )}
           </div>
           <div className="modal-footer">
-            <button type="button" className="plus-button" onClick={handleSaveMaterial}>Salvar</button>
+            <button type="button" className="plus-button" onClick={onClose}>Salvar</button>
           </div>
         </div>
 
@@ -721,13 +938,24 @@ const CreateClassroomPage: React.FC = () => {
               <p className="empty-message">Ainda não temos nenhum tópico na lista.</p>
             ) : (
               <ul>
-                {savedTopics.map((item, index) => (
-                  <li key={index} className="topic-item">
-                    <span>{item}</span>
-                    <button className="delete-button" onClick={() => handleDeleteTopic(index)}>🗑</button>
+                {topicList.map((topic, index) => (
+                  <li
+                    key={topic.topicId}
+                    className={`topic-item-display ${selectedTopicIndex === index ? "selected" : ""}`}
+                    onClick={() => {
+                      setSelectedTopicIndex(index);
+                      setTopicTitle(topic.title); // mostra o título no campo
+                      setSavedMaterials(topic.materials);
+                      setQuestions(topic.questions);
+
+                    }}
+
+                  >
+                    {topic.title}
                   </li>
                 ))}
               </ul>
+
             )}
           </div>
           <div className="modal-footer">
@@ -738,7 +966,15 @@ const CreateClassroomPage: React.FC = () => {
     );
   };
 
-  const [topicList, setTopicList] = useState<{ title: string; description: string; questions: Question[]; materials: string[] }[]>([]);
+  const [topicList, setTopicList] = useState<{
+    title: string;
+    description: string;
+    questions: Question[];
+    materials: { title: string; url: string }[];
+    topicId?: number;
+  }[]>([]);
+
+
   const [editingTopicIndex, setEditingTopicIndex] = useState<number | null>(null);
 
   const handleAddOrEditTopic = async () => {
@@ -803,9 +1039,11 @@ const CreateClassroomPage: React.FC = () => {
         title: topicTitle,
         description: "",
         questions: [],
-        materials: []
+        materials: [],
+        topicId: newTopicId // 👈 aqui você adiciona o ID retornado pelo backend
       };
       setTopicList([...topicList, newTopic]);
+
 
       // Limpa o campo
       setTopicTitle("");
@@ -833,6 +1071,53 @@ const CreateClassroomPage: React.FC = () => {
     setTopicList(updatedList);
   };
 
+  const fetchTopicsFromCurriculum = async (curriculumId: number) => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      console.error("Token não encontrado");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8081/api/curriculums/${curriculumId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Erro ao buscar tópicos do currículo: ${errorText}`);
+      }
+
+      const curriculum = await response.json();
+      console.log("Currículo retornado:", curriculum);
+
+      const loadedTopicList = curriculum.curriculumTopics
+        .map((topic: any) => ({
+          title: topic.description,
+          description: topic.description,
+          questions: topic.questions || [],
+          materials: topic.materials || [],
+          topicId: topic.topicId
+        }))
+        .sort((a: any, b: any) => a.topicId - b.topicId);
+
+      setTopicList(loadedTopicList);
+      setCurriculumTopics(loadedTopicList.map((t: any) => t.title));
+
+
+    } catch (err) {
+      console.error("Erro ao buscar tópicos:", err);
+      setCurriculumTopics([]);
+      setTopicList([]);
+    }
+  };
+
+
+
   const handleCreateClass = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -843,16 +1128,26 @@ const CreateClassroomPage: React.FC = () => {
     }
 
     const payload = {
+      ...(classId && { classId }), // <-- adiciona se estiver editando
       description: classTitle,
       course: {
         courseId: selectedCourseId
-      }
+      },
+      topics: topicList.map(t => ({
+        title: t.title,
+        description: t.description,
+        questions: t.questions,
+        materials: t.materials
+      }))
     };
+    console.log("🔍 Payload a ser enviado:", JSON.stringify(payload, null, 2));
+
 
     try {
+      const isEditing = !!classId;
       // 1. Cria a turma
-      const response = await fetch("http://localhost:8081/api/classes", {
-        method: "POST",
+      const response = await fetch(`http://localhost:8081/api/classes${isEditing ? `/${classId}` : ""}`, {
+        method: isEditing ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -878,20 +1173,23 @@ const CreateClassroomPage: React.FC = () => {
           },
           body: JSON.stringify(
             selectedStudents.map((student) => ({
-              studentEmail: student.email,
+              studentId: student.id,
               classId: createdClassId,
+              enrollmentDate: new Date().toISOString().split("T")[0], // exemplo de data
+              completionStatus: "PENDING", // ou outro valor padrão
             }))
           ),
         });
 
         if (!studentResponse.ok) {
           const text = await studentResponse.text();
-          throw new Error(`Erro ao adicionar alunos: ${text}`);
+          console.error("🛑 Erro completo ao adicionar alunos:", text);
+          throw new Error(`Erro ao adicionar alunos: ${studentResponse.status} - ${text}`);
         }
       }
 
       alert("Turma e alunos criados com sucesso!");
-      Router.push("/topicsprofile");
+      router.push(`/topicsmenu?classId=${createdClassId}`);
     } catch (err) {
       console.error("Erro ao criar turma ou adicionar alunos:", err);
       alert("Erro ao criar turma ou adicionar alunos. Veja o console.");
@@ -903,7 +1201,7 @@ const CreateClassroomPage: React.FC = () => {
 
       <button
         type="button"
-        onClick={() => Router.back()}
+        onClick={() => router.push("/createclassmenu")}
         style={{
           position: "absolute",
           top: "30px",
@@ -942,18 +1240,30 @@ const CreateClassroomPage: React.FC = () => {
                         setSelectedCourseId(course.courseId);
                         setSelectedCourse(course.name);
 
-                        // Adiciona esta parte para selecionar o currículo automaticamente
-                        if (course.curriculum && course.curriculum.curriculumId) {
-                          setSelectedCurriculum(course.curriculum.curriculumId.toString());
+                        if (course.curriculum?.curriculumId) {
+                          const curriculumId = course.curriculum.curriculumId;
+                          setSelectedCurriculum(curriculumId.toString());
+
+                          // 🔁 Puxa os tópicos vinculados ao currículo
+                          fetchTopicsFromCurriculum(curriculumId);
+                        } else {
+                          setCurriculumTopics([]); // limpa caso não tenha currículo
                         }
                       }}
                       className={selectedCourseId === course.courseId ? "selected" : ""}
                     >
                       {course.name}
                     </li>
+
+
                   ))}
 
                 </div>
+                {selectedCourse && (
+                  <div style={{ marginTop: "0.5rem", fontWeight: "bold", color: "black" }}>
+                    {selectedCourse}
+                  </div>
+                )}
                 <button type="button" className="plus-button">Adicionar Curso</button>
               </div>
             </div>
@@ -984,14 +1294,27 @@ const CreateClassroomPage: React.FC = () => {
             {/* Lista dos tópicos adicionados */}
             <div className="topic-list-display">
               <label className="label">Tópicos da Turma</label>
-              <ul>
-                {topicList.map((topic, index) => (
-                  <li key={index} className="topic-item-display">
-                    {topic.title}
-                    <button className="delete-button" onClick={() => handleDeleteTopic(index)}>×</button>
-                  </li>
-                ))}
-              </ul>
+              {topicList.length > 0 && (
+                <ul>
+                  {topicList.map((topic, index) => (
+                    <li
+                      key={topic.topicId}
+                      className={`topic-item-display ${selectedTopicIndex === index ? "selected" : ""}`}
+                      onClick={() => {
+                        setSelectedTopicIndex(index);
+                        setTopicTitle(topic.title);
+                        setTopicDescription(topic.description);
+                        setSavedMaterials(topic.materials);
+                        setQuestions(topic.questions);
+                      }}
+                    >
+                      {topic.title}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+
             </div>
 
 
@@ -1004,15 +1327,17 @@ const CreateClassroomPage: React.FC = () => {
               </button>
             </div>
 
-            <label htmlFor="topic-title" className="label">Título do Tópico</label>
+            <label htmlFor="topic-title" className="label">Tópico Selecionado</label>
             <input
               type="text"
               id="topic-title"
               className="input"
-              value={topicTitle}
-              onChange={(e) => setTopicTitle(e.target.value)}
-              placeholder="Título do Tópico"
+              value={selectedTopicIndex !== null ? topicList[selectedTopicIndex]?.title : ""}
+              readOnly
+              placeholder="Selecione um tópico para visualizar"
             />
+
+
 
           </div>
 

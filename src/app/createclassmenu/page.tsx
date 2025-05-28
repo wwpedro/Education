@@ -1,11 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import "./createcurriculum.css";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const CreateResumePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const classId = searchParams.get("classId");
 
   useEffect(() => {
     const starsContainer = document.querySelector(".stars");
@@ -34,8 +36,8 @@ const CreateResumePage = () => {
       <div className="stars"></div>
       <img src="/assets/image9.png" alt="Planeta Terra" className="planet-earth" />
       <img src="/assets/image8.png" alt="Planeta" className="planet-upper-right" />
-      
-      <button className="cancel-button" onClick={() => router.back()}>Voltar</button>
+
+      <button className="cancel-button" onClick={() => router.push("/profile")}>Voltar</button>
 
       <div className="title-container">
         <h1 className="title">Fábrica de Currículo</h1>
@@ -45,7 +47,9 @@ const CreateResumePage = () => {
       <div className="button-group">
         <button className="action-button" onClick={() => router.push("/createcurriculum")}>Criar Curriculum</button>
         <button className="action-button" onClick={() => router.push("/createcourse")}>Criar Curso</button>
-        <button className="action-button" onClick={() => router.push("/createclass")}>Criar Classe</button>
+        <button className="action-button" onClick={() => router.push("/createclass")}>
+          Criar Classe
+        </button>
       </div>
 
       {isModalOpen && (

@@ -77,7 +77,7 @@ const ProfilePage = () => {
       dotsContainer.appendChild(dot);
     }
   }, []);
-  
+
   return (
     <div className="profile-container">
       <div className="wave-container1">
@@ -122,12 +122,15 @@ const ProfilePage = () => {
           >
             Aceitar Alunos
           </button>*/}
-          <button
-            className="create-class-button"
-            onClick={() => router.push("/createclassmenu")}
-          >
-            Criar Classe
-          </button>
+          {userData?.subjectSpecialty && (
+            <button
+              className="create-class-button"
+              onClick={() => router.push("/createclassmenu")}
+            >
+              Criar Classe
+            </button>
+          )}
+
           <button
             className="view-classes-button"
             onClick={() => router.push("/classlist")}
@@ -135,7 +138,7 @@ const ProfilePage = () => {
             Ver Classes
           </button>
         </div>
-        
+
         {/* Botão de Logout */}
         <button
           className="logout-button-perfil"

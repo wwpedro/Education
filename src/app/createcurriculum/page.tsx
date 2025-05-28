@@ -45,9 +45,11 @@ const CreateCurriculumPage = () => {
     }
 
     const curriculumData = {
-      name,
-      description,
+      name: name.trim(),
+      description: description.trim()
     };
+
+    console.log("🔄 Enviando currículo:", curriculumData);
 
     try {
       const response = await fetch("http://localhost:8081/api/curriculums", {
@@ -60,13 +62,64 @@ const CreateCurriculumPage = () => {
       });
 
       if (response.ok) {
-        alert("Curriculum criado com sucesso!");
+        const createdCurriculum = await response.json();
+        const curriculumId = createdCurriculum.curriculumId;
+        console.log("✅ Currículo criado:", createdCurriculum);
+
+        // Criar e vincular os tópicos
+        let parentTopicId: number | null = null;
+
+        for (let i = 0; i < importedTopics.length; i++) {
+          const topicTitle: string = importedTopics[i];
+
+          const topicRes: Response = await fetch("http://localhost:8081/api/topics", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              description: topicTitle,
+              estimatedTime: 1,
+              parentTopic: i === 0 ? null : { topicId: parentTopicId },
+            }),
+          });
+
+          if (!topicRes.ok) {
+            console.error(`Erro ao criar tópico: ${topicTitle}`);
+            continue;
+          }
+
+          const topic: { topicId: number } = await topicRes.json();
+          const topicId: number = topic.topicId;
+
+          if (i === 0) {
+            parentTopicId = topicId; // ← apenas atribui valor aqui
+          }
+
+          await fetch("http://localhost:8081/api/curriculum-topics", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              curriculumId,
+              topicId,
+            }),
+          });
+        }
+
+
+        alert("Curriculum e tópicos vinculados com sucesso!");
         router.push("/createcourse");
       } else {
+        const errorText = await response.text();
+        console.error("🚫 Erro ao criar currículo:", errorText);
         alert("Erro ao criar curriculum.");
       }
     } catch (error) {
-      console.error("Erro ao conectar com o servidor:", error);
+      console.error("💥 Erro na requisição:", error);
       alert("Erro no servidor.");
     }
   };
@@ -74,12 +127,12 @@ const CreateCurriculumPage = () => {
   return (
     <div className="createclass-container">
       <button
-    className="back-arrow"
-    onClick={() => router.back()}
-    aria-label="Voltar"
-  >
-    <ArrowBackIcon className="back-icon" />
-  </button>
+        className="back-arrow"
+        onClick={() => router.push("/createclassmenu")}
+        aria-label="Voltar"
+      >
+        <ArrowBackIcon className="back-icon" />
+      </button>
       <div className="stars"></div>
 
       <img src="/assets/image9.png" alt="Planeta Terra" className="planet-earth" />
@@ -160,8 +213,6 @@ const CreateCurriculumPage = () => {
           />
         </div>
 
-
-
         <div className="form-actions">
           <button type="submit" className="submit-button">Salvar</button>
         </div>
@@ -209,8 +260,6 @@ const CreateCurriculumPage = () => {
                 <li key={index} style={{ marginBottom: "0.5rem" }}>{topic}</li>
               ))}
             </ul>
-
-            {/* Botão de salvar centralizado no rodapé */}
             <div style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}>
               <button
                 className="submit-button"
@@ -222,8 +271,6 @@ const CreateCurriculumPage = () => {
           </div>
         </div>
       )}
-
-
     </div>
   );
 };
