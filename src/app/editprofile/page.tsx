@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "./editprofile.css";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Link from "next/link";
 
 const EditProfilePage = () => {
   const [userId, setUserId] = useState<number | null>(null);
@@ -12,6 +14,10 @@ const EditProfilePage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [role, setRole] = useState("student");
+  const goTo = (url: string) => {
+    window.location.href = url;
+  };
+
 
   const router = useRouter();
 
@@ -48,7 +54,7 @@ const EditProfilePage = () => {
 
       if (response.ok) {
         alert("Informações atualizadas com sucesso!");
-        router.push("/profile");
+        goTo("/profile");
       } else {
         alert("Erro ao atualizar informações.");
       }
@@ -122,6 +128,12 @@ const EditProfilePage = () => {
       <div className="wave wave-back"></div>
       <div className="wave wave-front"></div>
       <div className="dots"></div>
+      <div className="back-button" onClick={() => window.history.back()}>
+        <Link href="/classlist">
+          <ArrowBackIcon className="back-icon" />
+        </Link>
+      </div>
+
 
       <div className="form-and-image">
         <div className="left-side">

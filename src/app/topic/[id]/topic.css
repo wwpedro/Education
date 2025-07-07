@@ -1,219 +1,220 @@
 /* Body ajustado para permitir rolagem vertical apenas */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #102f54;
-    color: white;
-    min-height: 100vh; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    overflow: hidden; /* Impede rolagem horizontal */
-    height: 100%;
-  }
-  
-  /* Fundo espacial ajustado */
-  .space-background {
-    background: url('/path/to/star-background.jpg') no-repeat center center fixed;
-    background-size: cover;
-    width: 100%;
-    min-height: 100vh;
-    position: relative;
-    padding-bottom: 50px;
-    overflow: hidden; /* Impede rolagem horizontal */
-  }
-  
-  /* Container dos tópicos com mais altura para garantir rolagem vertical */
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #102f54;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  /* Impede rolagem horizontal */
+  height: 100%;
+}
+
+/* Fundo espacial ajustado */
+.space-background {
+  background: url('/path/to/star-background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 50px;
+  overflow: hidden;
+  /* Impede rolagem horizontal */
+}
+
+/* Container dos tópicos com mais altura para garantir rolagem vertical */
 
 
-    /* Título */
-    .title {
-      color: white;
-      font-size: 2rem;
-      margin-bottom: 20px;
-      margin-top: 20px;
-      text-align: center;
-    }
-    
-    /* Imagens do fundo */
-    .planet {
-      position: absolute;
-      top: 10%;
-      left: 5%;
-      width: 20%;
-      height: auto;
-    }
-    
-    .comet {
-      position: absolute;
-      top: 10%;
-      right: 15%;
-      width: 10%;
-      height: auto;
-      opacity: 80%;
-    }
-    
-    .rocket {
-      position: absolute;
-      bottom: 10%;
-      left: 20%;
-      width: 10%;
-      height: auto;
-    }
-  
-    .rocket.diagonal {
-      position: absolute;
-      bottom: 10%;
-      left: 20%;
-      width: 10%;
-      height: auto;
-      transform: rotate(40deg); /* Inclinação diagonal */
-    }
-    
-    .earth {
-      position: absolute;
-      bottom: -40%;
-      right: -10%;
-      width: 35%;
-      height: auto;
-      z-index: -3;
-    }
-    
-    /* Título do tópico */
-    .node-title {
-      color: white;
-      font-size: 1rem;
-    }
-    
-    /* Botão amarelo */
-  .yellow-button {
-    background-color: rgba(255, 255, 0, 0);
-    border: none;
-    color: black;
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .yellow-button:hover {
-    background-color: #ffd90000; /* Amarelo dourado ao passar o mouse */
-  }
-  
-  /* Contêiner dos pontinhos */
-  .dots {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: -1; /* Fica atrás de todo o conteúdo */
-  }
-  
-  /* Contêiner dos pontinhos fixo e cobrindo toda a tela */
-  .dots {
-    position: fixed; /* Fica fixo atrás do conteúdo */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Atrás do conteúdo principal */
-    pointer-events: none; /* Não bloqueia interações com outros elementos */
-    overflow: hidden; /* Evita que pontinhos saiam da tela */
-  }
-  
-  /* Estilo dos pontinhos */
-  .dot {
-    position: absolute;
-    background-color: white;
-    border-radius: 50%; 
-    animation: blink 3s infinite ease-in-out;
+/* Título */
+.title {
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Imagens do fundo */
+.planet {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  width: 20%;
+  height: auto;
+}
+
+.comet {
+  position: absolute;
+  top: 10%;
+  right: 15%;
+  width: 10%;
+  height: auto;
+  opacity: 80%;
+}
+
+.rocket {
+  position: absolute;
+  bottom: 10%;
+  left: 20%;
+  width: 10%;
+  height: auto;
+}
+
+.rocket.diagonal {
+  position: absolute;
+  bottom: 10%;
+  left: 20%;
+  width: 10%;
+  height: auto;
+  transform: rotate(40deg);
+  /* Inclinação diagonal */
+}
+
+.earth {
+  position: absolute;
+  bottom: -40%;
+  right: -10%;
+  width: 35%;
+  height: auto;
+  z-index: -3;
+}
+
+/* Título do tópico */
+.node-title {
+  color: white;
+  font-size: 1rem;
+}
+
+/* Botão amarelo */
+.yellow-button {
+  background-color: rgba(255, 255, 0, 0);
+  border: none;
+  color: black;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  transition: background-color 0.3s ease;
+}
+
+.yellow-button:hover {
+  background-color: #ffd90000;
+  /* Amarelo dourado ao passar o mouse */
+}
+
+/* Contêiner dos pontinhos */
+.dots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+  /* Fica atrás de todo o conteúdo */
+}
+
+/* Contêiner dos pontinhos fixo e cobrindo toda a tela */
+.dots {
+  position: fixed;
+  /* Fica fixo atrás do conteúdo */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  /* Atrás do conteúdo principal */
+  pointer-events: none;
+  /* Não bloqueia interações com outros elementos */
+  overflow: hidden;
+  /* Evita que pontinhos saiam da tela */
+}
+
+/* Estilo dos pontinhos */
+.dot {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  animation: blink 3s infinite ease-in-out;
+  opacity: 0;
+}
+
+/* Animação de piscar */
+@keyframes blink {
+  0% {
     opacity: 0;
   }
-  
-  /* Animação de piscar */
-  @keyframes blink {
-    0% { opacity: 0; }
-    50% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-  
-/* Botão de Voltar */
-.back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background-color: rgba(255, 255, 0, 0);
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease;
-  }
-  
-  .back-button:hover {
-    background-color: #ffd90000; /* Amarelo dourado */
-  }
-  
 
-  /* Botão amarelo para 'Ditar Tópico' */
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+
+/* Botão amarelo para 'Ditar Tópico' */
 .yellow-button {
-    background-color: rgba(255, 255, 0, 0);
-    border: none;
-    color: black;
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .yellow-button:hover {
-    background-color: #ffd90000; /* Amarelo dourado */
-  }
-  
-  /* Imagem do planeta no canto superior direito */
-  .planet-top {
-    position: absolute;
-    top: -100px;
-    right: -200px;
-    width: 700px; /* Ajuste conforme necessário */
-    height: auto;
-    z-index: -1; /* Fica atrás do conteúdo */
-    opacity: 50%;
-  }
-  
-  /* Imagem do planeta no canto inferior esquerdo */
-  .planet-bottom {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    width: 100px; /* Ajuste conforme necessário */
-    height: auto;
-    z-index: -1; /* Fica atrás do conteúdo */
-    opacity: 50%;
-  }
+  background-color: rgba(255, 255, 0, 0);
+  border: none;
+  color: black;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.yellow-button:hover {
+  background-color: #ffd90000;
+  /* Amarelo dourado */
+}
+
+/* Imagem do planeta no canto superior direito */
+.planet-top {
+  position: absolute;
+  top: -100px;
+  right: -200px;
+  width: 700px;
+  /* Ajuste conforme necessário */
+  height: auto;
+  z-index: -1;
+  /* Fica atrás do conteúdo */
+  opacity: 50%;
+}
+
+/* Imagem do planeta no canto inferior esquerdo */
+.planet-bottom {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 100px;
+  /* Ajuste conforme necessário */
+  height: auto;
+  z-index: -1;
+  /* Fica atrás do conteúdo */
+  opacity: 50%;
+}
 
 
-  /* Fundo escuro de sobreposição com alta opacidade */
+/* Fundo escuro de sobreposição com alta opacidade */
 .popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8); /* Preto com opacidade alta */
+  background-color: rgba(0, 0, 0, 0.8);
+  /* Preto com opacidade alta */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -290,7 +291,8 @@ body {
   min-height: 100vh;
   position: relative;
   padding-bottom: 50px;
-  overflow-x: hidden; /* Impede rolagem horizontal */
+  overflow-x: hidden;
+  /* Impede rolagem horizontal */
 }
 
 /* Centralizando os elementos principais */
@@ -298,12 +300,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Centraliza verticalmente */
+  justify-content: center;
+  /* Centraliza verticalmente */
   gap: 50px;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Centraliza no meio da página */
+  transform: translate(-50%, -50%);
+  /* Centraliza no meio da página */
 }
 
 /* Ajustando o título para ficar centralizado */
@@ -318,30 +322,52 @@ body {
   transform: translateX(-50%);
 }
 
-/* Botão de voltar no canto superior esquerdo */
+/* Botão de Voltar */
 .back-button {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 1rem;
+  left: 1rem;
+  width: 48px;
+  height: 48px;
+  border: 2px solid white;
+  /* borda branca por padrão */
+  border-radius: 50%;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  z-index: 10;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0);
+  /* leve fundo amarelo */
+  border-color: #f2b705;
+  /* borda amarela no hover */
 }
 
 .back-icon {
-  font-size: 32px;
+  font-size: 24px;
   color: white;
-  transition: transform 0.2s ease;
+  /* ícone branco por padrão */
+  transition: color 0.2s;
 }
 
-.back-icon:hover {
-  transform: scale(1.1);
+.back-button:hover .back-icon {
+  color: #f2b705;
+  /* ícone amarelo no hover */
 }
 
 /* Ajustando a imagem inferior para o canto inferior */
 .planet-bottom {
   position: absolute;
-  bottom: -700px; /* Move para o canto inferior */
+  bottom: -700px;
+  /* Move para o canto inferior */
   left: -200px;
-  width: 1000px; /* Ajustável conforme necessário */
+  width: 1000px;
+  /* Ajustável conforme necessário */
   height: auto;
   z-index: -1;
 }
@@ -393,7 +419,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8); /* Preto com opacidade alta */
+  background-color: rgba(0, 0, 0, 0.8);
+  /* Preto com opacidade alta */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -436,26 +463,31 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  z-index: -1; /* Fica atrás de todo o conteúdo */
+  z-index: -1;
+  /* Fica atrás de todo o conteúdo */
 }
 
 /* Contêiner dos pontinhos fixo e cobrindo toda a tela */
 .dots {
-  position: fixed; /* Fica fixo atrás do conteúdo */
+  position: fixed;
+  /* Fica fixo atrás do conteúdo */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* Atrás do conteúdo principal */
-  pointer-events: none; /* Não bloqueia interações com outros elementos */
-  overflow: hidden; /* Evita que pontinhos saiam da tela */
+  z-index: -1;
+  /* Atrás do conteúdo principal */
+  pointer-events: none;
+  /* Não bloqueia interações com outros elementos */
+  overflow: hidden;
+  /* Evita que pontinhos saiam da tela */
 }
 
 /* Estilo dos pontinhos */
 .dot {
   position: absolute;
   background-color: white;
-  border-radius: 50%; 
+  border-radius: 50%;
   animation: blink 3s infinite ease-in-out;
   opacity: 0;
 }

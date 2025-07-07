@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation"; // Hook de navegação
 import "./popup.css";
 
 const SuccessTopic: React.FC = () => {
-  const router = useRouter(); // Inicializa o roteador
+  const goTo = (url: string) => {
+    window.location.href = url;
+  };
 
   useEffect(() => {
     const dotsContainer = document.querySelector(".dots");
@@ -33,7 +35,7 @@ const SuccessTopic: React.FC = () => {
   }, []);
 
   const handleButtonClick = () => {
-    router.push("/"); // Redireciona para a página inicial
+    goTo("/"); // Redireciona para a página inicial
   };
 
   return (

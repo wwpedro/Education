@@ -214,3 +214,36 @@ h1.title {
     width:90%;
   }
 }
+
+/* Botão de Voltar */
+.back-button {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 48px;
+  height: 48px;
+  border: 2px solid white;      /* borda branca por padrão */
+  border-radius: 50%;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  z-index: 10;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0); /* leve fundo amarelo */
+  border-color: #f2b705;              /* borda amarela no hover */
+}
+
+.back-icon {
+  font-size: 24px;
+  color: white;            /* ícone branco por padrão */
+  transition: color 0.2s;
+}
+
+.back-button:hover .back-icon {
+  color: #f2b705;          /* ícone amarelo no hover */
+}

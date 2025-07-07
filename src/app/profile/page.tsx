@@ -20,8 +20,14 @@ interface UserData {
 const ProfilePage = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const router = useRouter();
+  const goTo = (url: string) => { window.location.href = url; };
 
   useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://fonts.googleapis.com/icon?family=Material+Icons";
+    document.head.appendChild(link);
+
     // Função para buscar dados do usuário
     const fetchUserData = async () => {
       const token = localStorage.getItem("accessToken"); // Recupera o token armazenado
@@ -78,7 +84,7 @@ const ProfilePage = () => {
     }
   }, []);
 
-  return (
+ return (
     <div className="profile-container">
       <div className="wave-container1">
         <div className="wave1 wave-back1"></div>
@@ -90,7 +96,7 @@ const ProfilePage = () => {
       <div className="profile-header">
         <div className="profile-info">
           <img
-            src="assets/Pessoa-fisica-mobile.jpg"
+            src="/assets/Pessoa-fisica-mobile.jpg"
             alt="Foto do Perfil"
             className="profile-picture"
           />
@@ -103,7 +109,7 @@ const ProfilePage = () => {
                 </a>
                 {userData.subjectSpecialty ? (
                   <p className="profile-role">
-                    Cargo: Professor(a) - {userData.subjectSpecialty}
+                    Cargo: Professor(a) – {userData.subjectSpecialty}
                   </p>
                 ) : (
                   <p className="profile-role">Cargo: Estudante</p>
@@ -116,24 +122,17 @@ const ProfilePage = () => {
         </div>
 
         <div className="profile-buttons">
-          {/*<button
-            className="accept-button"
-            onClick={() => router.push("/studentslist")}
-          >
-            Aceitar Alunos
-          </button>*/}
           {userData?.subjectSpecialty && (
             <button
               className="create-class-button"
-              onClick={() => router.push("/createclassmenu")}
+              onClick={() => goTo("/createclassmenu")}
             >
               Criar Classe
             </button>
           )}
-
           <button
             className="view-classes-button"
-            onClick={() => router.push("/classlist")}
+            onClick={() => goTo("/classlist")}
           >
             Ver Classes
           </button>
@@ -144,10 +143,11 @@ const ProfilePage = () => {
           className="logout-button-perfil"
           onClick={() => {
             localStorage.removeItem("accessToken");
-            router.push("/login"); // Redireciona para a tela de login
+            goTo("/login");
           }}
         >
-          Logout
+          <span className="material-icons logout-icon" style={{ fontSize: "1.7rem" }}>logout</span>
+          <span className="logout-text">Logout</span>
         </button>
       </div>
     </div>

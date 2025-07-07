@@ -13,6 +13,10 @@ const RegisterPage = () => {
   const [modalMessage, setModalMessage] = useState("");
   const [modalError, setModalError] = useState(false);
   const router = useRouter();
+  const goTo = (url: string) => {
+    window.location.href = url;
+  };
+
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,7 +64,7 @@ const RegisterPage = () => {
   const closeModal = () => {
     setShowModal(false);
     if (!modalError) {
-      router.push("/login");
+      goTo("/login");
     }
   };
 

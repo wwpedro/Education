@@ -69,6 +69,9 @@ const CreateTopicPage: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [editingQuestionId, setEditingQuestionId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const goTo = (url: string) => {
+    window.location.href = url;
+  };
 
   const handleAddQuestion = () => {
     if (editingQuestionId !== null) {
@@ -242,11 +245,11 @@ const CreateTopicPage: React.FC = () => {
         <div className="form-actions">
           
             <button type="submit" className="submit-button" onClick={() => {
-              Router.push("/createcourse");
+              goTo("/createcourse");
               handleSaveAndAdvance;
             }}>Salvar e Avançar</button>
 
-          <button type="button" className="cancel-button" onClick={() => Router.push("/profile")}>Cancelar</button>
+          <button type="button" className="cancel-button" onClick={() => goTo("/profile")}>Cancelar</button>
         </div>
       </form>
 

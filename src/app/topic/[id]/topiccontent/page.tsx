@@ -31,6 +31,7 @@ const TopicContent: React.FC = () => {
     return "pdf";
   };
 
+
   const fetchMaterials = async () => {
     const token = localStorage.getItem("accessToken");
     if (!token || !topicId) return;
@@ -104,7 +105,7 @@ const TopicContent: React.FC = () => {
 
   return (
     <div className="space-background">
-      <div className="back-button" onClick={() => router.back()}>
+      <div className="back-button" onClick={() => window.history.back()}>
         <ArrowBackIcon className="back-icon" />
       </div>
 

@@ -8,6 +8,9 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const goTo = (url: string) => {
+    window.location.href = url;
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +30,7 @@ const LoginPage = () => {
 
         // Armazena o token no localStorage
         localStorage.setItem("accessToken", data.accessToken);
-        router.push("/profile"); // Redireciona para a página de perfil
+        goTo("/profile"); // Redireciona para a página de perfil
       } else {
         console.error("Erro ao realizar login");
         alert("Credenciais inválidas");

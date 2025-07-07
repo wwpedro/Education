@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useParams } from "next/navigation";
-import "./won.css";
+import "./won.css";  // ✅ Igual à página lose, usando o mesmo CSS
 
 interface SolutionFeedback {
   question: string;
@@ -11,53 +11,36 @@ interface SolutionFeedback {
   isCorrect: boolean;
 }
 
-const FinalScreen: React.FC = () => {
+const WonScreen: React.FC = () => {
   const params = useSearchParams();
   const routeParams = useParams();
   const topicId = routeParams.id as string;
 
-  const [correct, setCorrect] = useState(0);
-  const [incorrect, setIncorrect] = useState(0);
-  const [percentage, setPercentage] = useState(0);
+  const correct = parseInt(params.get("acertos") || "0", 10);
+  const incorrect = parseInt(params.get("erros") || "0", 10);
+  const improvement = params.get("reforcar") || "Nenhum";
+  const percentage = parseInt(params.get("porcentagem") || "0", 10);
+
   const [solutions, setSolutions] = useState<SolutionFeedback[]>([]);
 
-  const improvement = params.get("reforcar") || "Nenhum";
-
   const handleFinish = () => {
-    alert("Fim da jornada!");
+    alert("Parabéns! Você finalizou a etapa!");
   };
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    const studentId = localStorage.getItem("userId");
-
-    if (!token || !studentId || !topicId) return;
+    if (!token || !topicId) return;
 
     const fetchSolutions = async () => {
       try {
-        const res = await fetch(`http://localhost:8081/api/solutions/student/${studentId}/topic/${topicId}`, {
+        const res = await fetch(`http://localhost:8081/api/solutions/by-topic/${topicId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
         if (!res.ok) throw new Error("Erro ao buscar soluções");
         const data = await res.json();
-
-        const formatted = data.map((s: any) => ({
-          question: s.question?.content || "Pergunta não encontrada",
-          correctOption: s.question?.answer || "Desconhecida",
-          selectedOption: s.selectedOption?.text || "Não respondida",
-          isCorrect: s.selectedOption?.isCorrect === true,
-        }));
-
-        const correctCount = formatted.filter((s: any) => s.isCorrect).length;
-        const total = formatted.length;
-
-        setCorrect(correctCount);
-        setIncorrect(total - correctCount);
-        setPercentage(total > 0 ? Math.round((correctCount / total) * 100) : 0);
-        setSolutions(formatted);
+        setSolutions(data);
       } catch (err) {
         console.error("Erro ao carregar soluções:", err);
       }
@@ -70,18 +53,18 @@ const FinalScreen: React.FC = () => {
     <div className="result-screen">
       <img src="/assets/image9.png" alt="Planeta Terra" className="earth-img" />
 
-      <h1 className="congrats-text">
-        Parabéns Você concluiu a seção <br />
-        e desbloqueou uma nova fase
+      <h1 className="success-text">
+        Parabéns! <br />
+        Você concluiu essa fase <br />
+        e desbloqueou uma nova etapa!
       </h1>
 
-      <div className="summary-box">
+      <div className="summary-box green">
         <h2>Resumo</h2>
         <p>Prova</p>
-        <p>erros: {incorrect}</p>
-        <p>acertos: {correct}</p>
-        <p>reforçar: {improvement}</p>
-        <p>porcentagem de aprendizado: {percentage}%</p>
+        <p>Erros: {incorrect}</p>
+        <p>Acertos: {correct}</p>
+        <p>Porcentagem de aprendizado: {percentage}%</p>
       </div>
 
       {solutions.length > 0 && (
@@ -114,7 +97,7 @@ const FinalScreen: React.FC = () => {
 
       <img
         src="/assets/astronaut.png"
-        alt="Astronauta com bandeira"
+        alt="Astronauta comemorando"
         className="astronaut-img"
       />
 
@@ -127,4 +110,4 @@ const FinalScreen: React.FC = () => {
   );
 };
 
-export default FinalScreen;
+export default WonScreen;

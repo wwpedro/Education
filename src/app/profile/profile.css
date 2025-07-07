@@ -165,24 +165,50 @@ body {
 }
 
 /* Botão de Logout */
-.logout-button-perfil{
+.logout-button-perfil {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-  color: white;
-  background-color: red;
+  top: 25px;
+  right: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  padding: 0.8rem;
   z-index: 3;
 }
-.logout-button-perfil:hover {
-  background-color: #c50000;
+
+/* Ícone sempre visível (vermelho claro) */
+.logout-icon {
+  color: #ffffff;
+  transition: color 0.2s;
 }
+
+/* Texto inicialmente escondido à direita do botão, vai aparecer à esquerda do ícone */
+.logout-text {
+  position: absolute;
+  top: 50%;
+  /* começa logo à direita do botão, mas vamos mover ao aparecer */
+  right: 100%;
+  transform: translateY(-50%) translateX(-8px);
+  opacity: 0;
+  white-space: nowrap;
+  font-size: 1.0rem;
+  color: #ffffff;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Hover: ícone e texto ficam vermelhos escuros, texto desliza para encostar no ícone */
+.logout-button-perfil:hover .logout-icon {
+  color: #cc0000;
+}
+.logout-button-perfil:hover .logout-text {
+  transform: translateY(-50%) translateX(0);
+  opacity: 1;
+  color: #cc0000;
+}
+
 
 /* Pontinhos animados */
 .dots {

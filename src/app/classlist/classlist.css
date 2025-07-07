@@ -1,162 +1,199 @@
 /* Configuração Geral */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #102f54; /* Fundo azul */
-    color: white;
-    position: relative; /* Necessário para posicionar imagens absolutas */
-    overflow: hidden; /* Impede que imagens se estendam para fora */
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #102f54;
+  /* Fundo azul */
+  color: white;
+  position: relative;
+  /* Necessário para posicionar imagens absolutas */
+  overflow: hidden;
+  /* Impede que imagens se estendam para fora */
+}
+
+/* Container principal */
+.classlist-background-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  padding: 2rem;
+  position: relative;
+}
+
+/* Imagem da nave espacial no canto superior esquerdo */
+.rocket-image {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 15%;
+  /* Ajuste o tamanho conforme necessário */
+  transform: rotate(-45deg);
+  /* Rotaciona a nave para o lado esquerdo */
+  z-index: -1;
+  /* Coloca atrás do conteúdo */
+}
+
+/* Imagem do planeta no canto inferior direito */
+.planet-image {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20%;
+  /* Ajuste o tamanho conforme necessário */
+  transform: rotate(45deg);
+  /* Rotaciona o planeta para o lado esquerdo */
+  z-index: -1;
+  /* Coloca atrás do conteúdo */
+}
+
+/* Estrelas no fundo */
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -2;
+  /* Fica atrás de todo o conteúdo */
+}
+
+/* Cada estrela */
+.star {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  /* Pontos redondos */
+  opacity: 0;
+  /* Inicialmente invisível */
+  animation: blink 2s infinite ease-in-out;
+  /* Animação contínua */
+}
+
+/* Animação de piscar das estrelas */
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 0;
   }
-  
-  /* Container principal */
-  .classlist-background-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    height: 100vh;
-    padding: 2rem;
-    position: relative;
+
+  50% {
+    opacity: 1;
   }
-  
-  /* Imagem da nave espacial no canto superior esquerdo */
-  .rocket-image {
-    position: absolute;
-    top: 5%;
-    left: 5%;
-    width: 15%; /* Ajuste o tamanho conforme necessário */
-    transform: rotate(-45deg); /* Rotaciona a nave para o lado esquerdo */
-    z-index: -1; /* Coloca atrás do conteúdo */
-  }
-  
-  /* Imagem do planeta no canto inferior direito */
-  .planet-image {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 20%; /* Ajuste o tamanho conforme necessário */
-    transform: rotate(45deg); /* Rotaciona o planeta para o lado esquerdo */
-    z-index: -1; /* Coloca atrás do conteúdo */
-  }
-  
-  /* Estrelas no fundo */
-  .stars {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: -2; /* Fica atrás de todo o conteúdo */
-  }
-  
-  /* Cada estrela */
-  .star {
-    position: absolute;
-    background-color: white;
-    border-radius: 50%; /* Pontos redondos */
-    opacity: 0; /* Inicialmente invisível */
-    animation: blink 2s infinite ease-in-out; /* Animação contínua */
-  }
-  
-  /* Animação de piscar das estrelas */
-  @keyframes blink {
-    0%,
-    100% {
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
-    }
-  }
-  
-  /* Título */
-  .title {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: white;
-  }
-  
-  /* Área rolável dos cartões */
-  .class-cards-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* ← centraliza horizontalmente */
-    gap: 1rem;
-    width: 100%;
-    max-width: 800px;
-    overflow-y: auto;
-    max-height: 70vh;
-    padding: 1rem 0;
-  }
-  
-  /* Cartão de Título */
-  .curriculum-title {
-    background-color: #fff;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .curriculum-title h2 {
-    margin: 0;
-    color: #333;
-  }
-  
-  /* Cartão de Classe */
-  .class-card {
-    display: flex;
-    flex-direction: column;
-    background-color: #f9f9f9;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .class-card .class-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .class-card .class-details h3 {
-    color: #333;
-  }
-  
-  .class-card .class-details p {
-    color: #666;
-  }
-  
-  /* Botão "Ver Mais" */
-  .see-more-button {
-    background-color: #fdd835;
-    color: #333;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .see-more-button:hover {
-    background-color: #fbc02d;
-  }
-  
-  /* BOTÃO DE VOLTAR COMO SETA BRANCA NO TOPO ESQUERDO */
+}
+
+/* Título */
+.title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+/* Área rolável dos cartões */
+.class-cards-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* ← centraliza horizontalmente */
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+  overflow-y: auto;
+  max-height: 70vh;
+  padding: 1rem 0;
+}
+
+/* Cartão de Título */
+.curriculum-title {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.curriculum-title h2 {
+  margin: 0;
+  color: #333;
+}
+
+/* Cartão de Classe */
+.class-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.class-card .class-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.class-card .class-details h3 {
+  color: #333;
+}
+
+.class-card .class-details p {
+  color: #666;
+}
+
+/* Botão "Ver Mais" */
+.see-more-button {
+  background-color: #fdd835;
+  color: #333;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.see-more-button:hover {
+  background-color: #fbc02d;
+}
+
+/* Botão de Voltar */ 
 .back-button {
   position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
+  top: 1rem;
+  left: 1rem;
+  width: 48px;
+  height: 48px;
+  border: 2px solid white;
+  /* borda branca por padrão */
+  border-radius: 50%;
   background: transparent;
-  border: none;
-  font-size: 2rem;
-  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
   z-index: 10;
 }
 
 .back-button:hover {
-  color: #fdd835;
+  background: rgba(255, 255, 255, 0);
+  /* leve fundo amarelo */
+  border-color: #f2b705;
+  /* borda amarela no hover */
+}
+
+.back-icon {
+  font-size: 24px;
+  color: white;
+  /* ícone branco por padrão */
+  transition: color 0.2s;
+}
+
+.back-button:hover .back-icon {
+  color: #f2b705;
+  /* ícone amarelo no hover */
 }
 
 /* SCROLL CUSTOMIZADO PARA O CONTAINER DOS CARDS */
@@ -168,7 +205,8 @@ body {
   max-width: 800px;
   overflow-y: auto;
   max-height: 70vh;
-  scrollbar-width: thin; /* Firefox */
+  scrollbar-width: thin;
+  /* Firefox */
   scrollbar-color: #aaa transparent;
 }
 

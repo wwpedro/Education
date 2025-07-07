@@ -2,12 +2,17 @@
 import React, { useEffect, useState } from "react";
 import "./createcurriculum.css";
 import { useRouter, useSearchParams } from "next/navigation";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Link from "next/link";
 
 const CreateResumePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const classId = searchParams.get("classId");
+  const goTo = (url: string) => {
+    window.location.href = url;
+  };
 
   useEffect(() => {
     const starsContainer = document.querySelector(".stars");
@@ -37,7 +42,9 @@ const CreateResumePage = () => {
       <img src="/assets/image9.png" alt="Planeta Terra" className="planet-earth" />
       <img src="/assets/image8.png" alt="Planeta" className="planet-upper-right" />
 
-      <button className="cancel-button" onClick={() => router.push("/profile")}>Voltar</button>
+      <button className="back-button" onClick={() => goTo("/profile")}><Link href="/classlist">
+          <ArrowBackIcon className="back-icon" />
+        </Link></button>
 
       <div className="title-container">
         <h1 className="title">Fábrica de Currículo</h1>
@@ -45,9 +52,9 @@ const CreateResumePage = () => {
       </div>
 
       <div className="button-group">
-        <button className="action-button" onClick={() => router.push("/createcurriculum")}>Criar Curriculum</button>
-        <button className="action-button" onClick={() => router.push("/createcourse")}>Criar Curso</button>
-        <button className="action-button" onClick={() => router.push("/createclass")}>
+        <button className="action-button" onClick={() => goTo("/createcurriculum")}>Criar Curriculum</button>
+        <button className="action-button" onClick={() => goTo("/createcourse")}>Criar Curso</button>
+        <button className="action-button" onClick={() => goTo("/createclass")}>
           Criar Classe
         </button>
       </div>

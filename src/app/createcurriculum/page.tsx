@@ -12,6 +12,9 @@ const CreateCurriculumPage = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [fileName, setFileName] = useState("");
   const router = useRouter();
+  const goTo = (url: string) => {
+    window.location.href = url;
+  };
 
   useEffect(() => {
     const starsContainer = document.querySelector(".stars");
@@ -112,7 +115,7 @@ const CreateCurriculumPage = () => {
 
 
         alert("Curriculum e tópicos vinculados com sucesso!");
-        router.push("/createcourse");
+        goTo("/createcourse");
       } else {
         const errorText = await response.text();
         console.error("🚫 Erro ao criar currículo:", errorText);
@@ -127,8 +130,8 @@ const CreateCurriculumPage = () => {
   return (
     <div className="createclass-container">
       <button
-        className="back-arrow"
-        onClick={() => router.push("/createclassmenu")}
+        className="back-button"
+        onClick={() => goTo("/createclassmenu")}
         aria-label="Voltar"
       >
         <ArrowBackIcon className="back-icon" />
@@ -143,7 +146,7 @@ const CreateCurriculumPage = () => {
       <form className="createclass-form" onSubmit={handleSubmit}>
         <div className="info-icon" onClick={(e) => { e.preventDefault(); setIsModalOpen(true); }}>i</div><br />
 
-        <label htmlFor="curriculum" className="label">Curriculum</label>
+        <label htmlFor="curriculum" className="label">Curriculum<span className="required"> *</span></label>
         <input
           type="text"
           id="curriculum"
@@ -154,7 +157,7 @@ const CreateCurriculumPage = () => {
           required
         />
 
-        <label htmlFor="curriculum-description" className="label">Descrição</label>
+        <label htmlFor="curriculum-description" className="label">Descrição<span className="required"> *</span></label>
         <input
           type="text"
           id="curriculum-description"
@@ -165,7 +168,7 @@ const CreateCurriculumPage = () => {
           required
         />
 
-        <label className="label">Importar Tópicos do Currículo</label>
+        <label className="label">Importar Tópicos do Currículo<span className="required"> *</span></label>
         <div className="import-group">
           <input
             type="file"

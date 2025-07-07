@@ -5,113 +5,109 @@ import { useRouter, useParams } from "next/navigation";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import "./topic.css"; 
+import Link from "next/link";
+import "./topic.css";
 
 const Topico: React.FC = () => {
   const router = useRouter();
   const params = useParams();
-  const topicId = params.id;
+  const topicId = params.id as string;
   const title = params.title || "Título Tópico";
 
-  // Estado do cadeado na bolinha de resultado
   const [isLocked, setIsLocked] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
 
-  // Função para alternar o cadeado
-  const toggleLock = (event: React.MouseEvent) => {
-    event.stopPropagation(); // Impede que o clique no cadeado acione a navegação
-    setIsLocked(!isLocked);
+  useEffect(() => {
+    const stored = sessionStorage.getItem(`topic_${topicId}_percent`);
+    if (stored !== null) {
+      setIsLocked(false);
+    }
+  }, [topicId]);
+
+  const goTo = (url: string) => {
+    router.push(url);
   };
 
-  // Função para tentar acessar o resultado
+  const toggleLock = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsLocked(prev => !prev);
+  };
+
   const handleResultClick = () => {
     if (isLocked) {
-      setShowPopup(true); // Mostra o pop-up se estiver bloqueado
+      setShowPopup(true);
     } else {
-      router.push(`/topic/${topicId}/won`); // Navega se estiver desbloqueado
+      const stored = sessionStorage.getItem(`topic_${topicId}_percent`);
+      const percent = stored ? parseInt(stored) : 0;
+      const route = percent >= 70 ? 'won' : 'lose';
+      goTo(`/topic/${topicId}/${route}`);
     }
   };
 
   useEffect(() => {
-      const dotsContainer = document.querySelector(".dots");
-      if (!dotsContainer) return;
-  
-      const totalDots = 150;
-      dotsContainer.innerHTML = "";
-  
-      for (let i = 0; i < totalDots; i++) {
-        const dot = document.createElement("div");
-        dot.classList.add("dot");
-  
-        dot.style.top = `${Math.random() * 100}vh`;
-        dot.style.left = `${Math.random() * 100}vw`;
-  
-        const size = Math.random() * 3 + 2;
-        dot.style.width = `${size}px`;
-        dot.style.height = `${size}px`;
-  
-        dot.style.animationDelay = `${Math.random() * 5}s`;
-  
-        dotsContainer.appendChild(dot);
-      }
-    }, []);
+    const dots = document.querySelector('.dots');
+    if (!dots) return;
+    dots.innerHTML = '';
+    for (let i = 0; i < 150; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      dot.style.top = `${Math.random() * 100}vh`;
+      dot.style.left = `${Math.random() * 100}vw`;
+      const size = Math.random() * 3 + 2;
+      dot.style.width = `${size}px`;
+      dot.style.height = `${size}px`;
+      dot.style.animationDelay = `${Math.random() * 5}s`;
+      dots.appendChild(dot);
+    }
+  }, []);
+
+  const handleExitModule = () => {
+    router.push('/classlist');
+  };
 
   return (
     <div className="space-background">
-      {/* Botão de Voltar */}
-      <div className="back-button" onClick={() => router.back()}>
-        <ArrowBackIcon className="back-icon" />
+      <div className="back-button" onClick={handleExitModule}>
+        <Link href="/classlist"><ArrowBackIcon className="back-icon"/></Link>
       </div>
 
-      {/* Imagens dos planetas */}
       <img src="/assets/image81.png" alt="Planeta Superior" className="planet-top" />
       <img src="/assets/image9.png" alt="Planeta Inferior" className="planet-bottom" />
 
       <div className="dots"></div>
 
-      {/* Título do Tópico */}
-      <div className="title">
-        <h1>{title}</h1>
-      </div>
+      <div className="title"><h1>{title}</h1></div>
 
-      {/* Botões redondos maiores com ícones */}
       <div className="topics-container">
-        <div className="node" onClick={() => router.push(`/topic/${topicId}/topiccontent`)}> 
-          <div className="node-circle" style={{ backgroundColor: "#D9D9D9" }}>
+        <div className="node" onClick={() => goTo(`/topic/${topicId}/topiccontent`)}>
+          <div className="node-circle" style={{ backgroundColor: '#D9D9D9' }}>
             <img src="/assets/22.png" alt="Ícone Aula" className="node-icon" />
           </div>
           <p className="node-title">AULA</p>
         </div>
 
-        <div className="node" onClick={() => router.push(`/topic/${topicId}/question`)}> 
-          <div className="node-circle" style={{ backgroundColor: "#FFD700" }}>
+        <div className="node" onClick={() => goTo(`/topic/${topicId}/question`)}>
+          <div className="node-circle" style={{ backgroundColor: '#FFD700' }}>
             <img src="/assets/24.png" alt="Ícone Exercícios" className="node-icon" />
           </div>
           <p className="node-title">EXERCÍCIOS</p>
         </div>
 
-        <div className="node" onClick={handleResultClick}> 
-          <div className="node-circle" style={{ backgroundColor: "#FF4C4C" }}>
+        <div className="node" onClick={handleResultClick}>
+          <div className="node-circle" style={{ backgroundColor: '#FF4C4C' }}>
             <img src="/assets/23.png" alt="Ícone Resultado" className="node-icon" />
-            {isLocked ? (
-              <LockIcon className="lock-icon" onClick={toggleLock} />
-            ) : (
-              <LockOpenIcon className="lock-icon" onClick={toggleLock} />
-            )}
+            {isLocked ? <LockIcon className="lock-icon" onClick={toggleLock}/> : <LockOpenIcon className="lock-icon" onClick={toggleLock}/>}            
           </div>
           <p className="node-title">RESULTADO</p>
         </div>
       </div>
 
-      {/* Pop-up de módulo bloqueado */}
       {showPopup && (
         <div className="popup-overlay">
-          <div className="popup">
-            <div className="popup-content">
-              <p>Este módulo ainda não foi liberado!</p>
-              <button className="close-button" onClick={() => setShowPopup(false)}>Fechar</button>
-            </div>
-          </div>
+          <div className="popup"><div className="popup-content">
+            <p>Este módulo ainda não foi liberado!</p>
+            <button className="close-button" onClick={() => setShowPopup(false)}>Fechar</button>
+          </div></div>
         </div>
       )}
     </div>

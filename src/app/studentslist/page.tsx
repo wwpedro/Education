@@ -24,7 +24,6 @@ const studentsList = [
   { name: "Mariana Souza", email: "mariana.souza@email.com" },
   { name: "Gustavo Lima", email: "gustavo.lima@email.com" },
 ];
-  
 
 const StudentsPage = () => {
   useEffect(() => {

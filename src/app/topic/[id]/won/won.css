@@ -17,31 +17,32 @@ html {
 }
 
 /* Texto de parabéns */
-.congrats-text {
-    position: fixed;
-    top: 60px;
+.success-text {
+   position: fixed;
+    top: 5vh;
     left: 50%;
     transform: translateX(-50%);
     color: white;
-    font-size: 5vh;
+    font-size: 4.0vh;
     font-weight: bold;
-    z-index: 2;
     text-align: center;
+    z-index: 2;
 }
 
 /* Box verde com resumo */
 /* Box verde com resumo */
 .summary-box {
+    background: #18a557ca;
     position: fixed;
     left: 13vw;
     top: 35vh;
-    background: #18a557ca;
     padding: 2vh 2vw;
     border-radius: 1.2vh;
     color: white;
     box-shadow: 0 0 1vh rgba(0, 0, 0, 0.3);
     width: 18vw;
-    height: 18vw;
+    height: auto;
+    font-size: 2.3vh;
     z-index: 2;
 }
 
@@ -99,7 +100,7 @@ html {
 }
 
 @media (max-width: 990px) {
-    .congrats-text {
+    .success-text {
         font-size: 3.5vh;
         top: 5vh;
     }
@@ -109,9 +110,9 @@ html {
     }
 }
 
-@media (max-width: 676px) {
-    .congrats-text {
-        font-size: 3.5vh;
+@media (max-width: 944px) {
+    .success-text {
+        font-size: 3vh;
         top: 5vh;
     }
 
@@ -142,9 +143,42 @@ html {
     }
 }
 
-@media (max-width: 374px) {
-    .congrats-text {
-        font-size: 2.6vh;
+@media (max-width: 676px) {
+    .success-text {
+        font-size: 3vh;
+        top: 5vh;
+    }
+
+    .summary-box {
+        width: 70vw;
+        height: auto;
+        top: 28vh;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 2.2vh;
+        padding: 2vh 4vw;
+    }
+
+    .astronaut-img {
+        height: 40vh;
+        bottom: 14vh;
+    }
+
+    .earth-img {
+        width: 25vw;
+        top: 1vh;
+    }
+
+    .finish-button {
+        bottom: 6vh;
+        font-size: 2vh;
+        padding: 1vh 5vw;
+    }
+}
+
+@media (max-width: 410px) {
+    .success-text {
+        font-size: 2.3vh;
         top: 8vh;
     }
 

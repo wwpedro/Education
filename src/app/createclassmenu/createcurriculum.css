@@ -103,21 +103,37 @@ body {
 }
 
 /* Botão de voltar */
-.cancel-button {
+/* Botão de Voltar */
+.back-button {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background-color: transparent;
-  color: white;
-  border: 2px solid white;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 1rem;
+  top: 1rem;
+  left: 1rem;
+  width: 48px;
+  height: 48px;
+  border: 2px solid white;      /* borda branca por padrão */
+  border-radius: 50%;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  z-index: 10;
 }
 
-.cancel-button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+.back-button:hover {
+  background: rgba(255, 255, 255, 0); /* leve fundo amarelo */
+  border-color: #f2b705;              /* borda amarela no hover */
+}
+
+.back-icon {
+  font-size: 24px;
+  color: white;            /* ícone branco por padrão */
+  transition: color 0.2s;
+}
+
+.back-button:hover .back-icon {
+  color: #f2b705;          /* ícone amarelo no hover */
 }
 
 /* Grupo de botões */

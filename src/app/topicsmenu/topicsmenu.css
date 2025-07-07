@@ -1,292 +1,225 @@
-/* Body ajustado para permitir rolagem vertical apenas */
+/* Reset básico e overflow geral */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #102f54;
   color: white;
-  min-height: 100vh; 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  overflow-y: auto; /* Scroll apenas na vertical */
-  overflow-x: hidden; /* Impede rolagem horizontal */
+  overflow-x: hidden; /* impede scroll horizontal */
 }
 
-/* Fundo espacial ajustado */
+/* Container principal — cresce conforme os tópicos */
 .space-background {
-  background: url('/path/to/star-background.jpg') no-repeat center center fixed;
-  background-size: cover;
-  width: 100%;
-  min-height: 100vh;
   position: relative;
-  padding-bottom: 50px;
-  overflow-x: hidden; /* Impede rolagem horizontal */
+  width: 100%;
+  padding: 20px 0;      /* espaçamento acima e abaixo */
+  overflow-x: hidden;
 }
 
-/* Container dos tópicos com mais altura para garantir rolagem vertical */
+/* Canvas de estrelas estáticas — fixo atrás de tudo */
+.stars-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: -3;
+}
+
+/* Pontinhos piscantes — fixos entre canvas e conteúdo */
+.dots {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: -2;
+  overflow: hidden;
+}
+
+/* Animação de piscar */
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50%       { opacity: 1; }
+}
+
+/* Cada pontinho */
+.dot {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: blink 3s infinite ease-in-out;
+}
+
+/* Imagens de fundo FIXAS — não rolam com o conteúdo */
+.planet {
+  position: fixed;
+  top: 10%;
+  left: 5%;
+  width: 20%;
+  z-index: -1;
+}
+.comet {
+  position: fixed;
+  top: 10%;
+  right: 15%;
+  width: 10%;
+  opacity: 0.8;
+  z-index: -1;
+}
+.rocket {
+  position: fixed;
+  bottom: 10%;
+  left: 20%;
+  width: 10%;
+  z-index: -1;
+}
+.rocket.diagonal {
+  transform: rotate(40deg);
+}
+.earth {
+  position: fixed;
+  bottom: -40%;
+  right: -10%;
+  width: 35%;
+  z-index: -4;
+}
+
+/* Botão voltar — fixo no canto */
+.back-button {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  width: 48px; height: 48px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: border-color 0.2s;
+}
+.back-button:hover {
+  border-color: #f2b705;
+}
+.back-icon {
+  font-size: 24px;
+  color: white;
+  transition: color 0.2s;
+}
+.back-button:hover .back-icon {
+  color: #f2b705;
+}
+
+/* Título e subtítulo */
+.title {
+  text-align: center;
+  margin: 40px 0 20px;
+}
+.title h1 {
+  font-size: 2rem;
+  margin: 0;
+}
+.subtitle {
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Lista de tópicos — determina a altura da página */
 .topics-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 80px;
   padding: 20px;
-  min-height: 150vh; /* Garante que tenha altura suficiente para ativar o scroll */
-  overflow-x: hidden; /* Evita o scroll horizontal */
 }
 
-/* Tornar a página rolável */
-.scrollable {
-  overflow-y: auto;
-  max-height: 100vh; 
-  padding: 20px;
-}
-  
-  /* Título */
-  .title {
-    color: white;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  /* Imagens do fundo */
-  .planet {
-    position: absolute;
-    top: 10%;
-    left: 5%;
-    width: 20%;
-    height: auto;
-  }
-  
-  .comet {
-    position: absolute;
-    top: 10%;
-    right: 15%;
-    width: 10%;
-    height: auto;
-    opacity: 80%;
-  }
-  
-  .rocket {
-    position: absolute;
-    bottom: 10%;
-    left: 20%;
-    width: 10%;
-    height: auto;
-  }
-
-  .rocket.diagonal {
-    position: absolute;
-    bottom: 10%;
-    left: 20%;
-    width: 10%;
-    height: auto;
-    transform: rotate(40deg); /* Inclinação diagonal */
-  }
-  
-  .earth {
-    position: absolute;
-    bottom: -40%;
-    right: -10%;
-    width: 35%;
-    height: auto;
-    z-index: -3;
-  }
-  
-  /* Nó (bolinha com título) */
-  .node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  /* Bolinha do tópico */
-  /* Nó (tópico) */
+/* Cada nó de tópico */
 .node {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+.node:hover {
+  transform: translateY(-4px);
 }
 
 /* Bolinha do tópico */
 .node-circle {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
 }
-
 .node-circle:hover {
   transform: scale(1.1);
 }
 
 /* Ícone dentro da bolinha */
 .topic-icon {
-  width: 80px;
-  height: 80px;
   position: absolute;
+  width: 80px; height: 80px;
 }
 
 /* Cadeado */
 .lock-icon {
   position: absolute;
-  bottom: -5px;
-  right: -5px;
-  font-size: 30px; /* Ajusta o tamanho do ícone */
+  bottom: -5px; right: -5px;
+  font-size: 30px;
   color: white;
   cursor: pointer;
 }
-  
-  /* Título do tópico */
-  .node-title {
-    color: white;
-    font-size: 1rem;
-  }
-  
-  /* Botão amarelo */
-.yellow-button {
-  background-color: yellow;
-  border: none;
-  color: black;
-  padding: 10px 20px;
+
+/* Título do nó */
+.node-title {
+  margin-top: 8px;
   font-size: 1rem;
-  cursor: pointer;
-  border-radius: 5px;
-  margin-top: 20px;
-  margin-bottom: 30px;
-  transition: background-color 0.3s ease;
-}
-
-.yellow-button:hover {
-  background-color: #ffd700; /* Amarelo dourado ao passar o mouse */
-}
-
-/* Contêiner dos pontinhos */
-.dots {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: -1; /* Fica atrás de todo o conteúdo */
-}
-
-/* Contêiner dos pontinhos fixo e cobrindo toda a tela */
-.dots {
-  position: fixed; /* Fica fixo atrás do conteúdo */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1; /* Atrás do conteúdo principal */
-  pointer-events: none; /* Não bloqueia interações com outros elementos */
-  overflow: hidden; /* Evita que pontinhos saiam da tela */
-}
-
-/* Estilo dos pontinhos */
-.dot {
-  position: absolute;
-  background-color: white;
-  border-radius: 50%; 
-  animation: blink 3s infinite ease-in-out;
-  opacity: 0;
-}
-
-/* Animação de piscar */
-@keyframes blink {
-  0% { opacity: 0; }
-  50% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-/* Botão de voltar */
-.back-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  cursor: pointer;
-}
-
-.back-icon {
-  font-size: 32px;
   color: white;
-  transition: transform 0.2s ease;
-}
-
-.back-icon:hover {
-  transform: scale(1.1);
 }
 
 /* Botão amarelo */
 .yellow-button {
   background-color: yellow;
-  border: none;
   color: black;
+  border: none;
   padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
   border-radius: 5px;
-  margin-top: 20px;
+  cursor: pointer;
   transition: background-color 0.3s ease;
+  margin: 20px 0;
 }
-
 .yellow-button:hover {
-  background-color: #ffd700; /* Amarelo dourado ao passar o mouse */
+  background-color: #ffd700;
 }
 
-/* Fundo escuro de sobreposição com alta opacidade */
+/* Popup de aviso */
 .popup-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.664); /* Preto com opacidade alta */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.66);
+  display: flex; align-items: center; justify-content: center;
   z-index: 1000;
 }
-
-/* Janela do pop-up */
 .popup {
-  background-color: rgb(255, 248, 248);
-  padding: 50px;
+  background-color: #fff;
+  padding: 40px;
   border-radius: 10px;
-  color: black;
   text-align: center;
-  width: 500px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.108);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 90%;
 }
-
-/* Texto dentro do pop-up */
-.popup-content p {
-  font-size: 1.2rem;
-  margin-bottom: 50px;
-  color: black;
-}
-
-/* Botão vermelho para fechar */
 .close-button {
-  background-color: #ff0000;
+  margin-top: 20px;
+  background-color: #f00;
+  color: #fff;
   border: none;
-  color: rgb(255, 255, 255);
-  padding: 8px 15px;
-  font-size: 1rem;
-  cursor: pointer;
+  padding: 8px 16px;
   border-radius: 5px;
+  cursor: pointer;
   transition: background-color 0.3s ease;
 }
-
 .close-button:hover {
   background-color: #be0000;
 }

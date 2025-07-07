@@ -1,15 +1,21 @@
+// src/app/classlist/page.tsx
 "use client";
 import React, { useEffect, useState } from "react";
 import "./classlist.css";
 import { useRouter } from "next/navigation";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Link from "next/link";
 
 const ClassListPage = () => {
   const [classes, setClasses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const goTo = (url: string) => {
+    window.location.href = url;
+  };
 
+  //Efeito das estrelas
   useEffect(() => {
-    // Estrelas de fundo
     const starsContainer = document.querySelector(".stars");
     if (!starsContainer) return;
 
@@ -27,6 +33,7 @@ const ClassListPage = () => {
     }
   }, []);
 
+  //Fetch das turmas
   useEffect(() => {
     const fetchClasses = async () => {
       const token = localStorage.getItem("accessToken");
@@ -55,14 +62,22 @@ const ClassListPage = () => {
   }, []);
 
   const handleBackClick = () => {
-    router.push("/profile");
+    goTo("/profile");
   };
 
   return (
     <div className="classlist-background-container">
       <div className="stars"></div>
-      <img src="/assets/img2.png" alt="Nave Espacial" className="rocket-image" />
-      <img src="/assets/image8.png" alt="Planeta" className="planet-image" />
+      <img
+        src="/assets/img2.png"
+        alt="Nave Espacial"
+        className="rocket-image"
+      />
+      <img
+        src="/assets/image8.png"
+        alt="Planeta"
+        className="planet-image"
+      />
 
       <h1 className="title">Lista de Classes</h1>
 
@@ -79,14 +94,19 @@ const ClassListPage = () => {
                 <span className="class-status">Status: andamento</span>
               </div>
               <div className="class-card-body">
-                <h3 className="class-title">{classItem.course?.name || "Sem curso"}</h3>
+                <h3 className="class-title">
+                  {classItem.course?.name || "Sem curso"}
+                </h3>
                 <p className="class-description">
-                  {classItem.course?.curriculum?.description || "Sem descrição"}
+                  {classItem.course?.curriculum?.description ||
+                    "Sem descrição"}
                 </p>
               </div>
               <button
                 className="view-class-button"
-                onClick={() => router.push(`/topicsmenu?classId=${classItem.classId}`)}
+                onClick={() =>
+                  goTo(`/topicsmenu?classId=${classItem.classId}`)
+                }
               >
                 Ver classe
               </button>
@@ -95,9 +115,11 @@ const ClassListPage = () => {
         )}
       </div>
 
-      <button className="back-button" onClick={handleBackClick}>
-        ←
-      </button>
+      <div className="back-button" onClick={() => window.history.back()}>
+        <Link href="/classlist">
+          <ArrowBackIcon className="back-icon" />
+        </Link>
+      </div>
     </div>
   );
 };

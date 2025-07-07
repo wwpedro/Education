@@ -27,6 +27,7 @@ const PerdaScreen: React.FC = () => {
     alert("Vamos revisar!");
   };
 
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (!token || !topicId) return;

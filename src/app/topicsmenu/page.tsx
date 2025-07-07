@@ -18,6 +18,15 @@ interface UserData {
   subjectSpecialty?: string;
 }
 
+interface Dot {
+  top: number;
+  left: number;
+  size: number;
+  delay: number;
+}
+
+
+
 const TopicsMenu: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -26,12 +35,20 @@ const TopicsMenu: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [className, setClassName] = useState<string>("");
+  const [courseName, setCourseName] = useState<string>("");
   const isTeacher = !!userData?.subjectSpecialty;
+  const [curriculumId, setCurriculumId] = useState<number | null>(null);
+  const goTo = (url: string) => {
+    window.location.href = url;
+  };
+
+  const [dots, setDots] = useState<Dot[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("accessToken");
+
       if (!token || !classId) return;
 
       try {
@@ -46,15 +63,16 @@ const TopicsMenu: React.FC = () => {
         if (!classRes.ok) throw new Error("Erro ao buscar dados da turma");
 
         const classData = await classRes.json();
+        setCurriculumId(classData.course?.curriculum?.curriculumId || null);
+        setClassName(classData.description); // Nome da turma
+        setCourseName(classData.course?.name || ""); // Nome do curso (opcional)
         const curriculumTopics = classData?.course?.curriculum?.curriculumTopics ?? [];
 
-        const mappedTopics: Topic[] = curriculumTopics
-          .map((ct: any) => ({
-            topicId: ct.topic.topicId,
-            description: ct.topic.description,
-            isLocked: true,
-          }))
-          .sort((a: { topicId: number; }, b: { topicId: number; }) => a.topicId - b.topicId); // ← ordena por ID
+        const mappedTopics: Topic[] = curriculumTopics.map((ct: any) => ({
+          topicId: ct.topicId,
+          description: ct.description,
+          isLocked: ct.locked ?? true,
+        })).sort((a: { topicId: number; }, b: { topicId: number; }) => a.topicId - b.topicId); // ← ordena por ID
 
 
         setTopics(mappedTopics);
@@ -81,54 +99,91 @@ const TopicsMenu: React.FC = () => {
     fetchData();
   }, [classId]);
 
+   useEffect(() => {
+    const total = 100;
+    const arr: Dot[] = [];
+    for (let i = 0; i < total; i++) {
+      arr.push({
+        top: Math.random() * 100,
+        left: Math.random() * 100,
+        size: Math.random() * 3 + 1,
+        delay: Math.random() * 3,
+      });
+    }
+    setDots(arr);
+  }, []);
+
+
+
   const handleTopicClick = (topic: Topic) => {
     if (topic.isLocked && !isTeacher) {
       setShowPopup(true);
       return;
     }
-    router.push(`/topic/${topic.topicId}`);
+    goTo(`/topic/${topic.topicId}`);
   };
 
-  const toggleLock = (id: number, e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!isTeacher) return;
+  const toggleLock = async (id: number, e: React.MouseEvent) => {
+  e.stopPropagation();
+  if (!isTeacher || curriculumId === null) return;
+
+  const topic = topics.find(t => t.topicId === id);
+  if (!topic) return;
+
+  try {
+    const token = localStorage.getItem("accessToken");
+
+    await fetch(
+      `http://localhost:8081/api/curriculum-topics/lock?curriculumId=${curriculumId}&topicId=${id}&locked=${!topic.isLocked}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     setTopics((prev) =>
       prev.map((t) =>
         t.topicId === id ? { ...t, isLocked: !t.isLocked } : t
       )
     );
-  };
+  } catch (err) {
+    console.error("Erro ao atualizar estado de bloqueio:", err);
+  }
+};
+
+
 
   const getColorByIndex = (index: number) => {
     const colors = ["yellow", "red", "blue", "pink", "green"];
     return colors[index % colors.length];
   };
 
-  useEffect(() => {
-    const dotsContainer = document.querySelector(".dots");
-    if (!dotsContainer) return;
-
-    dotsContainer.innerHTML = "";
-    const totalDots = 150;
-
-    for (let i = 0; i < totalDots; i++) {
-      const dot = document.createElement("div");
-      dot.classList.add("dot");
-      dot.style.top = `${Math.random() * 100}vh`;
-      dot.style.left = `${Math.random() * 100}vw`;
-      dot.style.width = `${Math.random() * 3 + 2}px`;
-      dot.style.height = `${Math.random() * 3 + 2}px`;
-      dot.style.animationDelay = `${Math.random() * 5}s`;
-      dotsContainer.appendChild(dot);
-    }
-  }, []);
+  
 
   if (isLoading || !classId) return null;
 
   return (
+    
     <div className="space-background scrollable">
-      <div className="back-button">
+    {/* canvas cobrindo toda a tela para desenhar as estrelas */}
+    <div className="dots">
+        {dots.map((d, i) => (
+          <div
+            key={i}
+            className="dot"
+            style={{
+              top: `${d.top}%`,
+              left: `${d.left}%`,
+              width: `${d.size}px`,
+              height: `${d.size}px`,
+              animationDelay: `${d.delay}s`,
+            }}
+          />
+        ))}
+      </div>
+      <div className="back-button" onClick={() => window.history.back()}>
         <Link href="/classlist">
           <ArrowBackIcon className="back-icon" />
         </Link>
@@ -138,10 +193,10 @@ const TopicsMenu: React.FC = () => {
       <img src="/assets/image812.png" alt="Cometa" className="comet" />
       <img src="/assets/img2.png" alt="Foguete" className="rocket diagonal" />
       <img src="/assets/image9.png" alt="Terra" className="earth" />
-      <div className="dots"></div>
 
       <div className="title">
-        <h1>Tópicos da Turma</h1>
+        <h1>Tópicos da Turma: {className}</h1>
+        <p className="subtitle">Curso: {courseName}</p>
         {isTeacher && (
           <Link href={`/createclass?classId=${classId}`}>
             <button className="yellow-button">Editar classe</button>

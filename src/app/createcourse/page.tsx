@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import "./createcourse.css";
 import { useRouter } from "next/navigation";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Link from "next/link";
 
 const CreateClassPage = () => {
   const router = useRouter();
@@ -11,6 +13,10 @@ const CreateClassPage = () => {
   const [courseDescription, setCourseDescription] = useState("");
   const [teacherId, setTeacherId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const goTo = (url: string) => {
+    window.location.href = url;
+  };
+
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -116,7 +122,7 @@ const CreateClassPage = () => {
 
       if (response.ok) {
         alert("Curso criado com sucesso!");
-        router.push("/createclass");
+        goTo("/createclass");
       } else {
         alert("Erro ao criar curso.");
       }
@@ -128,15 +134,12 @@ const CreateClassPage = () => {
 
   return (
     <div className="createclass-container">
-      <button
-        className="back-arrow"
-        onClick={() => router.push("/createclassmenu")}
-        aria-label="Voltar"
-      >
-        ←
-      </button>
-
       <div className="stars"></div>
+      <div className="back-button" onClick={() => window.history.back()}>
+        <Link href="/classlist">
+          <ArrowBackIcon className="back-icon" />
+        </Link>
+      </div>
 
       <img src="/assets/image9.png" alt="Planeta Terra" className="planet-earth" />
       <img src="/assets/image8.png" alt="Planeta" className="planet-upper-right" />
@@ -167,7 +170,7 @@ const CreateClassPage = () => {
           ))}
         </select>
 
-        <label htmlFor="course" className="label">Curso</label>
+        <label htmlFor="course" className="label">Curso<span className="required"> *</span></label>
         <input
           type="text"
           id="course"
@@ -178,7 +181,7 @@ const CreateClassPage = () => {
           required
         />
 
-        <label htmlFor="description" className="label">Descrição</label>
+        <label htmlFor="description" className="label">Descrição<span className="required"> *</span></label>
         <input
           type="text"
           id="description"
