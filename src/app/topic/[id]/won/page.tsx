@@ -18,7 +18,6 @@ const WonScreen: React.FC = () => {
 
   const correct = parseInt(params.get("acertos") || "0", 10);
   const incorrect = parseInt(params.get("erros") || "0", 10);
-  const improvement = params.get("reforcar") || "Nenhum";
   const percentage = parseInt(params.get("porcentagem") || "0", 10);
 
   const [solutions, setSolutions] = useState<SolutionFeedback[]>([]);

@@ -280,3 +280,21 @@ body {
 .view-class-button:hover {
   background-color: #d29e00;
 }
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  width: 100%;
+}
+
+.search-input {
+  width: 80%;
+  max-width: 600px;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  color: #000;
+}

@@ -34,13 +34,15 @@ const EditProfilePage = () => {
 
     const updatedData: Record<string, string> = {
       role,
-      status: "ativo", // sempre enviado, mas não mostrado
+      status: "ATIVO", // sempre enviado, mas não mostrado
     };
 
     if (name) updatedData.name = name;
     if (email) updatedData.email = email;
     if (phone) updatedData.phone = phone;
     if (password) updatedData.password = password;
+
+    console.log("🔁 Enviando dados para o backend:", updatedData);
 
     try {
       const response = await fetch(`http://localhost:8081/api/users/${userId}`, {

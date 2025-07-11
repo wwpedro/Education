@@ -13,6 +13,7 @@ const ClassListPage = () => {
   const goTo = (url: string) => {
     window.location.href = url;
   };
+  const [searchTerm, setSearchTerm] = useState("");
 
   //Efeito das estrelas
   useEffect(() => {
@@ -81,37 +82,52 @@ const ClassListPage = () => {
 
       <h1 className="title">Lista de Classes</h1>
 
+      <div className="search-container">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Pesquisar por nome da turma ou curso..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       <div className="class-cards-container">
         {loading ? (
           <p>Carregando turmas...</p>
         ) : classes.length === 0 ? (
           <p>Nenhuma turma encontrada.</p>
         ) : (
-          classes.map((classItem, index) => (
-            <div key={index} className="custom-class-card">
-              <div className="class-card-header">
-                <span className="class-semester">{classItem.description}</span>
-                <span className="class-status">Status: andamento</span>
+          classes
+            .filter((classItem) =>
+              classItem.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              classItem.course?.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+            .map((classItem, index) => (
+              <div key={index} className="custom-class-card">
+                <div className="class-card-header">
+                  <span className="class-semester">{classItem.description}</span>
+                  <span className="class-status">Status: andamento</span>
+                </div>
+                <div className="class-card-body">
+                  <h3 className="class-title">
+                    {classItem.course?.name || "Sem curso"}
+                  </h3>
+                  <p className="class-description">
+                    {classItem.course?.curriculum?.description ||
+                      "Sem descrição"}
+                  </p>
+                </div>
+                <button
+                  className="view-class-button"
+                  onClick={() =>
+                    goTo(`/topicsmenu?classId=${classItem.classId}`)
+                  }
+                >
+                  Ver classe
+                </button>
               </div>
-              <div className="class-card-body">
-                <h3 className="class-title">
-                  {classItem.course?.name || "Sem curso"}
-                </h3>
-                <p className="class-description">
-                  {classItem.course?.curriculum?.description ||
-                    "Sem descrição"}
-                </p>
-              </div>
-              <button
-                className="view-class-button"
-                onClick={() =>
-                  goTo(`/topicsmenu?classId=${classItem.classId}`)
-                }
-              >
-                Ver classe
-              </button>
-            </div>
-          ))
+            ))
         )}
       </div>
 

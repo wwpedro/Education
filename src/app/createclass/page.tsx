@@ -118,7 +118,7 @@ const CreateClassroomPage: React.FC = () => {
   const [classId, setClassId] = useState<number | null>(null);
   const [topicTitle, setTopicTitle] = useState<string>("");
   const [topicDescription, setTopicDescription] = useState<string>("");
-  const [materials, setMaterials] = useState<File[] | null>(null);
+  const [material, setMaterial] = useState<File | null>(null);
   const [materialLink, setMaterialLink] = useState<string>("");
   const [questionDescription, setQuestionDescription] = useState<string>("");
   const [options, setOptions] = useState([{ text: "", isCorrect: false }]);
@@ -748,13 +748,13 @@ const CreateClassroomPage: React.FC = () => {
 
   const ImportMaterial: React.FC<{
     onClose: () => void;
-    materials: File[] | null;
-    setMaterials: (files: File[] | null) => void;
+    material: File | null;
+    setMaterial: (file: File | null) => void;
     materialLink: string;
     setMaterialLink: (link: string) => void;
     savedMaterials: { id?: number; title: string; url: string }[];   // ✅ Agora com id opcional
     setSavedMaterials: (materials: { id?: number; title: string; url: string }[]) => void;  // ✅ Agora com id opcional
-  }> = ({ onClose, materials, setMaterials, materialLink, setMaterialLink, savedMaterials, setSavedMaterials }) => {
+  }> = ({ onClose, material, setMaterial, materialLink, setMaterialLink, savedMaterials, setSavedMaterials }) => {
 
     const [previewFile, setPreviewFile] = useState<string | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -798,30 +798,14 @@ const CreateClassroomPage: React.FC = () => {
           }
         };
 
-        const formData = new FormData();
-        formData.append("title", materialTitle);
-        formData.append("url", materialLink);
-        formData.append("topicId", String(topicId));
-
-        // Adiciona todos os arquivos com a mesma chave "arquivos"
-        if (materials && materials.length > 0) {
-          materials.forEach((file) => {
-            formData.append("arquivos", file);
-          });
-        }
-
-        fetch("/api/materiais", {
-          method: "POST",
-          body: formData,
-        });
-
         try {
           const response = await fetch("http://localhost:8081/api/materials", {
             method: "POST",
             headers: {
+              "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: formData,
+            body: JSON.stringify(payload),
           });
 
           if (!response.ok) {
@@ -837,8 +821,8 @@ const CreateClassroomPage: React.FC = () => {
           alert("Erro ao salvar o material. Veja o console.");
         }
 
-      } else if (materials) {
-        const fakeUploadedUrl = URL.createObjectURL(materials[0]);
+      } else if (material) {
+        const fakeUploadedUrl = URL.createObjectURL(material);
 
         const payload = {
           title: materialTitle,
@@ -869,7 +853,7 @@ const CreateClassroomPage: React.FC = () => {
 
           const saved = await response.json();
           alert("Material PDF salvo com sucesso!");
-          setMaterials(null);
+          setMaterial(null);
         } catch (error) {
           console.error("Erro ao salvar material (PDF):", error);
           alert("Erro ao salvar o material. Veja o console.");
@@ -885,8 +869,8 @@ const CreateClassroomPage: React.FC = () => {
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = e.target.files ? Array.from(e.target.files) : [];
-      setMaterials(files);
+      const file = e.target.files ? e.target.files[0] : null;
+      setMaterial(file);
     };
 
     // Remove um material da lista
@@ -952,6 +936,7 @@ const CreateClassroomPage: React.FC = () => {
             value={materialTitle}
             onChange={(e) => setMaterialTitle(e.target.value)}
             placeholder="Digite o título do material"
+            onClick={(e) => e.stopPropagation()} // 👈 isso impede que o clique suba
           />
 
           {/* Botão de fechar no canto superior direito */}
@@ -967,18 +952,10 @@ const CreateClassroomPage: React.FC = () => {
               id="import-material"
               className="file-input"
               accept="application/pdf"
-              multiple 
               onChange={handleFileChange}
             />
             <span className="file-name">
-              {materials && materials.length > 0
-                ? materials.map((file, index) => (
-                    <span key={index}>
-                      {truncateFileName(file.name)}
-                      {index < materials.length - 1 && ', '}
-                    </span>
-                  ))
-                : "Clique para escolher arquivos"}
+              {material ? truncateFileName(material.name) : "Clique para escolher um arquivo"}
             </span>
           </div>
 
@@ -1005,14 +982,17 @@ const CreateClassroomPage: React.FC = () => {
                   <li
                     key={index}
                     className={`material-item ${selectedMaterialIndex === index ? "selected" : ""}`}
-                    onClick={() => {
+                    onClick={(e) => {
+                      // Evita conflito com input
+                      const target = e.target as HTMLElement;
+                      if (target.tagName === "INPUT" || target.closest("input")) return;
+
                       if (selectedMaterialIndex === index) {
-                        // Se clicar de novo no mesmo, desmarca
                         setSelectedMaterialIndex(null);
-                        setMaterialTitle("");
-                        setMaterialLink("");
+                        // ⚠️ NÃO limpe aqui se o input está sendo usado
+                        // setMaterialTitle("");
+                        // setMaterialLink("");
                       } else {
-                        // Se for um novo, carrega os campos
                         setSelectedMaterialIndex(index);
                         setMaterialTitle(item.title);
                         setMaterialLink(item.url);
@@ -1541,8 +1521,8 @@ const CreateClassroomPage: React.FC = () => {
       {showImportMaterial && (
         <ImportMaterial
           onClose={handleCloseImportMaterial}
-          materials={materials}
-          setMaterials={setMaterials}
+          material={material}
+          setMaterial={setMaterial}
           materialLink={materialLink}
           setMaterialLink={setMaterialLink}
           savedMaterials={savedMaterials}
