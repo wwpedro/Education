@@ -52,7 +52,7 @@ const CreateCurriculumPage = () => {
       description: description.trim()
     };
 
-    console.log("🔄 Enviando currículo:", curriculumData);
+    console.log("Enviando currículo:", curriculumData);
 
     try {
       const response = await fetch("http://localhost:8081/api/curriculums", {
@@ -67,9 +67,8 @@ const CreateCurriculumPage = () => {
       if (response.ok) {
         const createdCurriculum = await response.json();
         const curriculumId = createdCurriculum.curriculumId;
-        console.log("✅ Currículo criado:", createdCurriculum);
+        console.log("Currículo criado:", createdCurriculum);
 
-        // Criar e vincular os tópicos
         let parentTopicId: number | null = null;
 
         for (let i = 0; i < importedTopics.length; i++) {
@@ -97,7 +96,7 @@ const CreateCurriculumPage = () => {
           const topicId: number = topic.topicId;
 
           if (i === 0) {
-            parentTopicId = topicId; // ← apenas atribui valor aqui
+            parentTopicId = topicId;
           }
 
           await fetch("http://localhost:8081/api/curriculum-topics", {
@@ -113,16 +112,15 @@ const CreateCurriculumPage = () => {
           });
         }
 
-
         alert("Curriculum e tópicos vinculados com sucesso!");
         goTo("/createcourse");
       } else {
         const errorText = await response.text();
-        console.error("🚫 Erro ao criar currículo:", errorText);
+        console.error("Erro ao criar currículo:", errorText);
         alert("Erro ao criar curriculum.");
       }
     } catch (error) {
-      console.error("💥 Erro na requisição:", error);
+      console.error("Erro na requisição:", error);
       alert("Erro no servidor.");
     }
   };
@@ -146,74 +144,82 @@ const CreateCurriculumPage = () => {
       <form className="createclass-form" onSubmit={handleSubmit}>
         <div className="info-icon" onClick={(e) => { e.preventDefault(); setIsModalOpen(true); }}>i</div><br />
 
-        <label htmlFor="curriculum" className="label">Curriculum<span className="required"> *</span></label>
-        <input
-          type="text"
-          id="curriculum"
-          className="input"
-          placeholder="Nome do curriculum"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-
-        <label htmlFor="curriculum-description" className="label">Descrição<span className="required"> *</span></label>
-        <input
-          type="text"
-          id="curriculum-description"
-          className="input"
-          placeholder="Descrição do curriculum"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-
-        <label className="label">Importar Tópicos do Currículo<span className="required"> *</span></label>
-        <div className="import-group">
-          <input
-            type="file"
-            id="curriculum-file"
-            style={{ display: "none" }}
-            accept=".json"
-            onChange={async (e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                const text = await file.text();
-                const json = JSON.parse(text);
-                const titles = json.elements
-                  .filter((el: any) => el.group === "nodes" && el.data?.id)
-                  .map((el: any) => el.data.id);
-
-                setImportedTopics(titles);
-                setFileName(file.name);
-                setShowPopup(true);
-              }
-            }}
-          />
-
-          <button
-            type="button"
-            className="add-button"
-            onClick={() => document.getElementById("curriculum-file")?.click()}
-          >
-            +
-          </button>
-
+        <div className="form-group">
+          <label htmlFor="curriculum" className="label">Curriculum<span className="required"> *</span></label>
           <input
             type="text"
-            value={fileName || "Nenhum arquivo selecionado"}
-            readOnly
+            id="curriculum"
             className="input"
-            onClick={() => fileName && setShowPopup(true)}
-            style={{
-              flex: 1,
-              marginLeft: "0.5rem",
-              backgroundColor: "#f3f3f3",
-              color: fileName ? "#333" : "#888",
-              fontStyle: fileName ? "normal" : "italic",
-              cursor: fileName ? "pointer" : "default"
-            }}
+            placeholder="Nome do curriculum"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
           />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="curriculum-description" className="label">Descrição<span className="required"> *</span></label>
+          <input
+            type="text"
+            id="curriculum-description"
+            className="input"
+            placeholder="Descrição do curriculum"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="label">Importar Tópicos do Currículo<span className="required"> *</span></label>
+          <div className="import-group">
+            
+            <button
+              type="button"
+              className="add-button"
+              onClick={() => document.getElementById("curriculum-file")?.click()}
+            >
+              +
+            </button>
+            
+            <input
+              type="file"
+              id="curriculum-file"
+              style={{ display: "none" }}
+              accept=".json"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const text = await file.text();
+                  const json = JSON.parse(text);
+                  const titles = json.elements
+                    .filter((el: any) => el.group === "nodes" && el.data?.id)
+                    .map((el: any) => el.data.id);
+
+                  setImportedTopics(titles);
+                  setFileName(file.name);
+                  setShowPopup(true);
+                }
+              }}
+            />
+
+            <input
+              type="text"
+              value={fileName || "Nenhum arquivo selecionado"}
+              readOnly
+              className="input"
+              onClick={() => fileName && setShowPopup(true)}
+              style={{
+                flex: 1,
+                marginLeft: "0.5rem",
+                backgroundColor: "#f3f3f3",
+                color: fileName ? "#333" : "#888",
+                fontStyle: fileName ? "normal" : "italic",
+                cursor: fileName ? "pointer" : "default"
+              }}
+            />
+            
+          </div>
         </div>
 
         <div className="form-actions">

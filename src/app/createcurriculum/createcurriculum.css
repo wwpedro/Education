@@ -106,7 +106,6 @@ body {
   padding: 0.8rem;
   border: 1px solid #ccc;
   border-radius: 8px;
-  margin-bottom: 1rem;
   font-size: 1rem;
   box-sizing: border-box;
 }
@@ -276,4 +275,8 @@ body {
 
 .back-button:hover .back-icon {
   color: #f2b705;          /* ícone amarelo no hover */
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
 }
