@@ -54,7 +54,7 @@ const ClassStudents: React.FC<{
 
             <div className="student-columns">
             <div className="student-column">
-                <h3>Todos os Alunos</h3>
+                <h3>Lista de alunos</h3>
                 <button className="action-button green" onClick={handleAddAll}>Adicionar todos</button>
                 <ul>
                 {newStudents.map((student, i) => (
@@ -70,13 +70,14 @@ const ClassStudents: React.FC<{
             </div>
 
             <div className="student-column">
-                <h3>Alunos da Turma</h3>
+                <h3>Alunos adicionados a Turma</h3>
                 <button className="action-button red" onClick={handleRemoveAll}>Remover todos</button>
                 <ul>
                 {selectedStudents.map((student, i) => (
                     <li key={i}>
                     <div className="student-info">
                         <strong>{student.name}</strong>
+                        <small>{student.email}</small>
                     </div>
                     <button className="icon-button red" onClick={() => handleRemoveStudent(student.email)}>x</button>
                     </li>
