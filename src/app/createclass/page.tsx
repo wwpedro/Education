@@ -7,6 +7,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Link from "next/link";
 import ImportMaterial from "./ImportMaterial";
 import SelectCourse from "./SelectCourse";
+import ClassStudents from "./ClassStudents";
 
 
 // Interface para Estudantes
@@ -666,87 +667,6 @@ const CreateClassroomPage: React.FC = () => {
     fetchStudents();
   }, []);
 
-
-  const handleAddStudent = (student: Student) => {
-    if (!selectedStudents.find(s => s.email === student.email)) {
-      setSelectedStudents([...selectedStudents, student]);
-    }
-  };
-
-  const handleRemoveStudent = (email: string) => {
-    setSelectedStudents(selectedStudents.filter(s => s.email !== email));
-  };
-
-  const handleAddAll = () => {
-    setSelectedStudents(allStudents);
-  };
-
-  const handleRemoveAll = () => {
-    setSelectedStudents([]);
-  };
-
-  const saveStudentList = () => {
-    if (selectedStudents.length === 0) {
-      alert("Selecione pelo menos um aluno.");
-      return;
-    }
-
-    // Fecha o modal e mantém os alunos no estado
-    setShowPopup(false);
-    alert("Alunos selecionados e salvos localmente para a turma.");
-  };
-
-
-  // Substitua o StudentPopup existente por:
-
-  const StudentPopup: React.FC<{ onClose: () => void }> = ({ onClose }) => (
-    <div className="modal-overlay">
-      <div className="student-modal">
-        <button className="close-button" onClick={onClose}>✖</button>
-        <h2>Gerenciar Alunos da Turma</h2>
-
-        <div className="student-columns">
-          <div className="student-column">
-            <h3>Todos os Alunos</h3>
-            <button className="action-button green" onClick={handleAddAll}>Adicionar todos</button>
-            <ul>
-              {allStudents.map((student, i) => (
-                <li key={i}>
-                  <div className="student-info">
-                    <strong>{student.name}</strong>
-                    <small>{student.email}</small>
-                  </div>
-                  <button className="icon-button green" onClick={() => handleAddStudent(student)}>+</button>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="student-column">
-            <h3>Alunos da Turma</h3>
-            <button className="action-button red" onClick={handleRemoveAll}>Remover todos</button>
-            <ul>
-              {selectedStudents.map((student, i) => (
-                <li key={i}>
-                  <div className="student-info">
-                    <strong>{student.name}</strong>
-                  </div>
-                  <button className="icon-button red" onClick={() => handleRemoveStudent(student.email)}>x</button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="modal-footer-buttons">
-          <button className="save-button" onClick={saveStudentList}>
-            Salvar Alunos da Turma
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
   const ImportTopicPopup: React.FC<{
     onClose: () => void;
     savedTopics: string[];
@@ -1006,9 +926,6 @@ const CreateClassroomPage: React.FC = () => {
     }
   };
 
-
-
-
   const handleCreateClass = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -1118,7 +1035,7 @@ const CreateClassroomPage: React.FC = () => {
                   selectedCourseId={selectedCourseId}
                   onSelect={handleSelectCourse}
                 />
-                
+
               </div>
             </div>
             <label className="label">Nome da Turma<span className="required">*</span></label>
@@ -1229,9 +1146,13 @@ const CreateClassroomPage: React.FC = () => {
       )}
 
       {showPopup && (
-        <StudentPopup onClose={() => setShowPopup(false)} />
+        <ClassStudents
+         onClose={() => setShowPopup(false)} 
+         allStudents={allStudents}
+         selectedStudents={selectedStudents}
+         setSelectedStudents={setSelectedStudents}
+         />
       )}
-
 
     </div>
 
