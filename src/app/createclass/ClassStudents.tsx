@@ -13,6 +13,10 @@ const ClassStudents: React.FC<{
     setSelectedStudents: React.Dispatch<React.SetStateAction<Student[]>>;
 }> = ({ onClose, allStudents, selectedStudents, setSelectedStudents }) => {
 
+    const newStudents = allStudents.filter(
+        (student) => !selectedStudents.some(s => s.email === student.email)
+    );
+
     const handleAddAll = () => {
         setSelectedStudents(allStudents);
     };
@@ -53,7 +57,7 @@ const ClassStudents: React.FC<{
                 <h3>Todos os Alunos</h3>
                 <button className="action-button green" onClick={handleAddAll}>Adicionar todos</button>
                 <ul>
-                {allStudents.map((student, i) => (
+                {newStudents.map((student, i) => (
                     <li key={i}>
                     <div className="student-info">
                         <strong>{student.name}</strong>
@@ -82,9 +86,9 @@ const ClassStudents: React.FC<{
             </div>
 
             <div className="modal-footer-buttons">
-            <button className="save-button" onClick={saveStudentList}>
-                Salvar Alunos da Turma
-            </button>
+                <button className="save-button" onClick={saveStudentList}>
+                    Salvar Alunos da Turma
+                </button>
             </div>
         </div>
         </div>
