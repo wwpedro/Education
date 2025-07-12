@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Link from "next/link";
 import ImportMaterial from "./ImportMaterial";
+import SelectCourse from "./SelectCourse";
 
 
 // Interface para Estudantes
@@ -1111,26 +1112,13 @@ const CreateClassroomPage: React.FC = () => {
               {/* Seção de Curso */}
               <div className="course-section">
                 <label className="label">Curso <span className="required">*</span></label>
-                <div className="dropdown-list">
-                  {courses.map((course) => (
-                    <li
-                      key={course.courseId}
-                      onClick={() => handleSelectCourse(course)}
-                      className={selectedCourseId === course.courseId ? "selected" : ""}
-                    >
-                      {course.name}
-                    </li>
-
-
-                  ))}
-
-                </div>
-                {selectedCourse && (
-                  <div style={{ marginTop: "0.5rem", fontWeight: "bold", color: "black" }}>
-                    {selectedCourse}
-                  </div>
-                )}
-                <button type="button" className="plus-button">Adicionar Novo Curso</button>
+                
+                <SelectCourse 
+                  courses={courses}
+                  selectedCourseId={selectedCourseId}
+                  onSelect={handleSelectCourse}
+                />
+                
               </div>
             </div>
             <label className="label">Nome da Turma<span className="required">*</span></label>
