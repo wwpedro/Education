@@ -63,10 +63,9 @@ import React, { useState } from "react";
         formData.append("url", materialLink);
         formData.append("topicId", String(topicId));
 
-        // Adiciona todos os arquivos com a mesma chave "arquivos"
         if (materials && materials.length > 0) {
           materials.forEach((file) => {
-            formData.append("arquivos", file);
+            formData.append("filesMaterial", file);
           });
         }
 
