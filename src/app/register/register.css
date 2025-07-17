@@ -240,11 +240,12 @@ button:hover {
   border-radius: 8px;
   width: 300px;
   text-align: center;
+  color: black;
 }
 
 .modal-close-btn {
   margin-top: 1rem;
-  background-color: #102f54;
+  background-color: #dd1717;
   color: white;
   border: none;
   padding: 0.5rem 1rem;

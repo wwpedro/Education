@@ -13,10 +13,14 @@ const CreateClassPage = () => {
   const [courseDescription, setCourseDescription] = useState("");
   const [teacherId, setTeacherId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Estados para o modal de feedback
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+
   const goTo = (url: string) => {
     window.location.href = url;
   };
-
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -34,10 +38,13 @@ const CreateClassPage = () => {
           const data = await response.json();
           setCurriculums(data);
         } else {
-          alert("Erro ao carregar currículos.");
+          setFeedbackMessage("Erro ao carregar currículos.");
+          setShowFeedbackModal(true);
         }
       } catch (error) {
         console.error("Erro ao buscar currículos:", error);
+        setFeedbackMessage("Erro ao carregar currículos.");
+        setShowFeedbackModal(true);
       }
     };
 
@@ -53,10 +60,13 @@ const CreateClassPage = () => {
           const data = await response.json();
           setTeacherId(data.id);
         } else {
-          alert("Erro ao carregar dados do usuário.");
+          setFeedbackMessage("Erro ao carregar dados do usuário.");
+          setShowFeedbackModal(true);
         }
       } catch (error) {
         console.error("Erro ao buscar professor:", error);
+        setFeedbackMessage("Erro ao carregar dados do usuário.");
+        setShowFeedbackModal(true);
       }
     };
 
@@ -83,18 +93,21 @@ const CreateClassPage = () => {
     e.preventDefault();
 
     if (!selectedCurriculumId) {
-      alert("Você precisa selecionar um curriculum.");
+      setFeedbackMessage("Você precisa selecionar um curriculum.");
+      setShowFeedbackModal(true);
       return;
     }
 
     if (!teacherId) {
-      alert("Não foi possível identificar o professor logado.");
+      setFeedbackMessage("Não foi possível identificar o professor logado.");
+      setShowFeedbackModal(true);
       return;
     }
 
     const token = localStorage.getItem("accessToken");
     if (!token) {
-      alert("Usuário não autenticado.");
+      setFeedbackMessage("Usuário não autenticado.");
+      setShowFeedbackModal(true);
       return;
     }
 
@@ -121,19 +134,37 @@ const CreateClassPage = () => {
       });
 
       if (response.ok) {
-        alert("Curso criado com sucesso!");
-        goTo("/createclass");
+        setFeedbackMessage("Curso criado com sucesso!");
+        setShowFeedbackModal(true);
+        setTimeout(() => goTo("/createclass"), 1500);
       } else {
-        alert("Erro ao criar curso.");
+        setFeedbackMessage("Erro ao criar curso.");
+        setShowFeedbackModal(true);
       }
     } catch (error) {
       console.error("Erro ao conectar com o servidor:", error);
-      alert("Erro no servidor.");
+      setFeedbackMessage("Erro no servidor.");
+      setShowFeedbackModal(true);
     }
   };
 
   return (
     <div className="createclass-container">
+      {/* Modal de feedback */}
+      {showFeedbackModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p>{feedbackMessage}</p>
+            <button 
+              className="modal-close-btn"
+              onClick={() => setShowFeedbackModal(false)}
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="stars"></div>
       <div className="back-button" onClick={() => window.history.back()}>
         <Link href="/classlist">
@@ -197,6 +228,7 @@ const CreateClassPage = () => {
         </div>
       </form>
 
+      {/* Modal de informações */}
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">

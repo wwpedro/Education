@@ -7,7 +7,9 @@ import "./login.css";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  
   const goTo = (url: string) => {
     window.location.href = url;
   };
@@ -26,18 +28,15 @@ const LoginPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Login bem-sucedido!", data);
-
-        // Armazena o token no localStorage
         localStorage.setItem("accessToken", data.accessToken);
-        goTo("/profile"); // Redireciona para a página de perfil
+        goTo("/profile");
       } else {
-        console.error("Erro ao realizar login");
-        alert("Credenciais inválidas");
+        setModalMessage("Credenciais inválidas");
+        setShowModal(true);
       }
     } catch (error) {
-      console.error("Erro na requisição:", error);
-      alert("Ocorreu um erro ao tentar fazer login. Tente novamente.");
+      setModalMessage("Ocorreu um erro ao tentar fazer login. Tente novamente.");
+      setShowModal(true);
     }
   };
 
@@ -69,6 +68,21 @@ const LoginPage = () => {
 
   return (
     <div className="login-container">
+      {/* Modal integrado */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p>{modalMessage}</p>
+            <button 
+              className="modal-close-btn"
+              onClick={() => setShowModal(false)}
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Waves no fundo */}
       <div className="wave-container">
         <svg className="wave-svg back" viewBox="0 0 1800 400" preserveAspectRatio="none">

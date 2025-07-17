@@ -1,7 +1,6 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -11,39 +10,68 @@ import "./topic.css";
 const Topico: React.FC = () => {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const topicId = params.id as string;
   const title = params.title || "Título Tópico";
+  const classId = searchParams.get('classId') || '1'; // Adicionado para pegar o classId da URL ou usar '1' como padrão
 
   const [isLocked, setIsLocked] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
+  const [percentage, setPercentage] = useState<number | null>(null);
 
+  // Verifica o progresso ao carregar a página
   useEffect(() => {
-    const stored = sessionStorage.getItem(`topic_${topicId}_percent`);
-    if (stored !== null) {
-      setIsLocked(false);
-    }
-  }, [topicId]);
+    const checkProgress = async () => {
+      const token = localStorage.getItem("accessToken");
+      const studentId = localStorage.getItem("userId");
+      
+      if (!token || !studentId) return;
+
+      try {
+        const response = await fetch(
+          `http://localhost:8081/api/solutions/student/${studentId}/topic/${topicId}/progress`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setIsLocked(!data.isTopicUnlocked);
+          setPercentage(data.percentage);
+          
+          if (data.isTopicUnlocked) {
+            sessionStorage.setItem(`topic_${topicId}_percent`, data.percentage);
+          }
+        }
+      } catch (error) {
+        console.error("Erro ao verificar progresso:", error);
+      }
+    };
+
+    checkProgress();
+  }, [topicId, searchParams]);
 
   const goTo = (url: string) => {
-    router.push(url);
-  };
-
-  const toggleLock = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsLocked(prev => !prev);
+    window.location.href = url;
   };
 
   const handleResultClick = () => {
     if (isLocked) {
       setShowPopup(true);
     } else {
-      const stored = sessionStorage.getItem(`topic_${topicId}_percent`);
-      const percent = stored ? parseInt(stored) : 0;
-      const route = percent >= 70 ? 'won' : 'lose';
-      goTo(`/topic/${topicId}/${route}`);
+      goTo(`/topic/${topicId}/result`);
     }
   };
 
+  // Função modificada para voltar para a página de menu de tópicos com o classId
+  const handleExitModule = () => {
+    goTo(`/topicsmenu?classId=${classId}`);
+  };
+
+  // Efeito para as estrelas de fundo
   useEffect(() => {
     const dots = document.querySelector('.dots');
     if (!dots) return;
@@ -61,14 +89,11 @@ const Topico: React.FC = () => {
     }
   }, []);
 
-  const handleExitModule = () => {
-    router.push('/classlist');
-  };
-
   return (
     <div className="space-background">
+      {/* Botão de voltar atualizado */}
       <div className="back-button" onClick={handleExitModule}>
-        <Link href="/classlist"><ArrowBackIcon className="back-icon"/></Link>
+        <ArrowBackIcon className="back-icon"/>
       </div>
 
       <img src="/assets/image81.png" alt="Planeta Superior" className="planet-top" />
@@ -76,7 +101,14 @@ const Topico: React.FC = () => {
 
       <div className="dots"></div>
 
-      <div className="title"><h1>{title}</h1></div>
+      <div className="title">
+        <h1>{title}</h1>
+        {percentage !== null && (
+          <div className="progress-display">
+            Seu progresso: {percentage}%
+          </div>
+        )}
+      </div>
 
       <div className="topics-container">
         <div className="node" onClick={() => goTo(`/topic/${topicId}/topiccontent`)}>
@@ -96,18 +128,33 @@ const Topico: React.FC = () => {
         <div className="node" onClick={handleResultClick}>
           <div className="node-circle" style={{ backgroundColor: '#FF4C4C' }}>
             <img src="/assets/23.png" alt="Ícone Resultado" className="node-icon" />
-            {isLocked ? <LockIcon className="lock-icon" onClick={toggleLock}/> : <LockOpenIcon className="lock-icon" onClick={toggleLock}/>}            
+            {isLocked ? (
+              <LockIcon className="lock-icon" />
+            ) : (
+              <LockOpenIcon className="lock-icon" />
+            )}
           </div>
           <p className="node-title">RESULTADO</p>
+          {!isLocked && percentage !== null && (
+            <div className="result-percentage">{percentage}%</div>
+          )}
         </div>
       </div>
 
       {showPopup && (
         <div className="popup-overlay">
-          <div className="popup"><div className="popup-content">
-            <p>Este módulo ainda não foi liberado!</p>
-            <button className="close-button" onClick={() => setShowPopup(false)}>Fechar</button>
-          </div></div>
+          <div className="popup">
+            <div className="popup-content">
+              <p>Este módulo ainda não foi liberado!</p>
+              <p>Complete os exercícios com 70% de acerto para desbloquear.</p>
+              <button
+                className="close-button"
+                onClick={() => setShowPopup(false)}
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

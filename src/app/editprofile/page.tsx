@@ -14,10 +14,14 @@ const EditProfilePage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [role, setRole] = useState("student");
+  
+  // Estados para o modal
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
   const goTo = (url: string) => {
     window.location.href = url;
   };
-
 
   const router = useRouter();
 
@@ -25,7 +29,8 @@ const EditProfilePage = () => {
     e.preventDefault();
 
     if (password && password !== confirmPassword) {
-      alert("As senhas não coincidem.");
+      setModalMessage("As senhas não coincidem.");
+      setShowModal(true);
       return;
     }
 
@@ -34,7 +39,7 @@ const EditProfilePage = () => {
 
     const updatedData: Record<string, string> = {
       role,
-      status: "ATIVO", // sempre enviado, mas não mostrado
+      status: "ATIVO",
     };
 
     if (name) updatedData.name = name;
@@ -55,14 +60,17 @@ const EditProfilePage = () => {
       });
 
       if (response.ok) {
-        alert("Informações atualizadas com sucesso!");
-        goTo("/profile");
+        setModalMessage("Informações atualizadas com sucesso!");
+        setShowModal(true);
+        setTimeout(() => goTo("/profile"), 1500); // Redireciona após 1.5s
       } else {
-        alert("Erro ao atualizar informações.");
+        setModalMessage("Erro ao atualizar informações.");
+        setShowModal(true);
       }
     } catch (error) {
       console.error("Erro ao atualizar:", error);
-      alert("Erro no servidor.");
+      setModalMessage("Erro no servidor.");
+      setShowModal(true);
     }
   };
 
@@ -115,10 +123,13 @@ const EditProfilePage = () => {
           setPhone(data.phone || "");
           setRole(data.role || "student");
         } else {
-          alert("Erro ao carregar dados do perfil.");
+          setModalMessage("Erro ao carregar dados do perfil.");
+          setShowModal(true);
         }
       } catch (err) {
         console.error("Erro ao buscar dados do usuário", err);
+        setModalMessage("Erro ao carregar dados do perfil.");
+        setShowModal(true);
       }
     };
 
@@ -127,6 +138,21 @@ const EditProfilePage = () => {
 
   return (
     <div className="register-container">
+      {/* Modal */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p>{modalMessage}</p>
+            <button 
+              className="modal-close-btn"
+              onClick={() => setShowModal(false)}
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="wave wave-back"></div>
       <div className="wave wave-front"></div>
       <div className="dots"></div>
@@ -135,7 +161,6 @@ const EditProfilePage = () => {
           <ArrowBackIcon className="back-icon" />
         </Link>
       </div>
-
 
       <div className="form-and-image">
         <div className="left-side">

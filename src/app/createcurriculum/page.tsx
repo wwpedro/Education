@@ -11,6 +11,11 @@ const CreateCurriculumPage = () => {
   const [importedTopics, setImportedTopics] = useState<string[]>([]);
   const [showPopup, setShowPopup] = useState(false);
   const [fileName, setFileName] = useState("");
+  
+  // Estados para o modal de feedback
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  
   const router = useRouter();
   const goTo = (url: string) => {
     window.location.href = url;
@@ -43,7 +48,8 @@ const CreateCurriculumPage = () => {
 
     const token = localStorage.getItem("accessToken");
     if (!token) {
-      alert("Usuário não autenticado.");
+      setFeedbackMessage("Usuário não autenticado.");
+      setShowFeedbackModal(true);
       return;
     }
 
@@ -112,21 +118,39 @@ const CreateCurriculumPage = () => {
           });
         }
 
-        alert("Curriculum e tópicos vinculados com sucesso!");
-        goTo("/createcourse");
+        setFeedbackMessage("Curriculum e tópicos vinculados com sucesso!");
+        setShowFeedbackModal(true);
+        setTimeout(() => goTo("/createcourse"), 1500);
       } else {
         const errorText = await response.text();
         console.error("Erro ao criar currículo:", errorText);
-        alert("Erro ao criar curriculum.");
+        setFeedbackMessage("Erro ao criar curriculum.");
+        setShowFeedbackModal(true);
       }
     } catch (error) {
       console.error("Erro na requisição:", error);
-      alert("Erro no servidor.");
+      setFeedbackMessage("Erro no servidor.");
+      setShowFeedbackModal(true);
     }
   };
 
   return (
     <div className="createclass-container">
+      {/* Modal de feedback */}
+      {showFeedbackModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p>{feedbackMessage}</p>
+            <button 
+              className="modal-close-btn"
+              onClick={() => setShowFeedbackModal(false)}
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
+
       <button
         className="back-button"
         onClick={() => goTo("/createclassmenu")}
@@ -173,7 +197,6 @@ const CreateCurriculumPage = () => {
         <div className="form-group">
           <label className="label">Importar Tópicos do Currículo<span className="required"> *</span></label>
           <div className="import-group">
-            
             <button
               type="button"
               className="add-button"
@@ -218,7 +241,6 @@ const CreateCurriculumPage = () => {
                 cursor: fileName ? "pointer" : "default"
               }}
             />
-            
           </div>
         </div>
 
@@ -227,6 +249,7 @@ const CreateCurriculumPage = () => {
         </div>
       </form>
 
+      {/* Modal de informações */}
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -237,6 +260,8 @@ const CreateCurriculumPage = () => {
           </div>
         </div>
       )}
+
+      {/* Modal de tópicos importados */}
       {showPopup && (
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: "500px", position: "relative" }}>

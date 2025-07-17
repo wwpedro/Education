@@ -280,3 +280,13 @@ body {
 .form-group {
   margin-bottom: 1.5rem;
 }
+
+.modal-close-btn {
+  margin-top: 1rem;
+  background-color: #dd1717;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
