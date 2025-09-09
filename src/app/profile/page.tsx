@@ -84,7 +84,7 @@ const ProfilePage = () => {
     }
   }, []);
 
- return (
+  return (
     <div className="profile-container">
       <div className="wave-container1">
         <div className="wave1 wave-back1"></div>
@@ -92,63 +92,113 @@ const ProfilePage = () => {
       </div>
 
       <div className="dots"></div>
-
+      {/* Botão de Logout */}
+      <button
+        className="logout-button-perfil"
+        onClick={() => {
+          localStorage.removeItem("accessToken");
+          goTo("/login");
+        }}
+      >
+        <span className="material-icons logout-icon" style={{ fontSize: "1.7rem" }}>
+          logout
+        </span>
+        <span className="logout-text">Logout</span>
+      </button>
       <div className="profile-header">
-        <div className="profile-info">
-          <img
-            src="/assets/Pessoa-fisica-mobile.jpg"
-            alt="Foto do Perfil"
-            className="profile-picture"
-          />
-          <div className="profile-details">
-            {userData ? (
+        {/* Coluna esquerda */}
+        <div className="profile-left">
+  {/* Linha 1: Foto + Detalhes */}
+  <div className="profile-info">
+    <img
+      src="/assets/Pessoa-fisica-mobile.jpg"
+      alt="Foto do Perfil"
+      className="profile-picture"
+    />
+    <div className="profile-details">
+      {userData ? (
+        <>
+          <h1 className="profile-name">Olá, {userData.name}</h1>
+          <a href="/editprofile" className="edit-link">
+            Editar
+          </a>
+          {userData.subjectSpecialty ? (
+            <p className="profile-role">
+              Professor(a) – {userData.subjectSpecialty}
+            </p>
+          ) : (
+            <p className="profile-role">Estudante</p>
+          )}
+          <p className="profile-description">
+            Sou uma pessoa dedicada, gosto de programação e quero aprender mais...
+          </p>
+        </>
+      ) : (
+        <p>Carregando informações...</p>
+      )}
+    </div>
+  </div>
+
+  {/* Linha 2: Destaques */}
+  {!userData?.subjectSpecialty && (
+    <div className="profile-highlights">
+      <h3>Destaques:</h3>
+      <div className="highlights-icons">
+        <div className="highlight-circle">
+          <img src="/assets/rocket.png" alt="Destaque 1" />
+        </div>
+        <div className="highlight-circle">
+          <img src="/assets/alien.png" alt="Destaque 2" />
+        </div>
+        <div className="highlight-circle">
+          <img src="/assets/medal.png" alt="Destaque 3" />
+        </div>
+      </div>
+    </div>
+  )}
+</div>
+
+
+
+
+        {/* Coluna direita → Card */}
+        <div className="profile-right">
+          {!userData?.subjectSpecialty ? (
+            // Se for estudante
+            <div className="student-card">
+              <div className="card-header">
+                <span>Pontos 130</span>
+                <button onClick={() => goTo("/loja")}><span className="material-icons">shopping_cart</span></button>
+              </div>
+              <img src="/assets/nave.png" alt="Nave" className="card-image" />
+              <p className="card-description">
+                Verderinha - a nave mais rápida do espaço
+              </p>
+            </div>
+          ) : (
+            // Se for professor
+            <div className="teacher-card">
+              <img src="/assets/professor.png" alt="Professor" className="card-image" />
+              <p>Turmas ministradas: 5</p>
+              <p>Materiais: 10</p>
+            </div>
+          )}
+
+          {/* Botões abaixo do card */}
+          <div className="card-buttons">
+            {!userData?.subjectSpecialty ? (
               <>
-                <h1 className="profile-name">Olá, {userData.name}</h1>
-                <a href="/editprofile" className="edit-link">
-                  Editar
-                </a>
-                {userData.subjectSpecialty ? (
-                  <p className="profile-role">
-                    Cargo: Professor(a) – {userData.subjectSpecialty}
-                  </p>
-                ) : (
-                  <p className="profile-role">Cargo: Estudante</p>
-                )}
+                <button onClick={() => goTo("/baseespacial")}>Base Espacial</button>
+                <button onClick={() => goTo("/classlist")}>Turmas</button>
               </>
             ) : (
-              <p>Carregando informações...</p>
+              <>
+                <button onClick={() => goTo("/createclassmenu")}>Criar turma/curso</button>
+                <button onClick={() => goTo("/classlist")}>Ver turmas</button>
+              </>
             )}
           </div>
         </div>
-
-        <div className="profile-buttons">
-          {userData?.subjectSpecialty && (
-            <button
-              className="create-class-button"
-              onClick={() => goTo("/createclassmenu")}
-            >
-              Criar Classe
-            </button>
-          )}
-          <button
-            className="view-classes-button"
-            onClick={() => goTo("/classlist")}
-          >
-            Ver Classes
-          </button>
-        </div>
-
-        {/* Botão de Logout */}
-        <button
-          className="logout-button-perfil"
-          onClick={() => {
-            localStorage.removeItem("accessToken");
-            goTo("/login");
-          }}
-        >
-          <span className="material-icons logout-icon" style={{ fontSize: "1.7rem" }}>logout</span>
-          <span className="logout-text">Logout</span>
-        </button>
       </div>
     </div>
   );

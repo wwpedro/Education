@@ -1,0 +1,156 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #102f54;
+  color: white;
+  overflow: hidden;
+}
+
+.loja-background-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  padding: 2rem;
+  position: relative;
+}
+
+/* estrelas */
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+}
+
+.star {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: blink 2s infinite ease-in-out;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* botão voltar */
+.back-button {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 48px;
+  height: 48px;
+  border: 2px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.back-icon {
+  color: white;
+  font-size: 24px;
+}
+
+/* título */
+.title {
+  font-size: 2rem;
+  margin: 2rem 0;
+}
+
+/* container geral */
+.loja-container {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  justify-content: center;
+}
+
+/* card esquerdo */
+.card-esquerdo {
+  flex: 1;
+  background: #e0e0e0;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  color: black;
+}
+
+.pontos {
+  font-size: 2rem;
+  margin: 0.5rem 0 1.5rem 0;
+}
+
+.nave-imagem {
+  width: 150px;
+  margin: 1rem auto;
+}
+
+.descricao {
+  margin-top: 1rem;
+}
+
+/* card direito */
+.card-direito {
+  flex: 1.5;
+  background: #f0f0f0;
+  border-radius: 12px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lista-naves {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  overflow-y: auto;
+  max-height: 300px;
+  padding-right: 0.5rem;
+}
+
+.nave-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+}
+
+.nave-mini {
+  width: 60px;
+}
+
+.nave-info h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: black;
+}
+
+.nave-info p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: gray;
+}
+
+.comprar-btn {
+  margin-top: 1rem;
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.comprar-btn:hover {
+  background: #218838;
+}

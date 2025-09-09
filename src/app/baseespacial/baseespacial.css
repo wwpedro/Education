@@ -1,0 +1,218 @@
+/* Fundo e container */
+/* Fundo e container */
+.baseespacial-container {
+  min-height: 100vh; /* deixa crescer se o conteúdo passar da tela */
+  background-color: #102f54;
+  color: white;
+  position: relative;
+  overflow-x: hidden; /* só esconde o que passar para os lados */
+  padding: 2rem;
+}
+
+.stars {
+  position: fixed; /* fixa no fundo enquanto scrolla */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none; /* garante que não bloqueie cliques */
+}
+
+.star {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: blink 2s infinite ease-in-out;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Botão voltar */
+.back-button {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 48px;
+  height: 48px;
+  border: 2px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.back-button:hover {
+  border-color: #f2b705;
+}
+
+.back-icon {
+  font-size: 24px;
+  color: white;
+}
+
+.back-button:hover .back-icon {
+  color: #f2b705;
+}
+
+/* Título */
+.title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Grid */
+.grid-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  height: calc(100% - 100px);
+}
+
+/* Coluna esquerda */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.top-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* Cards */
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+/* Medalhas principais */
+.medalhas-card .medalhas-list {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.medal {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.medal img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Nave */
+.nave-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pontuacao {
+  margin-bottom: 0.5rem;
+}
+
+.nave-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nave {
+  width: 80px;
+  height: 80px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.nave img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.seta {
+  color: white;
+}
+
+.usar-button {
+  margin-top: 0.75rem;
+  background: #28a745;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.usar-button:hover {
+  background: #1e7e34;
+}
+
+/* Progresso */
+.progresso-card .progresso-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.filtros, .grafico {
+  background: rgba(255,255,255,0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  min-height: 120px;
+}
+
+/* Coluna direita */
+.medalhas-todas-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.medalhas-section h3 {
+  margin-bottom: 0.75rem;
+}
+
+.medalhas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.medal-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.medal-item span {
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+}

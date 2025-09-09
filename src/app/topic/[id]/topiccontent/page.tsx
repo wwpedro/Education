@@ -8,7 +8,6 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import "./topiccontent.css";
 
 interface Material {
-  id: number;
   title: string;
   url: string;
   type: "pdf" | "video";
@@ -17,53 +16,30 @@ interface Material {
 const TopicContent: React.FC = () => {
   const router = useRouter();
   const params = useParams();
+  // Você pode usar topicId se quiser, mas não influencia o material fixo:
   const topicId = params.id as string;
 
-  const [materials, setMaterials] = useState<Material[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // Estado com o material fixo sempre:
+  const [materials] = useState<Material[]>([
+    {
+      title: "Material",
+      url: "https://fasbam.edu.br/fasbampress/index.php/home/catalog/view/14/14/73",
+      type: "pdf",
+    },
+  ]);
 
+  const [currentIndex, setCurrentIndex] = useState(0);
   const currentMaterial = materials[currentIndex];
 
-  const detectType = (url: string): "pdf" | "video" => {
-    if (url.includes("youtube.com") || url.includes("youtu.be") || url.endsWith(".mp4")) {
-      return "video";
-    }
-    return "pdf";
+  const handleNext = () => {
+    if (currentIndex < materials.length - 1) setCurrentIndex(currentIndex + 1);
   };
 
-
-  const fetchMaterials = async () => {
-    const token = localStorage.getItem("accessToken");
-    if (!token || !topicId) return;
-
-    try {
-      const res = await fetch(`http://localhost:8081/api/materials/topic/${topicId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) throw new Error("Erro ao buscar materiais");
-
-      const data = await res.json();
-
-      const mapped = data.map((m: any) => ({
-        id: m.materialId,
-        title: m.title,
-        url: m.url,
-        type: detectType(m.url),
-      }));
-
-      setMaterials(mapped);
-    } catch (err) {
-      console.error("Erro ao carregar materiais:", err);
-    }
+  const handlePrevious = () => {
+    if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
   };
 
-  useEffect(() => {
-    fetchMaterials();
-  }, [topicId]);
-
+  // Efeito só para criar o fundo animado de pontos, opcional
   useEffect(() => {
     const dotsContainer = document.querySelector(".dots");
     if (!dotsContainer) return;
@@ -87,22 +63,6 @@ const TopicContent: React.FC = () => {
     }
   }, []);
 
-  const handleNext = () => {
-    if (currentIndex < materials.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
-
-  if (materials.length === 0) {
-    return <div className="space-background">Carregando materiais...</div>;
-  }
-
   return (
     <div className="space-background">
       <div className="back-button" onClick={() => window.history.back()}>
@@ -119,23 +79,15 @@ const TopicContent: React.FC = () => {
         <h2 className="content-title">{currentMaterial.title}</h2>
 
         <div className="content-viewer">
-          {currentMaterial.type === "video" ? (
-            <iframe
-              src={currentMaterial.url}
-              frameBorder="0"
-              allowFullScreen
-              className="video-frame"
-            ></iframe>
-          ) : (
-            <iframe
-              src={currentMaterial.url}
-              className="pdf-frame"
-            ></iframe>
-          )}
+          <iframe src={currentMaterial.url} className="pdf-frame" />
         </div>
 
         <div className="navigation-buttons">
-          <button className="nav-button" onClick={handlePrevious} disabled={currentIndex === 0}>
+          <button
+            className="nav-button"
+            onClick={handlePrevious}
+            disabled={currentIndex === 0}
+          >
             <NavigateBeforeIcon />
           </button>
           <button
