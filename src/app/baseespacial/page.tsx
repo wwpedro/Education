@@ -50,6 +50,19 @@ const BaseEspacialPage = () => {
         <div className="left-column">
           {/* Linha de cima */}
           <div className="top-row">
+
+            {/* Card nave */}
+            <div className="card nave-card">
+              <span className="pontuacao">Pontos: 130</span>
+              <div className="nave-content">
+                <div className="nave">
+                  <img src="/images/nave1.png" alt="Nave" />
+                </div>
+                <ChevronRightIcon className="seta" />
+              </div>
+              <button className="usar-button">Usar</button>
+            </div>
+
             {/* Medalhas principais */}
             <div className="card medalhas-card">
               <h2>Medalhas Principais</h2>
@@ -66,17 +79,7 @@ const BaseEspacialPage = () => {
               </div>
             </div>
 
-            {/* Card nave */}
-            <div className="card nave-card">
-              <span className="pontuacao">Pontos: 130</span>
-              <div className="nave-content">
-                <div className="nave">
-                  <img src="/images/nave1.png" alt="Nave" />
-                </div>
-                <ChevronRightIcon className="seta" />
-              </div>
-              <button className="usar-button">Usar</button>
-            </div>
+
           </div>
 
           {/* Linha de baixo */}

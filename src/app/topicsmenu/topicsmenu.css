@@ -140,6 +140,7 @@ body {
   text-align: center;
   transition: transform 0.3s ease-in-out;
   cursor: pointer;
+  position: relative;
 }
 .node:hover {
   transform: translateY(-4px);
@@ -224,3 +225,20 @@ body {
 .close-button:hover {
   background-color: #be0000;
 }
+
+.nave-flutuante {
+  position: absolute;
+  left: 100%;    /* coloca ao lado direito */
+  top: 0;        /* alinhado ao topo do título */
+  margin-left: -70px; 
+  width: 60px;
+  margin-top: -5px;
+  animation: flutuar 3s ease-in-out infinite;
+}
+
+@keyframes flutuar {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0); }
+}
+

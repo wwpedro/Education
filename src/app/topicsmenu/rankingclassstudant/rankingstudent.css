@@ -1,0 +1,157 @@
+.rank-background {
+  position: relative;
+  min-height: 100vh;
+  background-color: #102f54;
+  overflow: hidden;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Pontinhos animados */
+.dots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.dot {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  animation: blink 3s infinite ease-in-out;
+  opacity: 0;
+}
+
+@keyframes blink {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* botão voltar */
+.back-button {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  width: 48px; height: 48px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: border-color 0.2s;
+}
+
+.back-button:hover {
+  border-color: #f2b705;
+}
+.back-icon {
+  font-size: 24px;
+  color: white;
+  transition: color 0.2s;
+}
+.back-button:hover .back-icon {
+  color: #f2b705;
+}
+
+/* títulos */
+.rank-title {
+  margin-top: 60px;
+  font-size: 32px;
+  text-align: center;
+}
+.rank-subtitle {
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+/* pódio */
+.podium {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  z-index: 1;
+}
+.podium-slot {
+  text-align: center;
+}
+.podium-ship {
+  width: 80px;
+  height: auto;
+}
+.podium-name, .podium-points {
+  margin: 5px 0;
+}
+
+.students-list {
+  max-height: 400px;   /* antes era 250px */
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 1;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+/* Chrome, Edge, Safari */
+.students-list::-webkit-scrollbar {
+  width: 8px;                 /* largura */
+}
+
+.students-list::-webkit-scrollbar-track {
+  background: transparent;    /* trilho transparente */
+}
+
+.students-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);  /* cor semitransparente */
+  border-radius: 4px;
+}
+
+.students-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 0, 0.7);    /* hover amarelo pra combinar com as estrelas */
+}
+
+/* cada card */
+.student-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  min-height: 70px;
+}
+
+/* conteúdo do card */
+.student-info {
+  display: flex;
+  flex-direction: column;
+}
+.student-name {
+  font-weight: bold;
+  color: black;
+}
+.student-email {
+  font-size: 14px;
+  color: gray;
+}
+
+.student-stats {
+  text-align: right;
+  font-size: 14px;
+  color: black;
+}

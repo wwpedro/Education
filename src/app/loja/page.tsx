@@ -47,6 +47,39 @@ const LojaPage = () => {
   const [naveSelecionada, setNaveSelecionada] = useState<Nave | null>(naves[3]);
   const [pontos] = useState(130);
 
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [modalMsg, setModalMsg] = useState("");
+
+  const ModalSimples: React.FC<{
+    isOpen: boolean;
+    onClose: () => void;
+    mensagem: string;
+  }> = ({ isOpen, onClose, mensagem }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+          <p className="modal-texto">{mensagem}</p>
+          <button className="modal-ok" onClick={onClose}>OK</button>
+        </div>
+      </div>
+    );
+  };
+
+  const handleComprar = () => {
+    if (!naveSelecionada) return;
+
+    if (pontos >= naveSelecionada.preco) {
+      setModalMsg(`Parabéns! Você comprou a ${naveSelecionada.nome} por CB$ ${naveSelecionada.preco}!`);
+      setShowSuccessModal(true);
+    } else {
+      setModalMsg(`Pontos insuficientes! Você tem CB$ ${pontos} e precisa de CB$ ${naveSelecionada.preco}.`);
+      setShowErrorModal(true);
+    }
+  };
+
   // efeito das estrelas
   useEffect(() => {
     const starsContainer = document.querySelector(".stars");
@@ -117,9 +150,19 @@ const LojaPage = () => {
               </div>
             ))}
           </div>
-          <button className="comprar-btn">Comprar</button>
+          <button className="comprar-btn" onClick={handleComprar}>Comprar</button>
         </div>
       </div>
+      <ModalSimples
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        mensagem={modalMsg}
+      />
+      <ModalSimples
+        isOpen={showErrorModal}
+        onClose={() => setShowErrorModal(false)}
+        mensagem={modalMsg}
+      />
     </div>
   );
 };

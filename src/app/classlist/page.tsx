@@ -131,8 +131,8 @@ const ClassListPage = () => {
         )}
       </div>
 
-      <div className="back-button" onClick={() => window.history.back()}>
-        <Link href="/classlist">
+      <div className="back-button">
+        <Link href="/profile">
           <ArrowBackIcon className="back-icon" />
         </Link>
       </div>

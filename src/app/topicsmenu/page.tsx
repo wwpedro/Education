@@ -7,6 +7,7 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Link from "next/link";
 import "./topicsmenu.css";
+import Image from "next/image";
 
 interface Topic {
   topicId: number;
@@ -27,6 +28,7 @@ interface Dot {
 
 
 
+
 const TopicsMenu: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -42,6 +44,13 @@ const TopicsMenu: React.FC = () => {
   const goTo = (url: string) => {
     window.location.href = url;
   };
+  const unlockedIndex = topics.reduce(
+    (lasttopic, topic, i) => (!topic.isLocked ? i : lasttopic),
+    -1
+  );
+
+  const naveIndex =
+    unlockedIndex >= 0 ? unlockedIndex : 0;
 
   const [dots, setDots] = useState<Dot[]>([]);
 
@@ -99,7 +108,7 @@ const TopicsMenu: React.FC = () => {
     fetchData();
   }, [classId]);
 
-   useEffect(() => {
+  useEffect(() => {
     const total = 100;
     const arr: Dot[] = [];
     for (let i = 0; i < total; i++) {
@@ -124,34 +133,34 @@ const TopicsMenu: React.FC = () => {
   };
 
   const toggleLock = async (id: number, e: React.MouseEvent) => {
-  e.stopPropagation();
-  if (!isTeacher || curriculumId === null) return;
+    e.stopPropagation();
+    if (!isTeacher || curriculumId === null) return;
 
-  const topic = topics.find(t => t.topicId === id);
-  if (!topic) return;
+    const topic = topics.find(t => t.topicId === id);
+    if (!topic) return;
 
-  try {
-    const token = localStorage.getItem("accessToken");
+    try {
+      const token = localStorage.getItem("accessToken");
 
-    await fetch(
-      `http://localhost:8081/api/curriculum-topics/lock?curriculumId=${curriculumId}&topicId=${id}&locked=${!topic.isLocked}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+      await fetch(
+        `http://localhost:8081/api/curriculum-topics/lock?curriculumId=${curriculumId}&topicId=${id}&locked=${!topic.isLocked}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    setTopics((prev) =>
-      prev.map((t) =>
-        t.topicId === id ? { ...t, isLocked: !t.isLocked } : t
-      )
-    );
-  } catch (err) {
-    console.error("Erro ao atualizar estado de bloqueio:", err);
-  }
-};
+      setTopics((prev) =>
+        prev.map((t) =>
+          t.topicId === id ? { ...t, isLocked: !t.isLocked } : t
+        )
+      );
+    } catch (err) {
+      console.error("Erro ao atualizar estado de bloqueio:", err);
+    }
+  };
 
 
 
@@ -160,15 +169,17 @@ const TopicsMenu: React.FC = () => {
     return colors[index % colors.length];
   };
 
-  
+
 
   if (isLoading || !classId) return null;
 
+
+
   return (
-    
+
     <div className="space-background scrollable">
-    {/* canvas cobrindo toda a tela para desenhar as estrelas */}
-    <div className="dots">
+      {/* canvas cobrindo toda a tela para desenhar as estrelas */}
+      <div className="dots">
         {dots.map((d, i) => (
           <div
             key={i}
@@ -183,7 +194,7 @@ const TopicsMenu: React.FC = () => {
           />
         ))}
       </div>
-      <div className="back-button" onClick={() => window.history.back()}>
+      <div className="back-button">
         <Link href="/classlist">
           <ArrowBackIcon className="back-icon" />
         </Link>
@@ -197,9 +208,18 @@ const TopicsMenu: React.FC = () => {
       <div className="title">
         <h1>Tópicos da Turma: {className}</h1>
         <p className="subtitle">Curso: {courseName}</p>
-        {isTeacher && (
-          <Link href={`/createclass?classId=${classId}`}>
-            <button className="yellow-button">Editar classe</button>
+        {isTeacher ? (
+          <>
+            <Link href={`/createclass?classId=${classId}`}>
+              <button className="yellow-button">Editar classe</button>
+            </Link>
+            <Link href={`/topicsmenu/rankingclasssteacher?classId=${classId}`}>
+              <button className="yellow-button">Ver Ranking da Turma</button>
+            </Link>
+          </>
+        ) : (
+          <Link href={`/topicsmenu/rankingclassstudant?classId=${classId}`}>
+            <button className="yellow-button">Ver Ranking da Turma</button>
           </Link>
         )}
       </div>
@@ -244,6 +264,15 @@ const TopicsMenu: React.FC = () => {
                 )}
               </div>
               <p className="node-title">{topic.description}</p>
+              {!isTeacher && index === naveIndex && (
+                <Image
+                  src="/assets/navepink.png"
+                  alt="Nave"
+                  width={60}
+                  height={60}
+                  className="nave-flutuante"
+                />
+              )}
             </div>
           );
         })}

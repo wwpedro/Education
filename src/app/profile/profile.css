@@ -370,24 +370,216 @@ body {
 
 /* Responsivo */
 @media (max-width: 768px) {
-  .profile-header {
-    padding: 1rem;
+  .profile-container {
+    min-height: 100vh;
     height: auto;
+    padding-bottom: 2rem;
   }
 
+  .profile-header {
+    flex-direction: column;
+    width: 100%;
+    padding: 1rem;
+    gap: 2rem;
+    min-height: auto;
+    align-items: center;
+  }
+
+  /* Logout button para mobile */
   .logout-button-perfil {
-    top: 10px;
-    right: 10px;
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
+    top: 15px;
+    right: 15px;
+    padding: 0.6rem;
+  }
+
+  .logout-icon {
+    font-size: 1.5rem !important;
+  }
+
+  .logout-text {
+    display: none; /* Esconde texto em mobile para economizar espaço */
+  }
+
+  /* Reorganizando em coluna única - ORDEM CORRETA */
+  .profile-left {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+
+  .profile-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    order: 1; /* Primeiro: foto e informações */
   }
 
   .profile-picture {
-    width: 160px;
-    height: 160px;
+    width: 120px;
+    height: 120px;
+    order: 1; /* Foto primeiro */
+  }
+
+  .profile-details {
+    order: 2; /* Depois os detalhes */
+    text-align: center;
   }
 
   .profile-name {
     font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .edit-link {
+    order: 3; /* Edit link após nome */
+    display: inline-block;
+    margin: 0.5rem 0;
+  }
+
+  .profile-role {
+    order: 4; /* Role após editar */
+    margin: 0.5rem 0;
+  }
+
+  .profile-description {
+    order: 5; /* Descrição por último */
+    margin: 0.5rem 0;
+    text-align: center;
+    max-width: 300px;
+  }
+
+  /* Card do estudante/professor - ORDEM 2 */
+  .profile-right {
+    width: 100%;
+    margin-top: 1rem;
+    order: 2; /* Segundo: card */
+  }
+
+  .student-card, .teacher-card {
+    width: 90%;
+    max-width: 320px;
+    min-height: 220px;
+    padding: 1.5rem;
+    margin: 0 auto;
+  }
+
+  .card-image {
+    width: 100px;
+    margin: 0.5rem auto;
+  }
+
+  /* Destaques - ORDEM 3 */
+  .profile-highlights {
+    order: 3; /* Terceiro: destaques */
+    width: 100%;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .profile-highlights h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .highlights-icons {
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .highlight-circle {
+    width: 60px;
+    height: 60px;
+  }
+
+  .highlight-circle img {
+    width: 35px;
+    height: 35px;
+  }
+
+  /* Botões - ORDEM 4 */
+  .card-buttons {
+    order: 4; /* Quarto: botões */
+    flex-direction: column;
+    width: 90%;
+    max-width: 320px;
+    margin: 1rem auto 0 auto;
+    gap: 1rem;
+  }
+
+  .card-buttons button {
+    width: 100%;
+    min-width: auto;
+    padding: 1rem;
+    font-size: 1rem;
+  }
+
+  /* Ajustes nas waves para mobile */
+  .wave-back1 {
+    clip-path: path(
+      "M0,750 C400,770 800,730 1200,770 C1600,810 2000,770 2400,800 L2400,0 L0,0 Z"
+    );
+  }
+
+  .wave-front1 {
+    clip-path: path(
+      "M0,760 C400,790 800,740 1200,790 C1600,830 2000,790 2400,810 L2400,0 L0,0 Z"
+    );
+  }
+
+  /* Ajustes nos pontinhos para mobile */
+  .dots {
+    opacity: 0.6;
+  }
+}
+
+/* Ajustes para telas muito pequenas (menos de 480px) */
+@media (max-width: 480px) {
+  .profile-header {
+    padding: 0.5rem;
+    gap: 1.5rem;
+  }
+
+  .profile-left {
+    margin-top: 3rem;
+    gap: 1rem;
+  }
+
+  .profile-picture {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-name {
+    font-size: 1.3rem;
+  }
+
+  .student-card, .teacher-card {
+    width: 95%;
+    padding: 1rem;
+    min-height: 200px;
+  }
+
+  .card-buttons {
+    width: 95%;
+  }
+
+  .highlight-circle {
+    width: 50px;
+    height: 50px;
+  }
+
+  .highlight-circle img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Ajuste para telas muito grandes */
+@media (min-width: 1200px) {
+  .profile-header {
+    max-width: 1200px;
   }
 }

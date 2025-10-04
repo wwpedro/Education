@@ -34,8 +34,15 @@ body {
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* botão voltar */
@@ -153,4 +160,175 @@ body {
 
 .comprar-btn:hover {
   background: #218838;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+  .loja-background-container {
+    padding: 1rem;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  body {
+    overflow: auto;
+  }
+
+  .loja-container {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  /* Card superior (esquerdo) - altura reduzida */
+  .card-esquerdo {
+    order: 1;
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 0.5rem;
+    align-items: center;
+    text-align: left;
+  }
+
+  /* Organização em grid para o card superior */
+  .card-esquerdo h3 {
+    grid-column: 1 / -1;
+    margin: 0 auto 0.5rem auto;
+    font-size: 1rem;
+  }
+
+  .card-esquerdo .pontos {
+    grid-column: 1 / -1;
+    margin: 0 auto 0.5rem auto;
+    font-size: 1.5rem;
+  }
+
+  .card-esquerdo .nave-imagem {
+    grid-row: 3 / 5;
+    width: 80px;
+    margin: 10px;
+  }
+
+  .card-esquerdo .descricao {
+    grid-column: 2;
+    grid-row: 3 / 5;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  /* Card inferior (direito) */
+  .card-direito {
+    order: 2;
+    padding: 1rem;
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .lista-naves {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    max-height: 400px;
+  }
+
+  .nave-mini {
+    width: 50px;
+  }
+
+  .nave-info h4 {
+    font-size: 0.9rem;
+  }
+
+  .nave-info p {
+    font-size: 0.8rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+  }
+
+  .back-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .back-icon {
+    font-size: 20px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .card-esquerdo {
+    grid-template-columns: auto 1fr;
+    padding: 0.8rem;
+  }
+
+  .card-esquerdo .nave-imagem {
+    width: 60px;
+  }
+
+  .card-esquerdo .descricao {
+    font-size: 0.8rem;
+  }
+
+  .lista-naves {
+    grid-template-columns: 1fr;
+    max-height: 200px;
+  }
+
+  .nave-item {
+    gap: 0.5rem;
+  }
+
+  .nave-mini {
+    width: 40px;
+  }
+}
+
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-box{
+  background: #fff; color: #222;
+  border-radius: 8px;
+  position: relative;    
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 24px 56px;     /* espaço extra embaixo */
+  box-sizing: border-box;
+}
+
+
+.modal-texto {
+  margin: 0 0 16px;
+  font-size: 1rem;
+}
+
+.modal-ok{
+  position: absolute;
+  bottom: 16px;                /* colado lá embaixo */
+  left: 50%;
+  transform: translateX(-50%); /* centraliza horizontal */
+  background: #d5be4b;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 24px;
+  cursor: pointer;
 }

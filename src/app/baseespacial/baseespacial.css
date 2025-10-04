@@ -1,12 +1,11 @@
 /* Fundo e container */
-/* Fundo e container */
 .baseespacial-container {
   min-height: 100vh; /* deixa crescer se o conteúdo passar da tela */
   background-color: #102f54;
   color: white;
   position: relative;
   overflow-x: hidden; /* só esconde o que passar para os lados */
-  padding: 2rem;
+  padding: 3rem 10vw;
 }
 
 .stars {
@@ -215,4 +214,18 @@
 .medal-item span {
   margin-top: 0.25rem;
   font-size: 0.8rem;
+}
+
+
+@media (max-width: 900px){
+  .grid-container{
+    grid-template-columns: 1fr; 
+    gap: 1.5rem;
+  }
+
+  .left-column{ order: 1; }
+  .medalhas-todas-card{ order: 2; }
+
+  .top-row{ grid-template-columns: 1fr; }
+  .progresso-card{ order: 3; }
 }
