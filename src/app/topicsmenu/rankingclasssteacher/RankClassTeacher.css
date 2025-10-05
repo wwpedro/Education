@@ -200,5 +200,113 @@
   gap: 1rem;
 }
 
+/*========== RESPONSIVO ≤ 768px ==========*/
+@media (max-width: 768px) {
+  /* afasta tudo da borda */
+  .teacher-dashboard {
+    padding: 20px 5vw;
+  }
+  .dashboard-wrapper {
+    padding: 0;
+  }
 
+  /* vira pilha */
+  .dashboard-container {
+    flex-direction: column;
+  }
+  .left-column,
+  .right-column {
+    flex: none;
+    width: 100%;
+  }
 
+  /* stats um embaixo do outro */
+  .stats-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  /* ranking não cresce demais */
+  .ranking-list {
+    max-height: 50vh;
+  }
+
+  /* date-pickers lado a lado */
+  .date-picker-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+}
+/* ===== TRAVA LATERAL E REDUZ CARDS ===== */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;          /* elimina scroll horizontal */
+    width: 100%;
+  }
+
+  .teacher-dashboard {
+    padding: 15px 4vw;           /* margem das laterais */
+    box-sizing: border-box;
+  }
+
+  /* cards não ultrapassam a tela */
+  .progress-card,
+  .ranking-card {
+    width: 100% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;   /* 2 colunas */
+    gap: 12px;
+  }
+
+  .stat-card {
+    width: 100%;          /* largura total da célula */
+    padding: 16px 8px;    /* aumenta área clicável */
+    font-size: 0.9rem;    /* texto um pouco menor */
+  }
+
+  .stat-card h2 {
+    font-size: 24px;      /* número maior, visível */
+  }
+
+  /* stats um embaixo do outro */
+  .stats-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  /* ranking com altura fixa para não crescer demais */
+  .ranking-list {
+    max-height: 45vh;
+  }
+
+  .progress-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .date-picker-container {
+    display: flex;
+    flex-direction: column;   /* um embaixo do outro */
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* caixa de texto não ultrapassa a tela */
+  .date-picker-container .MuiTextField-root {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* fonte menor → cabe mais texto */
+  .date-picker-container .MuiInputBase-input {
+    font-size: 0.85rem;
+    padding: 8px 12px;
+  }
+}

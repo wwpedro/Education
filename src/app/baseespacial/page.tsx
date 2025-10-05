@@ -8,31 +8,36 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 const BaseEspacialPage = () => {
 
   // efeito das estrelas
-  useEffect(() => {
-    const starsContainer = document.querySelector(".stars");
-    if (!starsContainer) return;
-
-    const totalStars = 100;
-    for (let i = 0; i < totalStars; i++) {
-      const star = document.createElement("div");
-      star.classList.add("star");
-      star.style.top = `${Math.random() * 100}%`;
-      star.style.left = `${Math.random() * 100}%`;
-      const size = Math.random() * 3 + 1;
-      star.style.width = `${size}px`;
-      star.style.height = `${size}px`;
-      star.style.animationDelay = `${Math.random() * 2}s`;
-      starsContainer.appendChild(star);
-    }
-
-    return () => {
-      starsContainer.innerHTML = "";
-    };
-  }, []);
+ useEffect(() => {
+     // Adiciona os pontinhos animados
+     const dotsContainer = document.querySelector(".dots");
+     if (!dotsContainer) return;
+ 
+     const totalDots = 100; // Quantidade de pontinhos
+     for (let i = 0; i < totalDots; i++) {
+       const dot = document.createElement("div");
+       dot.classList.add("dot");
+ 
+       // Posições aleatórias
+       dot.style.top = `${Math.random() * 100}%`;
+       dot.style.left = `${Math.random() * 100}%`;
+ 
+       // Tamanhos aleatórios
+       const size = Math.random() * 2 + 1; // Entre 1px e 3px
+       dot.style.width = `${size}px`;
+       dot.style.height = `${size}px`;
+ 
+       // Atraso de animação aleatório
+       dot.style.animationDelay = `${Math.random() * 5}s`;
+ 
+       // Adiciona o ponto ao contêiner
+       dotsContainer.appendChild(dot);
+     }
+   }, []);
 
   return (
     <div className="baseespacial-container">
-      <div className="stars."></div>
+      <div className="dots"></div>
 
       {/* Botão voltar */}
       <div className="back-button">
