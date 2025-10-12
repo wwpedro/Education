@@ -29,7 +29,6 @@ const QuestionPage = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  // Map: question index -> selected option value
   const [answersMap, setAnswersMap] = useState<Record<number, string>>({});
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -57,8 +56,7 @@ const QuestionPage = () => {
           })),
         }));
         setQuestions(mapped);
-        // Load any saved answer for the first question
-        setSelectedOption(prev => answersMap[0] || null);
+        setSelectedOption(answersMap[0] || null);
       } catch (err) {
         console.error("Erro ao carregar questões:", err);
       }
@@ -122,22 +120,39 @@ const QuestionPage = () => {
     }
   };
 
+  const awardPoints = async (studentId: number, solutionId: number, points: number) => {
+    const token = localStorage.getItem("accessToken");
+    try {
+      await fetch(
+        `http://localhost:8081/api/gamification/points/${studentId}/solution/${solutionId}?points=${points}`,
+        { method: "POST", headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (err) {
+      console.error("Erro ao atribuir pontos:", err);
+    }
+  };
+
   const handleNext = async () => {
     if (!selectedOption) return;
-    // Prepare updated answers map including current selection
     const updatedMap = { ...answersMap, [currentQuestionIndex]: selectedOption };
     setAnswersMap(updatedMap);
-    // Save current answer
-    const opt = currentQuestion.options.find(o => o.value === selectedOption)!;
-    await saveAnswerToServer(currentQuestion.id, opt.label, !!opt.isCorrect);
 
-    // Move to next or finish
+    const opt = currentQuestion.options.find(o => o.value === selectedOption)!;
+    const correct = !!opt.isCorrect;
+    await saveAnswerToServer(currentQuestion.id, opt.label, correct);
+
+    // ✅ Atribui pontos apenas se acertou
+    if (correct) {
+      const studentId = Number(localStorage.getItem("userId"));
+      const points = currentQuestion.difficulty * 10; // 10, 20 ou 30
+      await awardPoints(studentId, currentQuestion.id, points);
+    }
+
     if (currentQuestionIndex < questions.length - 1) {
       const next = currentQuestionIndex + 1;
       setCurrentQuestionIndex(next);
       setSelectedOption(updatedMap[next] || null);
     } else {
-      // Compute final counts from updatedMap
       const total = questions.length;
       const correctAnswers = Object.entries(updatedMap).filter(([idx, val]) => {
         const q = questions[parseInt(idx)];
