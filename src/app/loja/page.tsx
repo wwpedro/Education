@@ -18,30 +18,44 @@ const LojaPage = () => {
       id: 1,
       nome: "Rosinha",
       preco: 1300,
-      imagem: "/assets/rosinha.png",
+      imagem: "/naves/rosinha.png",
       descricao: "A nave rosa mais charmosa do espaço",
     },
     {
       id: 2,
       nome: "Amarelinho",
       preco: 1300,
-      imagem: "/assets/amarelinho.png",
+      imagem: "/naves/amarelinha.png",
       descricao: "A nave amarela iluminada",
     },
     {
       id: 3,
       nome: "Vermelhinho",
       preco: 1300,
-      imagem: "/assets/vermelhinho.png",
-      descricao: "A nave vermelha mais veloz",
+      imagem: "/naves/vermelhinha.png",
+      descricao: "A nave vermelha mais veloz do espaço",
     },
     {
       id: 4,
-      nome: "Verderinha",
+      nome: "Verdinho",
       preco: 1300,
-      imagem: "/assets/verderinha.png",
-      descricao: "Sua nave é a Verderinha, a mais rápida do espaço",
+      imagem: "/naves/verdinha.png",
+      descricao: "A nave verde mais aventureira do espaço",
     },
+    {
+      id: 5,
+      nome: "Azulzinho",
+      preco: 1300,
+      imagem: "/naves/azulina.png",
+      descricao: "A nave azul mais silenciosa do espaço",
+    },
+    {
+      id: 6,
+      nome: "Roxinha",
+      preco: 1300,
+      imagem: "/naves/roxinha.png",
+      descricao: "A nave roxa mais misteriosa do espaço",
+    }
   ]);
 
   const [naveSelecionada, setNaveSelecionada] = useState<Nave | null>(naves[3]);

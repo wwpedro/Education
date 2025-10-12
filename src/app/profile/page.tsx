@@ -145,13 +145,13 @@ const ProfilePage = () => {
       <h3>Destaques:</h3>
       <div className="highlights-icons">
         <div className="highlight-circle">
-          <img src="/assets/rocket.png" alt="Destaque 1" />
+          <img src="/medalhas/ouro.png" alt="Destaque 1" />
         </div>
         <div className="highlight-circle">
-          <img src="/assets/alien.png" alt="Destaque 2" />
+          <img src="/medalhas/prata.png" alt="Destaque 2" />
         </div>
         <div className="highlight-circle">
-          <img src="/assets/medal.png" alt="Destaque 3" />
+          <img src="/medalhas/bronze.png" alt="Destaque 3" />
         </div>
       </div>
     </div>
@@ -170,9 +170,9 @@ const ProfilePage = () => {
                 <span>Pontos 130</span>
                 <button onClick={() => goTo("/loja")}><span className="material-icons">shopping_cart</span></button>
               </div>
-              <img src="/assets/nave.png" alt="Nave" className="card-image" />
+              <img src="/naves/verdinha.png" alt="Nave" className="card-image" />
               <p className="card-description">
-                Verderinha - a nave mais rápida do espaço
+                Verdinho - a nave mais rápida do espaço
               </p>
             </div>
           ) : (
