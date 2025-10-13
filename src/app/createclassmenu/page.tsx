@@ -1,15 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect, useState, Suspense } from "react";
 import "./createcurriculum.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Link from "next/link";
 
-const CreateResumePage = () => {
+function CreateResumeContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const classId = searchParams.get("classId");
+
   const goTo = (url: string) => {
     window.location.href = url;
   };
@@ -42,9 +44,11 @@ const CreateResumePage = () => {
       <img src="/assets/image9.png" alt="Planeta Terra" className="planet-earth" />
       <img src="/assets/image8.png" alt="Planeta" className="planet-upper-right" />
 
-      <button className="back-button" onClick={() => goTo("/profile")}><Link href="/classlist">
+      <button className="back-button" onClick={() => goTo("/profile")}>
+        <Link href="/classlist">
           <ArrowBackIcon className="back-icon" />
-        </Link></button>
+        </Link>
+      </button>
 
       <div className="title-container">
         <h1 className="title">Fábrica de Currículo</h1>
@@ -71,6 +75,12 @@ const CreateResumePage = () => {
       )}
     </div>
   );
-};
+}
 
-export default CreateResumePage;
+export default function CreateResumePage() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <CreateResumeContent />
+    </Suspense>
+  );
+}

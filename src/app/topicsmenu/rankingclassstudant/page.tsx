@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -14,7 +14,7 @@ interface Student {
     spaceship: string;
 }
 
-const RankStudentPage: React.FC = () => {
+const RankStudentContent: React.FC = () => {
     const router = useRouter();
     const params = useParams();
     const searchParams = useSearchParams();
@@ -143,4 +143,10 @@ const RankStudentPage: React.FC = () => {
     );
 };
 
-export default RankStudentPage;
+export default function RankStudentPage() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <RankStudentContent />
+    </Suspense>
+  );
+}

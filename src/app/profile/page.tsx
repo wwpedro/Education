@@ -37,7 +37,8 @@ const ProfilePage = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:8081/api/auth/profile", {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/auth/profile`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

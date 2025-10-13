@@ -28,8 +28,9 @@ const Topico: React.FC = () => {
       if (!token || !studentId) return;
 
       try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
         const response = await fetch(
-          `http://localhost:8081/api/solutions/student/${studentId}/topic/${topicId}/progress`,
+          `${apiUrl}/solutions/student/${studentId}/topic/${topicId}/progress`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

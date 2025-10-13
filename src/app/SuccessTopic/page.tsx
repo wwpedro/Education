@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation"; // Hook de navegação
-import "./popup.css";
+// import "./popup.css";
+import "../popup/popup.css";
 
 const SuccessTopic: React.FC = () => {
   const goTo = (url: string) => {

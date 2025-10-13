@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
@@ -29,7 +29,7 @@ interface Dot {
 
 
 
-const TopicsMenu: React.FC = () => {
+const TopicsMenuContent: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const classId = searchParams.get("classId");
@@ -62,7 +62,8 @@ const TopicsMenu: React.FC = () => {
 
       try {
         // 1. Dados da turma
-        const classRes = await fetch(`http://localhost:8081/api/classes/${classId}`, {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const classRes = await fetch(`${apiUrl}/classes/${classId}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -87,7 +88,7 @@ const TopicsMenu: React.FC = () => {
         setTopics(mappedTopics);
 
         // 2. Dados do usuário
-        const userRes = await fetch("http://localhost:8081/api/auth/profile", {
+        const userRes = await fetch(`${apiUrl}/auth/profile`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -141,9 +142,9 @@ const TopicsMenu: React.FC = () => {
 
     try {
       const token = localStorage.getItem("accessToken");
-
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       await fetch(
-        `http://localhost:8081/api/curriculum-topics/lock?curriculumId=${curriculumId}&topicId=${id}&locked=${!topic.isLocked}`,
+        `${apiUrl}/curriculum-topics/lock?curriculumId=${curriculumId}&topicId=${id}&locked=${!topic.isLocked}`,
         {
           method: "PUT",
           headers: {
@@ -306,4 +307,10 @@ const TopicsMenu: React.FC = () => {
   );
 };
 
-export default TopicsMenu;
+export default function TopicsMenu() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <TopicsMenuContent />
+    </Suspense>
+  );
+}

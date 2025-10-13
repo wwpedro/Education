@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import "./createclass.css";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
@@ -97,7 +97,7 @@ const Material: React.FC<MaterialProps> = ({ topics, onAddTopic, onClose }) => {
   );
 };
 
-const CreateClassroomPage: React.FC = () => {
+const CreateClassroomContent: React.FC = () => {
   const router = useRouter();
   const [materialTitle, setMaterialTitle] = useState<string>("");
   const searchParams = useSearchParams(); // 👈 aqui dentro
@@ -149,7 +149,8 @@ const CreateClassroomPage: React.FC = () => {
 
   const fetchClassStudents = async (classId: number, token: string) => {
     try {
-      const res = await fetch(`http://localhost:8081/api/student-classes/class/${classId}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/student-classes/class/${classId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -176,7 +177,8 @@ const CreateClassroomPage: React.FC = () => {
 
       try {
         // Buscar dados da turma
-        const response = await fetch(`http://localhost:8081/api/classes/${classIdNumber}`, {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/classes/${classIdNumber}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -267,7 +269,8 @@ const CreateClassroomPage: React.FC = () => {
     if (!token) return;
 
     try {
-      const response = await fetch(`http://localhost:8081/api/questions/${id}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/questions/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -324,7 +327,8 @@ const CreateClassroomPage: React.FC = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:8081/api/courses", {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/courses`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -436,7 +440,8 @@ const CreateClassroomPage: React.FC = () => {
         let response;
         let savedQuestion;
         if (editingQuestionId !== null) {
-          response = await fetch(`http://localhost:8081/api/questions/${editingQuestionId}`, {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          response = await fetch(`${apiUrl}/questions/${editingQuestionId}`, {
             method: "PUT", // <-- PUT para atualizar
             headers: {
               "Content-Type": "application/json",
@@ -445,7 +450,8 @@ const CreateClassroomPage: React.FC = () => {
             body: JSON.stringify(payload),
           });
         } else {
-          response = await fetch("http://localhost:8081/api/questions", {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          response = await fetch(`${apiUrl}/questions`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -521,7 +527,8 @@ const CreateClassroomPage: React.FC = () => {
       if (!token) return;
 
       try {
-        const response = await fetch(`http://localhost:8081/api/questions/${id}`, {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/questions/${id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -644,7 +651,8 @@ const CreateClassroomPage: React.FC = () => {
       if (!token) return;
 
       try {
-        const response = await fetch("http://localhost:8081/api/users/students", {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/users/students`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -781,7 +789,8 @@ const CreateClassroomPage: React.FC = () => {
 
     try {
       // 1. Cria o tópico
-      const response = await fetch("http://localhost:8081/api/topics", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/topics`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -803,7 +812,7 @@ const CreateClassroomPage: React.FC = () => {
       const newTopicId = topicData.topicId;
 
       // 2. Associa ao currículo
-      const curriculumResponse = await fetch("http://localhost:8081/api/curriculum-topics", {
+      const curriculumResponse = await fetch(`${apiUrl}/curriculum-topics`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -881,7 +890,8 @@ const CreateClassroomPage: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8081/api/curriculums/${curriculumId}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/curriculums/${curriculumId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -955,7 +965,8 @@ const CreateClassroomPage: React.FC = () => {
     try {
       const isEditing = !!classId;
       // 1. Cria a turma
-      const response = await fetch(`http://localhost:8081/api/classes${isEditing ? `/${classId}` : ""}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/classes${isEditing ? `/${classId}` : ""}`, {
         method: isEditing ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
@@ -974,7 +985,8 @@ const CreateClassroomPage: React.FC = () => {
 
       // 2. Envia os alunos vinculados
       if (selectedStudents.length > 0) {
-        const studentResponse = await fetch("http://localhost:8081/api/student-classes", {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const studentResponse = await fetch(`${apiUrl}/student-classes`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -1159,4 +1171,10 @@ const CreateClassroomPage: React.FC = () => {
   );
 };
 
-export default CreateClassroomPage;
+export default function CreateClassroomPage() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <CreateClassroomContent />
+    </Suspense>
+  );
+}

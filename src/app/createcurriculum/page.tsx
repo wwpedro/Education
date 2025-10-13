@@ -61,7 +61,8 @@ const CreateCurriculumPage = () => {
     console.log("Enviando currículo:", curriculumData);
 
     try {
-      const response = await fetch("http://localhost:8081/api/curriculums", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/curriculums`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,8 +80,8 @@ const CreateCurriculumPage = () => {
 
         for (let i = 0; i < importedTopics.length; i++) {
           const topicTitle: string = importedTopics[i];
-
-          const topicRes: Response = await fetch("http://localhost:8081/api/topics", {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+          const topicRes: Response = await fetch(`${apiUrl}/topics`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -104,8 +105,8 @@ const CreateCurriculumPage = () => {
           if (i === 0) {
             parentTopicId = topicId;
           }
-
-          await fetch("http://localhost:8081/api/curriculum-topics", {
+          
+          await fetch(`${apiUrl}/curriculum-topics`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

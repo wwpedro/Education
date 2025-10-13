@@ -50,7 +50,8 @@ const EditProfilePage = () => {
     console.log("🔁 Enviando dados para o backend:", updatedData);
 
     try {
-      const response = await fetch(`http://localhost:8081/api/users/${userId}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/users/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -119,7 +120,8 @@ const EditProfilePage = () => {
       if (!token) return;
 
       try {
-        const response = await fetch("http://localhost:8081/api/auth/profile", {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/auth/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

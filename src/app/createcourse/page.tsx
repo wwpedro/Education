@@ -28,7 +28,8 @@ const CreateClassPage = () => {
 
     const fetchCurriculums = async () => {
       try {
-        const response = await fetch("http://localhost:8081/api/curriculums", {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/curriculums`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -50,7 +51,8 @@ const CreateClassPage = () => {
 
     const fetchTeacherId = async () => {
       try {
-        const response = await fetch("http://localhost:8081/api/auth/profile", {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/auth/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -124,7 +126,8 @@ const CreateClassPage = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8081/api/courses", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/courses`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
