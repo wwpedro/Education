@@ -108,55 +108,59 @@ const ProfilePage = () => {
       <div className="profile-header">
         {/* Coluna esquerda */}
         <div className="profile-left">
-  {/* Linha 1: Foto + Detalhes */}
-  <div className="profile-info">
-    <img
-      src="/assets/Pessoa-fisica-mobile.jpg"
-      alt="Foto do Perfil"
-      className="profile-picture"
-    />
-    <div className="profile-details">
-      {userData ? (
-        <>
-          <h1 className="profile-name">Olá, {userData.name}</h1>
-          <a href="/editprofile" className="edit-link">
-            Editar
-          </a>
-          {userData.subjectSpecialty ? (
-            <p className="profile-role">
-              Professor(a) – {userData.subjectSpecialty}
-            </p>
-          ) : (
-            <p className="profile-role">Estudante</p>
-          )}
-          <p className="profile-description">
-            Sou uma pessoa dedicada, gosto de programação e quero aprender mais...
-          </p>
-        </>
-      ) : (
-        <p>Carregando informações...</p>
-      )}
-    </div>
-  </div>
+          {/* Linha 1: Foto + Detalhes */}
+          <div className="profile-info">
+            <img
+              src={
+                userData?.subjectSpecialty
+                  ? "../assets/professora.png" // ou professor.png, dependendo do formato
+                  : "../assets/estudante.png"
+              }
+              alt="Foto do Perfil"
+              className="profile-picture"
+            />
+            <div className="profile-details">
+              {userData ? (
+                <>
+                  <h1 className="profile-name">Olá, {userData.name}</h1>
+                  <a href="/editprofile" className="edit-link">
+                    Editar
+                  </a>
+                  {userData.subjectSpecialty ? (
+                    <p className="profile-role">
+                      Professor(a) – {userData.subjectSpecialty}
+                    </p>
+                  ) : (
+                    <p className="profile-role">Estudante</p>
+                  )}
+                  <p className="profile-description">
+                    Sou uma pessoa dedicada, gosto de programação e quero aprender mais...
+                  </p>
+                </>
+              ) : (
+                <p>Carregando informações...</p>
+              )}
+            </div>
+          </div>
 
-  {/* Linha 2: Destaques */}
-  {!userData?.subjectSpecialty && (
-    <div className="profile-highlights">
-      <h3>Destaques:</h3>
-      <div className="highlights-icons">
-        <div className="highlight-circle">
-          <img src="/medalhas/ouro.png" alt="Destaque 1" />
+          {/* Linha 2: Destaques */}
+          {!userData?.subjectSpecialty && (
+            <div className="profile-highlights">
+              <h3>Destaques:</h3>
+              <div className="highlights-icons">
+                <div className="highlight-circle">
+                  <img src="/medalhas/ouro.png" alt="Destaque 1" />
+                </div>
+                <div className="highlight-circle">
+                  <img src="/medalhas/prata.png" alt="Destaque 2" />
+                </div>
+                <div className="highlight-circle">
+                  <img src="/medalhas/bronze.png" alt="Destaque 3" />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-        <div className="highlight-circle">
-          <img src="/medalhas/prata.png" alt="Destaque 2" />
-        </div>
-        <div className="highlight-circle">
-          <img src="/medalhas/bronze.png" alt="Destaque 3" />
-        </div>
-      </div>
-    </div>
-  )}
-</div>
 
 
 

@@ -14,7 +14,7 @@ const EditProfilePage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [role, setRole] = useState("student");
-  
+
   // Estados para o modal
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -104,6 +104,16 @@ const EditProfilePage = () => {
   }, []);
 
   useEffect(() => {
+    if (role) {
+      setProfileImage(
+        role === "teacher"
+          ? "/assets/professora.png"
+          : "/assets/estudante.png"
+      );
+    }
+  }, [role]);
+
+  useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("accessToken");
       if (!token) return;
@@ -143,7 +153,7 @@ const EditProfilePage = () => {
         <div className="modal-overlay">
           <div className="modal-content">
             <p>{modalMessage}</p>
-            <button 
+            <button
               className="modal-close-btn"
               onClick={() => setShowModal(false)}
             >
