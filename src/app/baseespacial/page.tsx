@@ -217,8 +217,8 @@ const BaseEspacialPage = () => {
           </div>
         </div>
 
-          {/* Linha de baixo */}
-          <div className="card progresso-card">
+          {/* Linha de baixo 
+          {/*<div className="card progresso-card">
             <h2>Progresso</h2>
             <div className="progresso-content">
               <div className="filtros">
@@ -226,10 +226,10 @@ const BaseEspacialPage = () => {
                 <p>Conquistadas</p>
               </div>
               <div className="grafico">
-                {/* Espaço reservado para gráfico */}
+                {/* Espaço reservado para gráfico 
               </div>
             </div>
-          </div>
+          </div>*/}
         </div>
 
         {/* Coluna direita */}

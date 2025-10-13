@@ -172,7 +172,7 @@ const EditProfilePage = () => {
                 <div className="profile-image-placeholder" />
               )}
             </div>
-            <div className="button-container">
+            {/*<div className="button-container">
               <label htmlFor="fileInput" className="upload-button">Escolher Foto</label>
               <input
                 type="file"
@@ -181,7 +181,7 @@ const EditProfilePage = () => {
                 onChange={handleImageChange}
                 style={{ display: "none" }}
               />
-            </div>
+            </div>*/}
           </div>
         </div>
 

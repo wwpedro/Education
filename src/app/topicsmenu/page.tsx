@@ -206,23 +206,32 @@ const TopicsMenu: React.FC = () => {
       <img src="/assets/image9.png" alt="Terra" className="earth" />
 
       <div className="title">
-        <h1>Tópicos da Turma: {className}</h1>
-        <p className="subtitle">Curso: {courseName}</p>
-        {isTeacher ? (
-          <>
-            <Link href={`/createclass?classId=${classId}`}>
-              <button className="yellow-button">Editar classe</button>
-            </Link>
-            <Link href={`/topicsmenu/rankingclasssteacher?classId=${classId}`}>
-              <button className="yellow-button">Ver Ranking da Turma</button>
-            </Link>
-          </>
-        ) : (
-          <Link href={`/topicsmenu/rankingclassstudant?classId=${classId}`}>
-            <button className="yellow-button">Ver Ranking da Turma</button>
-          </Link>
-        )}
-      </div>
+  <h1>Tópicos da Turma: {className}</h1>
+  <p className="subtitle">Curso: {courseName}</p>
+
+  {isTeacher ? (
+    <>
+      <Link href={`/createclass?classId=${classId}`}>
+        <button className="yellow-button">Editar classe</button>
+      </Link>
+
+      {/* 
+      <Link href={`/topicsmenu/rankingclasssteacher?classId=${classId}`}>
+        <button className="yellow-button">Ver Ranking da Turma</button>
+      </Link> 
+      */}
+    </>
+  ) : (
+    <>
+      {/* 
+      <Link href={`/topicsmenu/rankingclassstudant?classId=${classId}`}>
+        <button className="yellow-button">Ver Ranking da Turma</button>
+      </Link> 
+      */}
+    </>
+  )}
+</div>
+
 
       <div className="topics-container">
         {topics.map((topic, index) => {
