@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Link from "next/link";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -10,7 +10,7 @@ import dayjs, { Dayjs } from "dayjs";
 import "./RankClassTeacher.css";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 
-const RankClassTeacher: React.FC = () => {
+const RankClassTeacherContent: React.FC = () => {
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
     dayjs("2025-01-27"),
     dayjs("2025-01-31"),
@@ -166,4 +166,10 @@ const RankClassTeacher: React.FC = () => {
   );
 };
 
-export default RankClassTeacher;
+export default function RankClassTeacher() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <RankClassTeacherContent />
+    </Suspense>
+  );
+}

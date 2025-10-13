@@ -38,8 +38,9 @@ const QuestionPage = () => {
       const token = localStorage.getItem("accessToken");
       if (!token || !topicId) return;
       try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
         const res = await fetch(
-          `http://localhost:8081/api/questions/topic/${topicId}`,
+          `${apiUrl}/questions/topic/${topicId}`,
           { headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` } }
         );
         if (!res.ok) throw new Error("Erro ao buscar questões");
@@ -100,7 +101,8 @@ const QuestionPage = () => {
     const studentId = localStorage.getItem("userId");
     const now = new Date().toISOString();
     try {
-      await fetch("http://localhost:8081/api/solutions", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      await fetch(`${apiUrl}/solutions`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
@@ -123,8 +125,9 @@ const QuestionPage = () => {
   const awardPoints = async (studentId: number, solutionId: number, points: number) => {
     const token = localStorage.getItem("accessToken");
     try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       await fetch(
-        `http://localhost:8081/api/gamification/points/${studentId}/solution/${solutionId}?points=${points}`,
+        `${apiUrl}/gamification/points/${studentId}/solution/${solutionId}?points=${points}`,
         { method: "POST", headers: { Authorization: `Bearer ${token}` } }
       );
     } catch (err) {

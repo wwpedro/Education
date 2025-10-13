@@ -41,7 +41,8 @@ const ClassListPage = () => {
       if (!token) return;
 
       try {
-        const response = await fetch("http://localhost:8081/api/classes", {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/classes`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

@@ -70,7 +70,8 @@ const ImportMaterial: React.FC<{
       }
 
       try {
-        const response = await fetch("http://localhost:8081/api/materials", {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/materials`, {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
           body: formData,
@@ -117,7 +118,8 @@ const ImportMaterial: React.FC<{
 
   if (materialId && token) {
     try {
-      const response = await fetch(`http://localhost:8081/api/materials/${materialId}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/materials/${materialId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -163,7 +165,8 @@ const ImportMaterial: React.FC<{
         setPreviewUrl(item.url);
       } else if (item.id) {
         const token = localStorage.getItem("accessToken");
-        const fileUrl = `http://localhost:8081/api/materials/${item.id}/download?token=${token}`;
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const fileUrl = `${apiUrl}/materials/${item.id}/download?token=${token}`;
         setPreviewUrl(fileUrl);
       } else {
         alert("Arquivo não encontrado para visualização.");

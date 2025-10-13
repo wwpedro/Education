@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation"; // Hook de navegação
-import "./popup.css";
+import "../popup/popup.css";
 
 const FailureTopic: React.FC = () => {
   const router = useRouter(); // Inicializa o roteador

@@ -32,7 +32,8 @@ const WonScreen: React.FC = () => {
 
     const fetchSolutions = async () => {
       try {
-        const res = await fetch(`http://localhost:8081/api/solutions/by-topic/${topicId}`, {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const res = await fetch(`${apiUrl}/solutions/by-topic/${topicId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
